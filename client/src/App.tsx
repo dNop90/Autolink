@@ -5,7 +5,7 @@ import { AuthProvider } from './contexts/AuthContext';
 import DealerDashboard from './pages/DealerDashboard';
 import Home from './pages/Home';
 import UserProfile from './pages/UserProfile';
-import Navbar from './components/Navbar';
+import Navbar from './components/navbar/Navbar';
 
 
 const App: React.FC = () => {
