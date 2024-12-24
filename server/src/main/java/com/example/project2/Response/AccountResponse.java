@@ -21,25 +21,20 @@ public class AccountResponse {
 
     
     @JsonCreator
+    /*
+     * Account fields returned to front end after login, hiding password and other information
+     */
     public AccountResponse(
         @JsonProperty("accountId")  Long accountId,
         @JsonProperty("username") String username,
-        @JsonProperty("email") String email,
         @JsonProperty("role") Integer role,
         @JsonProperty("isSuspended") Boolean isSuspended,
-        @JsonProperty("firstName") String firstName,
-        @JsonProperty("lastName") String lastName,
-        @JsonProperty("phone") String phone,
         @JsonProperty("imageId") Long imageId
     ) {
         this.accountId = accountId;
         this.username = username;
-        this.email = email;
         this.role = role;
         this.isSuspended = isSuspended;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.phone = phone;
         this.imageId = imageId;
     }
     
