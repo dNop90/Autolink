@@ -12,14 +12,6 @@ nav a{
     color: var(--gray-color);
 }
 
-nav a:first-child{
-    margin-left: 30px;
-}
-
-nav a:last-child{
-    margin-right: 30px;
-}
-
 nav a:hover{
     color: black;
 }
@@ -28,6 +20,39 @@ nav .left{
     float: left;
 }
 
+nav .left > a:first-child{
+    margin-left: 30px;
+}
+
 nav .right{
     float: right;
+}
+
+nav ul{
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    text-align: center;
+    width: 200px;
+    background-color: white;
+    border-radius: 10px;
+}
+
+nav ul > .username{
+    display: block;
+    line-height: 50px;
+}
+
+nav ul > li{
+    display: none;
+}
+
+nav ul:hover > li{
+    display: block;
+}
+
+nav ul a{
+    margin: 0;
+    padding: 0;
+    width: 100%;
 }
