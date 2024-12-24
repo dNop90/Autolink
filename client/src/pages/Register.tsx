@@ -3,6 +3,7 @@ import { useState, FormEvent } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import '../styles/Login.css'
 
 const API_LINK = process.env.REACT_APP_API_USER;
 
@@ -111,7 +112,7 @@ function Register() {
 
     return (
         <>
-            <Form onSubmit={handleSubmit}>
+            <Form className="loginform" onSubmit={handleSubmit}>
                 <Form.Group>
                     <Form.Label>
                         Username:
