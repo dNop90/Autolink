@@ -1,6 +1,5 @@
 import React from 'react'
 import { useAuth } from '../contexts/AuthContext'
-import Navbar from '../components/navbar/Navbar';
 import { Navigate, Outlet } from 'react-router-dom';
 
 function UserRouteGuard() {
