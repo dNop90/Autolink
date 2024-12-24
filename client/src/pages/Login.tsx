@@ -3,7 +3,9 @@ import { useAuth } from '../contexts/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Button, Form } from 'react-bootstrap'
-import 'bootstrap/dist/css/bootstrap.min.css';
+
+const API_LINK = process.env.REACT_APP_API_USER;
+
 function Login() {
     const [formInput, setFormInput] = useState({
         username: "",
@@ -65,7 +67,7 @@ function Login() {
         }
         setFormError(inputError);
         axios
-            .post("http://localhost:8080/api/user/login", {
+            .post(`${API_LINK}/login`, {
                 username,
                 password
             }).then((response) => {
