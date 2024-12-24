@@ -6,6 +6,7 @@ import DealerDashboard from './pages/DealerDashboard';
 import Home from './pages/Home';
 import UserProfile from './pages/UserProfile';
 import Navbar from './components/navbar/Navbar';
+import UserRouteGuard from './routeguards/UserRouteGuard';
 
 
 const App: React.FC = () => {
@@ -14,8 +15,11 @@ const App: React.FC = () => {
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/dealer-dashboard" element={<DealerDashboard />} />
-        <Route path="/user-profile" element={<UserProfile />} />
+
+        <Route element={<UserRouteGuard/>}>
+          <Route path="/dealer-dashboard" element={<DealerDashboard />} />
+          <Route path="/user-profile" element={<UserProfile />} />
+        </Route>
       </Routes>
     </AuthProvider>
   );

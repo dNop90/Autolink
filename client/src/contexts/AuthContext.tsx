@@ -3,7 +3,7 @@ import { User } from '../data/User';
 
 interface AuthContextType {
   user: User | null;
-  login: (userid: number, username: string) => void;
+  login: (userid: number, username: string, role: number, imageurl: string) => void;
   logout: () => void;
 }
 
@@ -24,9 +24,9 @@ export const useAuth = () => {
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
 
-  function login(userid: number, username: string)
+  function login(userid: number, username: string, role: number, imageurl: string)
   {
-    setUser({userid, username});
+    setUser({userid, username, role, imageurl});
   }
 
   function logout()
