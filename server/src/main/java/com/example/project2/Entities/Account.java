@@ -16,6 +16,9 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "accounts")
+/*
+ * Account entity
+ */
 public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,7 +26,7 @@ public class Account {
     private String username;
     private String email;
     private String password;
-    private Integer role = 1;
+    private Integer role = 1; // 1 = regular user, 2 = dealer, 3 = admin, default regular user
     private Boolean isSuspended = false;
     private String firstName;
     private String lastName;
