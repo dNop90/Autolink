@@ -3,7 +3,8 @@ import { useState, FormEvent } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
-import 'bootstrap/dist/css/bootstrap.min.css';
+
+const API_LINK = process.env.REACT_APP_API_USER;
 
 function Register() {
     const [formInput, setFormInput] = useState({
@@ -80,7 +81,7 @@ function Register() {
         let email = formInput.email;
         let password = formInput.password;
         axios
-            .post("http://localhost:8080/api/user/register", {
+            .post(`${API_LINK}/register`, {
                 username,
                 email,
                 password

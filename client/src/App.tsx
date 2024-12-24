@@ -9,6 +9,7 @@ import Navbar from './components/navbar/Navbar';
 import UserRouteGuard from './routeguards/UserRouteGuard';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import ViewInventory from './pages/ViewInventory';
 
 
 const App: React.FC = () => {
@@ -17,8 +18,10 @@ const App: React.FC = () => {
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />}></Route>
-        <Route path="/register" element={<Register />}></Route>
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/explore" element={<ViewInventory />} />
+        
         <Route element={<UserRouteGuard/>}>
           <Route path="/dealer-dashboard" element={<DealerDashboard />} />
           <Route path="/user-profile" element={<UserProfile />} />
