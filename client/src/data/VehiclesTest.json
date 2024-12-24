@@ -1,0 +1,77 @@
+[
+    {
+      "vehicleId": 1,
+      "make": "Tesla",
+      "model": "Model S",
+      "price": 79999,
+      "condition": "New",
+      "year": 2023,
+      "color": "Red",
+      "engineType": "Electric",
+      "imageUrls": [
+        "https://images.pexels.com/photos/35967/mini-cooper-auto-model-vehicle.jpg?cs=srgb&dl=pexels-pixabay-35967.jpg&fm=jpg",
+        "https://images.pexels.com/photos/35967/mini-cooper-auto-model-vehicle.jpg?cs=srgb&dl=pexels-pixabay-35967.jpg&fm=jpg",
+        "https://images.pexels.com/photos/35967/mini-cooper-auto-model-vehicle.jpg?cs=srgb&dl=pexels-pixabay-35967.jpg&fm=jpg"
+      ]
+    },
+    {
+      "vehicleId": 2,
+      "make": "Honda",
+      "model": "Civic",
+      "price": 19999,
+      "condition": "Used",
+      "year": 2018,
+      "color": "Blue",
+      "engineType": "Gasoline",
+      "imageUrls": [
+        "https://images.pexels.com/photos/35967/mini-cooper-auto-model-vehicle.jpg?cs=srgb&dl=pexels-pixabay-35967.jpg&fm=jpg",
+        "https://images.pexels.com/photos/35967/mini-cooper-auto-model-vehicle.jpg?cs=srgb&dl=pexels-pixabay-35967.jpg&fm=jpg",
+        "https://images.pexels.com/photos/35967/mini-cooper-auto-model-vehicle.jpg?cs=srgb&dl=pexels-pixabay-35967.jpg&fm=jpg"
+      ]
+    },
+    {
+      "vehicleId": 3,
+      "make": "Ford",
+      "model": "F-150",
+      "price": 45999,
+      "condition": "New",
+      "year": 2024,
+      "color": "Black",
+      "engineType": "Diesel",
+      "imageUrls": [
+        "https://images.pexels.com/photos/35967/mini-cooper-auto-model-vehicle.jpg?cs=srgb&dl=pexels-pixabay-35967.jpg&fm=jpg",
+        "https://t4.ftcdn.net/jpg/09/75/01/79/360_F_975017974_T5MerqYMKhfxAc0WwzvJ9SEbCXjsFfVp.jpg",
+        "https://t4.ftcdn.net/jpg/09/75/01/79/360_F_975017976_OOexzfloTyR3Cyrj77OAxap41TpeH9Fh.jpg"
+      ]
+    },
+    {
+      "vehicleId": 4,
+      "make": "Toyota",
+      "model": "Corolla",
+      "price": 17999,
+      "condition": "Used",
+      "year": 2020,
+      "color": "White",
+      "engineType": "Hybrid",
+      "imageUrls": [
+        "https://images.pexels.com/photos/35967/mini-cooper-auto-model-vehicle.jpg?cs=srgb&dl=pexels-pixabay-35967.jpg&fm=jpg",
+        "https://t4.ftcdn.net/jpg/09/75/01/79/360_F_975017974_T5MerqYMKhfxAc0WwzvJ9SEbCXjsFfVp.jpg",
+        "https://t4.ftcdn.net/jpg/09/75/01/79/360_F_975017976_OOexzfloTyR3Cyrj77OAxap41TpeH9Fh.jpg"
+      ]
+    },
+    {
+      "vehicleId": 5,
+      "make": "Chevrolet",
+      "model": "Camaro",
+      "price": 49999,
+      "condition": "New",
+      "year": 2023,
+      "color": "Yellow",
+      "engineType": "Gasoline",
+      "imageUrls": [
+        "https://images.pexels.com/photos/35967/mini-cooper-auto-model-vehicle.jpg?cs=srgb&dl=pexels-pixabay-35967.jpg&fm=jpg",
+        "https://t4.ftcdn.net/jpg/09/75/01/79/360_F_975017974_T5MerqYMKhfxAc0WwzvJ9SEbCXjsFfVp.jpg",
+        "https://t4.ftcdn.net/jpg/09/75/01/79/360_F_975017976_OOexzfloTyR3Cyrj77OAxap41TpeH9Fh.jpg"
+      ]
+    }
+  ]
