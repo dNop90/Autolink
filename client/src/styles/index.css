@@ -1,3 +1,7 @@
+:root{
+    --gray-color: #6b6b6b;
+}
+
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
@@ -26,3 +30,9 @@ button {
 button:hover {
     background-color: #0056b3;
 }
+
+
+a{
+    text-decoration: none;
+}
+  
