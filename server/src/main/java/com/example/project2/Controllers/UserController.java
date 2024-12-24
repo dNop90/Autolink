@@ -59,9 +59,9 @@ public class UserController {
              AccountResponse res = accountService.login(account);
              return ResponseEntity.status(200).body(res);
         } catch (AccountNotFoundException e) {
-            return ResponseEntity.status(401).body("Unauthorized");
+            return ResponseEntity.status(401).body("No account with username");
         } catch (PasswordIncorrectException e) {
-            return ResponseEntity.status(401).body("Unauthorized");
+            return ResponseEntity.status(401).body("Invalid password");
         } catch (NoSuchAlgorithmException e) {
             return ResponseEntity.status(500).body("Hashing algorithm not fount");
         }
