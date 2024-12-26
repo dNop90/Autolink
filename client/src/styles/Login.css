@@ -1,5 +1,5 @@
 .loginform{
-    margin: 200px auto 0px;
+    margin: 145px auto 145px;
     width: 400px;
 }
 
@@ -42,4 +42,17 @@
 
 .btn-success:hover{
     background-color: var(--color-button-background-hover);
+}
+
+.loginform .new-password{
+    position: relative;
+}
+
+.loginform .new-password-eye{
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: black;
+    padding: 16px;
 }
