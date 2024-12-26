@@ -1,10 +1,9 @@
-import React, { FormEvent, useContext, useEffect, useState } from 'react'
+import React, { FormEvent, useEffect, useState } from 'react'
 import { useAuth } from '../contexts/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { Button, Form } from 'react-bootstrap'
-
-const API_LINK = process.env.REACT_APP_API_USER;
+import '../styles/Login.css'
+import { api } from '../services/api';
 
 function Login() {
     const [formInput, setFormInput] = useState({
@@ -35,6 +34,7 @@ function Login() {
             }
         }
     },[account] );
+
     function handleSubmit(event: FormEvent) {
         event.preventDefault();
         let inputError = {
@@ -66,11 +66,7 @@ function Login() {
             return;
         }
         setFormError(inputError);
-        axios
-            .post(`${API_LINK}/login`, {
-                username,
-                password
-            }).then((response) => {
+        api.user.loginUser(username, password).then((response) => {
                 console.log(response);
                 setAccount(response.data);
                 
@@ -99,7 +95,7 @@ function Login() {
 
     return (
         <>
-            <Form onSubmit={handleSubmit}>
+            <Form className="loginform" onSubmit={handleSubmit}>
                 <Form.Group>
                     <Form.Label>
                         Username:
