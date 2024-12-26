@@ -1,12 +1,14 @@
 import axios from "axios";
 import { useState, FormEvent } from "react";
-import { Button, Form, Modal } from "react-bootstrap";
+import { Button, Form, Modal, Container, Row, Col } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import * as Icon from 'react-bootstrap-icons';
 
 const API_LINK = process.env.REACT_APP_API_USER;
 
 function Register() {
+    const [type, setType] = useState("password");
     const [formInput, setFormInput] = useState({
         username: "",
         email: "",
@@ -25,9 +27,33 @@ function Register() {
     const context = useAuth()
     if (!context) throw new Error("Register must be used with an AuthProvider");
     const navigate = useNavigate();
-    const handleClose = () =>  {
+    const handleClose = () => {
         setShow(false);
         navigate("/login");
+    }
+    const [lowerVal, setLowerVal] = useState(false);
+    const [upperVal, setUpperVal] = useState(false);
+    const [numberVal, setNumberVal] = useState(false);
+    const [specialVal, setSpecialVal] = useState(false);
+    const [lengthVal, setLengthVal] = useState(false);
+
+    function handlePassword(value: string) {
+        const lower = new RegExp('(?=.*[a-z])');
+        const upper = new RegExp('(?=.*[A-Z])');
+        const number = new RegExp('(?=.*[0-9])');
+        const special = new RegExp('(?=.*[!@#\$%\^\&\*])');
+        const length = new RegExp('(?=.{8,})');
+        if (lower.test(value)) setLowerVal(true);
+        else setLowerVal(false);
+        if (upper.test(value)) setUpperVal(true);
+        else setUpperVal(false);
+        if (number.test(value)) setNumberVal(true);
+        else setNumberVal(false);
+        if (special.test(value)) setSpecialVal(true);
+        else setSpecialVal(false);
+        if (length.test(value)) setLengthVal(true);
+        else setLengthVal(false);
+        setFormInput({ ...formInput, password: value });
     }
     function handleSubmit(event: FormEvent) {
         event.preventDefault();
@@ -44,7 +70,7 @@ function Register() {
                 ...inputError,
                 username: "Username cannot be empty",
                 email: "Email cannot be empty",
-                password: "Password cannot be empty"
+                password: "Password does not meet the requirements"
             });
             return;
         }
@@ -53,6 +79,12 @@ function Register() {
                 ...inputError,
                 username: "Username cannot be empty"
             });
+            if (!lowerVal || !upperVal || !numberVal || !specialVal || !lengthVal) {
+                setFormError({
+                    ...inputError,
+                    password: "Password does not meet the requirements"
+                });
+            };
             return;
         }
         if (!formInput.email) {
@@ -62,10 +94,10 @@ function Register() {
             });
             return;
         }
-        if (!formInput.password) {
+        if (!formInput.password || !lowerVal || !upperVal || !numberVal || !specialVal || !lengthVal) {
             setFormError({
                 ...inputError,
-                password: "Password cannot be empty"
+                password: "Password does not meet the requirements"
             });
             return;
         }
@@ -104,7 +136,7 @@ function Register() {
                         toLoginLink: true
                     });
                 }
-                
+
                 return;
             })
     }
@@ -129,15 +161,96 @@ function Register() {
                 <Form.Group>
                     <Form.Label>
                         Password:
-                        <Form.Control autoComplete="new-password" type="password" value={formInput.password} onChange={(e: any) => setFormInput({ ...formInput, password: e.target.value })} placeholder='Password'></Form.Control>
-                        <Form.Text>{formError.password}</Form.Text>
+                        <Container>
+                            <Row>
+                                <Col>
+                                    <Form.Control autoComplete="new-password" type={type} value={formInput.password} onChange={(e: any) => handlePassword(e.target.value)} placeholder='Password'></Form.Control>
+                                    {type === "password" ? (
+                                        <span
+                                            onClick={() => setType("text")}>
+                                            <Icon.EyeSlash />
+                                        </span>
+                                    ) : (
+                                        <span
+                                            onClick={() => setType("password")}>
+                                            <Icon.Eye />
+                                        </span>
+                                    )}
+                                </Col>
+                                <Col>
+                                    <Row>
+                                        <Col>
+                                            {
+                                                lowerVal ? (
+                                                    <Icon.CheckCircle />
+                                                ) : (
+                                                    <Icon.XCircle />
+                                                )
+                                            }
+                                            At least one lowercase letter
+                                        </Col>
+                                        <Col>
+                                            {
+                                                upperVal ? (
+                                                    <Icon.CheckCircle />
+                                                ) : (
+                                                    <Icon.XCircle />
+                                                )
+                                            }
+                                            At least one uppercase letter
+                                        </Col>
+                                        <Col>
+                                            {
+                                                numberVal ? (
+                                                    <Icon.CheckCircle />
+                                                ) : (
+                                                    <Icon.XCircle />
+                                                )
+                                            }
+                                            At least one number
+                                        </Col>
+                                        <Col>
+                                            {
+                                                specialVal ? (
+                                                    <Icon.CheckCircle />
+                                                ) : (
+                                                    <Icon.XCircle />
+                                                )
+                                            }
+                                            At least one special character
+                                        </Col>
+                                        <Col>
+                                            {
+                                                lengthVal ? (
+                                                    <Icon.CheckCircle />
+                                                ) : (
+                                                    <Icon.XCircle />
+                                                )
+                                            }
+                                            At least 8 characters
+                                        </Col>
+                                    </Row>
+                                </Col>
+                                <Col>
+                                    <Form.Text>{formError.password}</Form.Text>
+                                </Col>
+                            </Row>
+                        </Container>
                     </Form.Label>
                 </Form.Group>
                 <Form.Group>
                     <Form.Label>
                         Confirm Password:
-                        <Form.Control type="password" value={formInput.confirmPassword} onChange={(e: any) => setFormInput({ ...formInput, confirmPassword: e.target.value })} placeholder='Confirm Password'></Form.Control>
-                        <Form.Text>{formError.confirmPassword}</Form.Text>
+                        <Container>
+                            <Row>
+                                <Col>
+                                    <Form.Control type={type} value={formInput.confirmPassword} onChange={(e: any) => setFormInput({ ...formInput, confirmPassword: e.target.value })} placeholder='Confirm Password'></Form.Control>
+                                </Col>
+                                <Col>
+                                    <Form.Text>{formError.confirmPassword}</Form.Text>
+                                </Col>
+                            </Row>
+                        </Container>
                     </Form.Label>
                 </Form.Group>
                 <Button type="submit">Register</Button>
