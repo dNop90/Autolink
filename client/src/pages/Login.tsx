@@ -4,8 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Button, Form } from 'react-bootstrap'
 import '../styles/Login.css'
-
-const API_LINK = process.env.REACT_APP_API_USER;
+import { api } from '../services/api';
 
 function Login() {
     const [formInput, setFormInput] = useState({
@@ -68,11 +67,7 @@ function Login() {
             return;
         }
         setFormError(inputError);
-        axios
-            .post(`${API_LINK}/login`, {
-                username,
-                password
-            }).then((response) => {
+        api.user.loginUser(username, password).then((response) => {
                 console.log(response);
                 setAccount(response.data);
                 
