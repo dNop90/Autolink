@@ -1,7 +1,6 @@
-import React, { FormEvent, useContext, useEffect, useState } from 'react'
+import React, { FormEvent, useEffect, useState } from 'react'
 import { useAuth } from '../contexts/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { Button, Form } from 'react-bootstrap'
 import '../styles/Login.css'
 import { api } from '../services/api';

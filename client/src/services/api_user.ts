@@ -1,7 +1,7 @@
 import axios from "axios";
 
 /**
- * API related to user
+ * Handle all API related to user
  */
 export class api_user {
     api_link: string;
@@ -21,4 +21,9 @@ export class api_user {
         const response = await axios.post(`${this.api_link}/login`, { username, password });
         return response.data;
     };
+
+    async registerUser(username: string, email: string, password: string) {
+        const response = await axios.post(`${this.api_link}/register`, { username, email, password});
+        return response.data;
+    }
 }

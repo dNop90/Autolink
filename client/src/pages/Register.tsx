@@ -1,10 +1,10 @@
-import axios from "axios";
 import { useState, FormEvent } from "react";
 import { Button, Form, Modal, Container, Row, Col } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import * as Icon from 'react-bootstrap-icons';
 import '../styles/Login.css'
+import { api } from "../services/api";
 
 const API_LINK = process.env.REACT_APP_API_USER;
 
@@ -113,12 +113,7 @@ function Register() {
         let username = formInput.username;
         let email = formInput.email;
         let password = formInput.password;
-        axios
-            .post(`${API_LINK}/register`, {
-                username,
-                email,
-                password
-            }).then((response) => {
+        api.user.registerUser(username, email, password).then((response) => {
                 console.log(response);
                 setShow(true);
             }).catch((error) => {

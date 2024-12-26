@@ -1,0 +1,22 @@
+:root{
+    --color-background: white;
+    --color-background-body: #f4f4f4;
+    --color-text-link: #6b6b6b;
+    --color-text-link-hover: black;
+    --color-button-text: white;
+    --color-button-background: #6b6b6b;
+    --color-button-background-hover: black;
+}
+
+body{
+    color: black;
+    background-color: var(--color-background);
+}
+
+button, .btn{
+    color: var(--color-button-text);
+}
+
+button:hover, .btn:hover{
+    color: var(--color-button-text);
+}
