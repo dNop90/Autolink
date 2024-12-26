@@ -3,6 +3,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Button, Form } from 'react-bootstrap'
+import '../styles/Login.css'
 
 const API_LINK = process.env.REACT_APP_API_USER;
 
@@ -35,6 +36,7 @@ function Login() {
             }
         }
     },[account] );
+
     function handleSubmit(event: FormEvent) {
         event.preventDefault();
         let inputError = {
@@ -99,7 +101,7 @@ function Login() {
 
     return (
         <>
-            <Form onSubmit={handleSubmit}>
+            <Form className="loginform" onSubmit={handleSubmit}>
                 <Form.Group>
                     <Form.Label>
                         Username:

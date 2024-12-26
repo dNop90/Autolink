@@ -1,0 +1,45 @@
+.loginform{
+    margin: 200px auto 0px;
+    width: 400px;
+}
+
+.loginform label{
+    width: 100%;
+}
+
+.loginform input{
+    width: 100%;
+    margin: 10px 0px;
+}
+
+.loginform input:focus{
+    border: 1px solid black;
+    box-shadow: none;
+}
+
+.loginform button[type="submit"]{
+    width: 100%;
+    background-color: var(--gray-color);
+    border: 0;
+}
+
+.loginform button[type="submit"]:hover{
+    background-color: black;
+}
+
+.btn-close{
+    --bs-btn-close-focus-shadow: none;
+}
+
+.btn-close:hover{
+    background-color: transparent;
+}
+
+.btn-success{
+    background-color: var(--gray-color);
+    border: 0;
+}
+
+.btn-success:hover{
+    background-color: black;
+}
