@@ -4,6 +4,7 @@ import { Button, Form, Modal, Container, Row, Col } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import * as Icon from 'react-bootstrap-icons';
+import '../styles/Login.css'
 
 const API_LINK = process.env.REACT_APP_API_USER;
 
@@ -143,7 +144,7 @@ function Register() {
 
     return (
         <>
-            <Form onSubmit={handleSubmit}>
+            <Form className="loginform" onSubmit={handleSubmit}>
                 <Form.Group>
                     <Form.Label>
                         Username:
@@ -165,6 +166,8 @@ function Register() {
                             <Row>
                                 <Col>
                                     <Form.Control autoComplete="new-password" type={type} value={formInput.password} onChange={(e: any) => handlePassword(e.target.value)} placeholder='Password'></Form.Control>
+                                </Col>
+                                <Col>
                                     {type === "password" ? (
                                         <span
                                             onClick={() => setType("text")}>
@@ -177,63 +180,81 @@ function Register() {
                                         </span>
                                     )}
                                 </Col>
-                                <Col>
-                                    <Row>
-                                        <Col>
-                                            {
-                                                lowerVal ? (
-                                                    <Icon.CheckCircle />
-                                                ) : (
-                                                    <Icon.XCircle />
-                                                )
-                                            }
-                                            At least one lowercase letter
-                                        </Col>
-                                        <Col>
-                                            {
-                                                upperVal ? (
-                                                    <Icon.CheckCircle />
-                                                ) : (
-                                                    <Icon.XCircle />
-                                                )
-                                            }
-                                            At least one uppercase letter
-                                        </Col>
-                                        <Col>
-                                            {
-                                                numberVal ? (
-                                                    <Icon.CheckCircle />
-                                                ) : (
-                                                    <Icon.XCircle />
-                                                )
-                                            }
-                                            At least one number
-                                        </Col>
-                                        <Col>
-                                            {
-                                                specialVal ? (
-                                                    <Icon.CheckCircle />
-                                                ) : (
-                                                    <Icon.XCircle />
-                                                )
-                                            }
-                                            At least one special character
-                                        </Col>
-                                        <Col>
-                                            {
-                                                lengthVal ? (
-                                                    <Icon.CheckCircle />
-                                                ) : (
-                                                    <Icon.XCircle />
-                                                )
-                                            }
-                                            At least 8 characters
-                                        </Col>
-                                    </Row>
-                                </Col>
-                                <Col>
-                                    <Form.Text>{formError.password}</Form.Text>
-                                </Col>
+                            </Row>
+                            <Row>
+                                <Row>
+                                    <Col>
+                                        {
+                                            lowerVal ? (
+                                                <Icon.CheckCircle />
+                                            ) : (
+                                                <Icon.XCircle />
+                                            )
+                                        }
+                                    </Col>
+                                    <Col>
+                                        At least one lowercase letter
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col>
+                                        {
+                                            upperVal ? (
+                                                <Icon.CheckCircle />
+                                            ) : (
+                                                <Icon.XCircle />
+                                            )
+                                        }
+                                    </Col>
+                                    <Col>
+                                        At least one uppercase letter
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col>
+                                        {
+                                            numberVal ? (
+                                                <Icon.CheckCircle />
+                                            ) : (
+                                                <Icon.XCircle />
+                                            )
+                                        }
+                                    </Col>
+                                    <Col>
+                                        At least one number
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col>
+                                        {
+                                            specialVal ? (
+                                                <Icon.CheckCircle />
+                                            ) : (
+                                                <Icon.XCircle />
+                                            )
+                                        }
+                                    </Col>
+                                    <Col>
+                                        At least one special character
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col>
+                                        {
+                                            lengthVal ? (
+                                                <Icon.CheckCircle />
+                                            ) : (
+                                                <Icon.XCircle />
+                                            )
+                                        }
+                                    </Col>
+                                    <Col>
+                                        At least 8 characters
+                                    </Col>
+                                </Row>
+                            </Row>
+                            <Row>
+                                <Form.Text>{formError.password}</Form.Text>
                             </Row>
                         </Container>
                     </Form.Label>
@@ -241,16 +262,8 @@ function Register() {
                 <Form.Group>
                     <Form.Label>
                         Confirm Password:
-                        <Container>
-                            <Row>
-                                <Col>
-                                    <Form.Control type={type} value={formInput.confirmPassword} onChange={(e: any) => setFormInput({ ...formInput, confirmPassword: e.target.value })} placeholder='Confirm Password'></Form.Control>
-                                </Col>
-                                <Col>
-                                    <Form.Text>{formError.confirmPassword}</Form.Text>
-                                </Col>
-                            </Row>
-                        </Container>
+                        <Form.Control type={type} value={formInput.confirmPassword} onChange={(e: any) => setFormInput({ ...formInput, confirmPassword: e.target.value })} placeholder='Confirm Password'></Form.Control>
+                        <Form.Text>{formError.confirmPassword}</Form.Text>
                     </Form.Label>
                 </Form.Group>
                 <Button type="submit">Register</Button>
