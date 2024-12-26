@@ -2,7 +2,7 @@
     position: relative;
     margin-top: 50px;
     width: 100%;
-    height: calc(100vh - 54px);
+    height: calc(100vh - 50px);
 }
 
 .vid .vid-context{
