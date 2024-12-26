@@ -1,0 +1,36 @@
+.vid{
+    position: relative;
+    margin-top: 50px;
+    width: 100%;
+    height: calc(100vh - 54px);
+}
+
+.vid .vid-context{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: "Open Sans", serif;
+    text-transform: uppercase;
+}
+
+.vid .vid-play{
+    width: 100%;
+	height: 100%;
+	object-fit: cover;
+	object-position: 50% 50%;
+    background-color: black;
+    filter: brightness(90%) contrast(120%);
+}
+
+.vid .vid-context > h1{
+    font-size: 5vw;
+    color: white;
+    font-weight: 800;
+}
+
+.vid .vid-context > p{
+    font-size: 1em;
+    color: white;
+    font-weight: 300;
+}
