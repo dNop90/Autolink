@@ -1,10 +1,15 @@
 package com.example.project2.Controllers;
 
-import java.security.NoSuchAlgorithmException;
+import java.util.Optional;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import java.security.NoSuchAlgorithmException;
+
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,7 +21,9 @@ import com.example.project2.Exceptions.DuplicateUsernameException;
 import com.example.project2.Exceptions.PasswordIncorrectException;
 import com.example.project2.Response.AccountResponse;
 import com.example.project2.Services.AccountService;
+import com.example.project2.models.DTOs.RegistrationUserDTO;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -25,7 +32,7 @@ import lombok.AllArgsConstructor;
 @RequestMapping("api/user")
 public class UserController {
     private final AccountService accountService;
-    
+  
     /*
      * Register endpoint
      * Calls register service
@@ -48,7 +55,7 @@ public class UserController {
     }
 
     /*
-     * Register endpoint
+     * Login endpoint
      * Calls login service
      * @param account, valid account with fields username or email, and password
      * @return a ResponseEntity with the account response or corresponding error message
@@ -64,6 +71,33 @@ public class UserController {
             return ResponseEntity.status(401).body("Invalid password");
         } catch (NoSuchAlgorithmException e) {
             return ResponseEntity.status(500).body("Hashing algorithm not fount");
+        }
+    }
+
+    @GetMapping("/profile")
+    public ResponseEntity<?> getUserProfile(HttpSession session) {
+        Integer userId = (Integer) session.getAttribute("userId");
+        if (userId == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not logged in.");
+        }
+        Optional<Account> userOptional = accountService.getUserById(userId);
+        if (userOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
+        }
+        return ResponseEntity.ok(userOptional.get());
+    }
+    
+    @PutMapping("/profile")
+    public ResponseEntity<?> updateUserProfile(@RequestBody RegistrationUserDTO updateUserDTO, HttpSession session) {
+        Integer userId = (Integer) session.getAttribute("userId");
+        if (userId == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not logged in.");
+        }
+        try {
+            accountService.updateUserProfile(userId, updateUserDTO);
+            return ResponseEntity.ok("User profile updated successfully.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update user profile.");
         }
     }
 }
