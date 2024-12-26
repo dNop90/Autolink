@@ -1,5 +1,7 @@
 package com.example.project2.Services;
 
+
+import java.util.Optional;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -14,6 +16,7 @@ import com.example.project2.Exceptions.DuplicateUsernameException;
 import com.example.project2.Exceptions.PasswordIncorrectException;
 import com.example.project2.Repositories.AccountRepository;
 import com.example.project2.Response.AccountResponse;
+import com.example.project2.models.DTOs.RegistrationUserDTO;
 
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -32,12 +35,14 @@ public class AccountService {
      * @throws DuplicateEmailException if email already exist in db, DuplicateUsernameException if username already in db, NoSuchAlgorithmException if hashing algorithm doesn't exist
      */
     public AccountResponse register(Account account) throws DuplicateEmailException, DuplicateUsernameException, NoSuchAlgorithmException{
-        
+
         Account check = accountRepository.findAccountByEmail(account.getEmail());
         if (check != null) throw new DuplicateEmailException();
         check = accountRepository.findAccountByUsername(account.getUsername());
         if (check != null) throw new DuplicateUsernameException();
+
         account.setPassword(toHexString(getSHA(account.getPassword())));
+
         Account res = accountRepository.save(account);
         AccountResponse result = new AccountResponse(
             res.getAccountId(), 
@@ -60,6 +65,7 @@ public class AccountService {
         
         if (check == null) throw new AccountNotFoundException();
         account.setPassword(toHexString(getSHA(account.getPassword())));
+
         if (!check.getPassword().equals(account.getPassword())) throw new PasswordIncorrectException();
 
         AccountResponse result = new AccountResponse(
@@ -72,10 +78,33 @@ public class AccountService {
         return result;
     }
 
+    // Get user by ID
+    public Optional<Account> getUserById(Integer userId) {
+        return accountRepository.findById(userId.longValue());
+    }
+
+    // Update user profile
+    public void updateUserProfile(Integer userId, RegistrationUserDTO updateUserDTO) throws AccountNotFoundException {
+        Optional<Account> optionalAccount = accountRepository.findById(userId.longValue());
+
+        if (optionalAccount.isEmpty()) {
+            throw new AccountNotFoundException();
+        }
+
+        Account account = optionalAccount.get();
+        account.setFirstName(updateUserDTO.getFirstName());
+        account.setLastName(updateUserDTO.getLastName());
+        account.setEmail(updateUserDTO.getEmail());
+        account.setPhone(updateUserDTO.getPhone());
+        // Update other fields as necessary
+
+        accountRepository.save(account);  // Save the updated account
+    }
+  
     /*
      * Helper class for password hasing
      */
-    public static byte[] getSHA(String input) throws NoSuchAlgorithmException
+    private static byte[] getSHA(String input) throws NoSuchAlgorithmException
     {
         // Static getInstance method is called with hashing SHA
         MessageDigest md = MessageDigest.getInstance("SHA-256");
@@ -85,6 +114,7 @@ public class AccountService {
         // and return array of byte
         return md.digest(input.getBytes(StandardCharsets.UTF_8));
     }
+  
     /*
      * Helper class for password hasing
      */
@@ -101,7 +131,6 @@ public class AccountService {
         {
             hexString.insert(0, '0');
         }
- 
         return hexString.toString();
     }
 }
