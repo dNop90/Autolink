@@ -1,6 +1,7 @@
 .loginform{
     margin: 145px auto 145px;
     width: 400px;
+    line-height: 1.5;
 }
 
 .loginform label{
