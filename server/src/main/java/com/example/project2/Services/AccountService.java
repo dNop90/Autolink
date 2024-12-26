@@ -75,7 +75,7 @@ public class AccountService {
     /*
      * Helper class for password hasing
      */
-    public static byte[] getSHA(String input) throws NoSuchAlgorithmException
+    private static byte[] getSHA(String input) throws NoSuchAlgorithmException
     {
         // Static getInstance method is called with hashing SHA
         MessageDigest md = MessageDigest.getInstance("SHA-256");
