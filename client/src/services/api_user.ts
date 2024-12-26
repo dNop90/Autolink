@@ -1,7 +1,7 @@
 import axios from "axios";
 
 /**
- * API related to user
+ * Handle all API related to user
  */
 export class api_user {
     api_link: string;
