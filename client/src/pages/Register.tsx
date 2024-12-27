@@ -114,10 +114,10 @@ function Register() {
         let email = formInput.email;
         let password = formInput.password;
         api.user.registerUser(username, email, password).then((response) => {
-                console.log(response);
+                //console.log(response);
                 setShow(true);
             }).catch((error) => {
-                console.log(error.response.data);
+                //console.log(error.response.data);
                 let errorData = error.response.data;
                 if (errorData == "Username taken") {
                     setFormError({

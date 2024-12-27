@@ -46,7 +46,7 @@ public class UserController {
     public ResponseEntity register(@RequestBody Account account) {
         System.out.println(account);
         try {
-            AccountResponse res = accountService.register(account);
+            String res = accountService.register(account);
             return ResponseEntity.status(200).body(res);
         }catch (DuplicateUsernameException d) {
             return ResponseEntity.status(409).body("Username taken");
@@ -114,10 +114,9 @@ public class UserController {
         //Check if token is valid
         if(JWTUtil.isValid(authHeader))
         {
-            //TODO return user information just like login
-            //JWTUtil.parseToken(authHeader).getId()
-            //AccountResponse res = accountService.getUserById(Integer.parseInt());
-            return ResponseEntity.status(200).body("working");
+            AccountResponse res = accountService.getCurrentUser(JWTUtil.parseToken(authHeader).getSubject(), authHeader);
+
+            return ResponseEntity.status(200).body(res);
         }
         
         //Return 401 if its NOT valid

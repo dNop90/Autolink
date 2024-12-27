@@ -24,7 +24,7 @@ function Login() {
     let password = formInput.password;
     useEffect(() => {
         if(account) {
-            console.log(account);
+            //console.log(account);
             let accountId = account.accountId;
             let role = account.role;
             let imgeUrl = account.imgeUrl;
@@ -67,9 +67,8 @@ function Login() {
         }
         setFormError(inputError);
         api.user.loginUser(username, password).then((response) => {
-                console.log(response);
-                setAccount(response.data);
-                
+                //console.log(response);
+                setAccount(response);
             })
             .catch((error) => {
                 console.log(error);
