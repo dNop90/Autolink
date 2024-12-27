@@ -10,13 +10,14 @@ import UserRouteGuard from './routeguards/UserRouteGuard';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import ViewInventory from './pages/ViewInventory';
-import { ThemeProvider } from './contexts/ThemeContext';
+import { CookieProvider } from './contexts/CookieContext';
 
 
 const App: React.FC = () => {
   return (
-    <AuthProvider>
-      <ThemeProvider>
+    
+    <CookieProvider>
+      <AuthProvider>
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
@@ -29,8 +30,8 @@ const App: React.FC = () => {
             <Route path="/user-profile" element={<UserProfile />} />
           </Route>
         </Routes>
-      </ThemeProvider>
-    </AuthProvider>
+      </AuthProvider>
+    </CookieProvider>
   );
 };
 
