@@ -49,6 +49,7 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
   function setTheme(theme_type: number)
   {
     setThemeState(theme_type);
+    Cookies.set('theme', String(theme_type), { sameSite: 'strict' });
   }
 
   return (

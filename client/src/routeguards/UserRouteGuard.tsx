@@ -6,6 +6,7 @@ function UserRouteGuard() {
     const authContext = useAuth();
     const user = authContext.user;
 
+    //Check if user login
     if(!user)
     {
         return <Navigate to="/" replace/>;

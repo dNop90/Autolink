@@ -36,6 +36,18 @@ nav .right{
     float: right;
 }
 
+nav .theme-toggle{
+    display: inline-block;
+    font-size: 40px;
+    cursor: pointer;
+    color: var(--color-text-link);
+    margin-right: 20px;
+}
+
+nav .theme-toggle:hover{
+    color: var(--color-text-link-hover);
+}
+
 nav ul{
     display: inline-block;
     margin: 0;
