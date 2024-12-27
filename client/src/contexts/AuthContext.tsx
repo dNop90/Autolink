@@ -63,7 +63,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   function logout()
   {
     setUser(null);
-    navigate("/");
+    cookie.setToken('');
   }
 
   return (
