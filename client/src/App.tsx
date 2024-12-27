@@ -11,6 +11,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import ViewInventory from './pages/ViewInventory';
 import { CookieProvider } from './contexts/CookieContext';
+import Logout from './components/Logout';
 
 
 const App: React.FC = () => {
@@ -22,6 +23,7 @@ const App: React.FC = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/logout" element={<Logout/>}/>
           <Route path="/register" element={<Register />} />
           <Route path="/explore" element={<ViewInventory />}/>
 
