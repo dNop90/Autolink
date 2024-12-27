@@ -12,6 +12,17 @@ export class api_user {
     }
 
     /**
+     * Check the user token if it validate or not
+     * @param token The token to send to the server
+     * @returns only the response status
+     */
+    async tokenValidation(token: string)
+    {
+        const response = await axios.post(`${this.api_link}/token`, {headers:{'Authorization': token}});
+        return response.data;
+    }
+
+    /**
      * Login user api
      * @param username The user username 
      * @param password The user password
