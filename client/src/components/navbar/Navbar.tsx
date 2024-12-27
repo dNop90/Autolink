@@ -2,10 +2,15 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import './Navbar.css'
 import { useAuth } from '../../contexts/AuthContext';
+import * as Icon from 'react-bootstrap-icons';
+import { useTheme } from '../../contexts/ThemeContext';
 
 const Navbar: React.FC = () => {
   const authContext = useAuth();
   const user = authContext.user;
+
+  const themeContext = useTheme();
+  const theme = themeContext.theme;
 
   return (
     <nav>
@@ -14,7 +19,15 @@ const Navbar: React.FC = () => {
         <Link to="/explore">Explore</Link>
         <Link to="/dashboard">Dashboard</Link>
       </div>
+
       <div className='right'>
+        {
+          theme > 0 ?
+          <Icon.ToggleOn className='theme-toggle' onClick={() => themeContext.setTheme(0)}/>
+          :
+          <Icon.ToggleOff className='theme-toggle'onClick={() => themeContext.setTheme(1)}/>
+        }
+
         {
           user ?
           <>

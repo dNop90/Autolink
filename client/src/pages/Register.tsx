@@ -157,19 +157,17 @@ function Register() {
                 <Form.Group>
                     <Form.Label>
                         Password:
-                        <Container>
+                        <div>
                             <Row>
-                                <Col>
+                                <Col className="new-password">
                                     <Form.Control autoComplete="new-password" type={type} value={formInput.password} onChange={(e: any) => handlePassword(e.target.value)} placeholder='Password'></Form.Control>
-                                </Col>
-                                <Col>
                                     {type === "password" ? (
-                                        <span
+                                        <span className="new-password-eye"
                                             onClick={() => setType("text")}>
                                             <Icon.EyeSlash />
                                         </span>
                                     ) : (
-                                        <span
+                                        <span className="new-password-eye"
                                             onClick={() => setType("password")}>
                                             <Icon.Eye />
                                         </span>
@@ -251,7 +249,7 @@ function Register() {
                             <Row>
                                 <Form.Text>{formError.password}</Form.Text>
                             </Row>
-                        </Container>
+                        </div>
                     </Form.Label>
                 </Form.Group>
                 <Form.Group>
