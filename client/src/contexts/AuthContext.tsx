@@ -2,6 +2,7 @@ import React, { createContext, useState, useContext, ReactNode, useEffect } from
 import { User } from '../data/User';
 import { useCookie } from './CookieContext';
 import { api } from '../services/api';
+import { useNavigate } from 'react-router-dom';
 
 interface AuthContextType {
   user: User | null;
@@ -26,7 +27,7 @@ export const useAuth = () => {
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const cookie = useCookie();
-
+  const navigate = useNavigate();
   //On page loaded
   //We will verified the user token based on their cookie
   useEffect(() => {
@@ -62,6 +63,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   function logout()
   {
     setUser(null);
+    cookie.setToken('');
   }
 
   return (
