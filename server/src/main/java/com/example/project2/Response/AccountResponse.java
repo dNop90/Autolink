@@ -11,13 +11,10 @@ import lombok.Setter;
 public class AccountResponse {
     private Long accountId;
     private String username;
-    private String email;
     private Integer role;
     private Boolean isSuspended;
-    private String firstName;
-    private String lastName;
-    private String phone;
     private Long imageId;
+    private String token;
 
     
     @JsonCreator
@@ -29,13 +26,15 @@ public class AccountResponse {
         @JsonProperty("username") String username,
         @JsonProperty("role") Integer role,
         @JsonProperty("isSuspended") Boolean isSuspended,
-        @JsonProperty("imageId") Long imageId
+        @JsonProperty("imageId") Long imageId,
+        @JsonProperty("token") String token
     ) {
         this.accountId = accountId;
         this.username = username;
         this.role = role;
         this.isSuspended = isSuspended;
         this.imageId = imageId;
+        this.token = token;
     }
     
     

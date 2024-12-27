@@ -14,6 +14,7 @@ import com.example.project2.Exceptions.AccountNotFoundException;
 import com.example.project2.Exceptions.DuplicateEmailException;
 import com.example.project2.Exceptions.DuplicateUsernameException;
 import com.example.project2.Exceptions.PasswordIncorrectException;
+import com.example.project2.JWT.JWTUtil;
 import com.example.project2.Repositories.AccountRepository;
 import com.example.project2.Response.AccountResponse;
 import com.example.project2.models.DTOs.RegistrationUserDTO;
@@ -34,7 +35,7 @@ public class AccountService {
      * @return result, an account response with necesary fields
      * @throws DuplicateEmailException if email already exist in db, DuplicateUsernameException if username already in db, NoSuchAlgorithmException if hashing algorithm doesn't exist
      */
-    public AccountResponse register(Account account) throws DuplicateEmailException, DuplicateUsernameException, NoSuchAlgorithmException{
+    public String register(Account account) throws DuplicateEmailException, DuplicateUsernameException, NoSuchAlgorithmException{
 
         Account check = accountRepository.findAccountByEmail(account.getEmail());
         if (check != null) throw new DuplicateEmailException();
@@ -44,14 +45,8 @@ public class AccountService {
         account.setPassword(toHexString(getSHA(account.getPassword())));
 
         Account res = accountRepository.save(account);
-        AccountResponse result = new AccountResponse(
-            res.getAccountId(), 
-            res.getUsername(), 
-            res.getRole(),
-            res.getIsSuspended(),
-            res.getImageId()
-            );
-        return result;
+        
+        return "Success";
     }
 
     /*
@@ -67,13 +62,26 @@ public class AccountService {
         account.setPassword(toHexString(getSHA(account.getPassword())));
 
         if (!check.getPassword().equals(account.getPassword())) throw new PasswordIncorrectException();
-
+        String token = JWTUtil.generateToken(check.getUsername(), String.valueOf(check.getAccountId()));
         AccountResponse result = new AccountResponse(
             check.getAccountId(), 
             check.getUsername(), 
             check.getRole(),
             check.getIsSuspended(),
-            check.getImageId()
+            check.getImageId(),
+            token
+            );
+        return result;
+    }
+    public AccountResponse getCurrentUser(String username, String token) {
+        Account check = accountRepository.findAccountByUsername(username);
+        AccountResponse result = new AccountResponse(
+            check.getAccountId(), 
+            check.getUsername(), 
+            check.getRole(),
+            check.getIsSuspended(),
+            check.getImageId(),
+            token
             );
         return result;
     }
