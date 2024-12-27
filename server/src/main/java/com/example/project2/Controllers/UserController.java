@@ -116,16 +116,14 @@ public class UserController {
     }
 
     @PostMapping("/test2")
-    public String getTest2(String test) {
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("Data", "12345");
-        
-        return JWTUtil.generateToken(test, claims);
-    }
-
-    @PostMapping("/test3")
     public String getTest3(@RequestHeader("Authorization") String authHeader, String test) {
+        //Not valid
+        if(!JWTUtil.isValid(authHeader))
+        {
+            return "ERROR token";
+        }
+
         Claims claims = JWTUtil.parseToken(test);
-        return claims.get("Data").toString();
+        return claims.getSubject();
     }
 }
