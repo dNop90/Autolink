@@ -115,7 +115,8 @@ public class UserController {
         if(JWTUtil.isValid(authHeader))
         {
             //TODO return user information just like login
-            //AccountResponse res = accountService.getUserById(Integer.parseInt(JWTUtil.parseToken(authHeader).getId()));
+            //JWTUtil.parseToken(authHeader).getId()
+            //AccountResponse res = accountService.getUserById(Integer.parseInt());
             return ResponseEntity.status(200).body("working");
         }
         
