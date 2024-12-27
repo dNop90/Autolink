@@ -1,7 +1,5 @@
 package com.example.project2.Controllers;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
@@ -105,6 +103,26 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update user profile.");
         }
     }
+
+    /**
+     * Check if the user token is valid or not
+     * @param authHeader The token in the Authorization header
+     * @return user information
+     */
+    @PostMapping("/token")
+    public ResponseEntity<?> verifyUserToken(@RequestHeader("Authorization") String authHeader) {
+        //Check if token is valid
+        if(JWTUtil.isValid(authHeader))
+        {
+            //TODO return user information just like login
+            //AccountResponse res = accountService.getUserById(Integer.parseInt(JWTUtil.parseToken(authHeader).getId()));
+            return ResponseEntity.status(200).body("working");
+        }
+        
+        //Return 401 if its NOT valid
+        return ResponseEntity.status(401).build();
+    }
+    
 
 
     /*

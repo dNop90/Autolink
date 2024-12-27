@@ -74,18 +74,26 @@ public class JWTUtil {
                 return false;
             }
 
+
             //Check if the subject is null
             if(claims.getSubject() == null)
             {
-                //TODO Add username check here
                 return false;
+            }
+            else
+            {
+                //TODO Add username check here
             }
 
             //Check if the ID is null or less than 0
             if(claims.getId() == null || Integer.parseInt(claims.getId()) <= 0)
             {
-                //TODO Add userID check here
+                
                 return false;
+            }
+            else
+            {
+                //TODO Add account ID check here
             }
 
             return true;
