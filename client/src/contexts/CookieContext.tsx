@@ -1,12 +1,13 @@
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 import Cookies from 'js-cookie'
 import { CookieData } from '../data/CookieData';
+import { useAuth } from './AuthContext';
 
 interface CookieContextType {
     cookieData: CookieData;
     setTheme: (theme_type: number) => void;
     setToken: (token: string) => void;
-    getToken: () => string;
+    removeToken: () => void;
 }
 
 interface CookieProviderProps {
@@ -26,8 +27,8 @@ export const useCookie = () => {
 export const CookieProvider: React.FC<CookieProviderProps> = ({ children }) => {
   const [cookie, setCookieState] = useState<CookieData>(
     {
-      theme: 0,
-      token: ''
+      theme: Cookies.get('theme') ? parseInt(Cookies.get('theme') as any) : 0,
+      token: Cookies.get('session') ? Cookies.get('session') as string : ''
     }
   );
 
@@ -51,7 +52,7 @@ export const CookieProvider: React.FC<CookieProviderProps> = ({ children }) => {
     }
     else
     {
-        Cookies.set('theme', '0', { sameSite: 'strict' });
+        Cookies.set('theme', '0', { sameSite: 'strict', session: false });
     }
   }
 
@@ -67,10 +68,6 @@ export const CookieProvider: React.FC<CookieProviderProps> = ({ children }) => {
     {
         setToken(session_cookie);
     }
-    else
-    {
-        Cookies.set('session', '', { sameSite: 'strict' });
-    }
   }
   
 
@@ -81,7 +78,7 @@ export const CookieProvider: React.FC<CookieProviderProps> = ({ children }) => {
   function setTheme(theme_type: number)
   {
     setCookieState({...cookie, theme: theme_type});
-    Cookies.set('theme', String(theme_type), { sameSite: 'strict' });
+    Cookies.set('theme', String(theme_type), { sameSite: 'strict', session: false });
   }
 
   /**
@@ -95,27 +92,27 @@ export const CookieProvider: React.FC<CookieProviderProps> = ({ children }) => {
   }
 
   /**
-   * Get user token
-   * @returns The token from the cookie
+   * Remove the token for user session
    */
-  function getToken()
+  function removeToken()
   {
-    return cookie.token;
+    setCookieState({...cookie, token: ''});
+    Cookies.remove('session');
   }
 
 
   return (
     <>
-        {
-            cookie.theme > 0 ?
-            <link rel="stylesheet" href="css/Dark-Theme.css" />
-            :
-            <link rel="stylesheet" href="css/Light-Theme.css" />
-        }
+      {
+        cookie.theme > 0 ?
+        <link rel="stylesheet" href="css/Dark-Theme.css" />
+        :
+        <link rel="stylesheet" href="css/Light-Theme.css" />
+      }
 
-        <CookieContext.Provider value={{cookieData: cookie, setTheme, setToken, getToken}}>
-            {children}
-        </CookieContext.Provider>
+      <CookieContext.Provider value={{cookieData: cookie, setTheme, setToken, removeToken}}>
+          {children}
+      </CookieContext.Provider>
     </>
   );
 };

@@ -18,7 +18,7 @@ export class api_user {
      */
     async tokenValidation(token: string)
     {
-        const response = await axios.post(`${this.api_link}/token`, {headers:{'Authorization': token}});
+        const response = await axios.post(`${this.api_link}/token`, {}, {headers:{'Authorization': token}});
         return response.data;
     }
 
