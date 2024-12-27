@@ -112,7 +112,7 @@ public class UserController {
      */
     @GetMapping("/test")
     public String getTest(String test) {
-        return JWTUtil.generateToken(test);
+        return JWTUtil.generateToken(test, "123");
     }
 
     @PostMapping("/test2")

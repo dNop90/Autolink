@@ -17,9 +17,10 @@ public class JWTUtil {
      * @param username The username which will be use in token generation
      * @return The token string
      */
-    public static String generateToken(String username){
+    public static String generateToken(String username, String id){
         return Jwts.builder()
             .setSubject(username)
+            .setId(id)
             .setIssuedAt(new Date())
             .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)) // 1 hour
             .signWith(Keys.hmacShaKeyFor(SECRET_KEY.getBytes()))
@@ -57,12 +58,41 @@ public class JWTUtil {
     }
 
     /**
-     * Check if token is expired
-     * @param token The token to check
+     * Check if the token is valid
+     * @param token The token to extract information
      * @return True or false
      */
-    public static boolean isTokenExpire(String token){
-        Claims claims = parseToken(token);
-        return claims.getExpiration().getTime() < (new Date()).getTime();
+    public static boolean isValid(String token)
+    {
+        try
+        {
+            Claims claims = parseToken(token);
+
+            //Check if the time is expired
+            if(claims.getExpiration().getTime() < (new Date()).getTime())
+            {
+                return false;
+            }
+
+            //Check if the subject is null
+            if(claims.getSubject() == null)
+            {
+                //TODO Add username check here
+                return false;
+            }
+
+            //Check if the ID is null or less than 0
+            if(claims.getId() == null || Integer.parseInt(claims.getId()) <= 0)
+            {
+                //TODO Add userID check here
+                return false;
+            }
+
+            return true;
+        }
+        catch(Exception e)
+        {
+            return false;
+        }
     }
 }
