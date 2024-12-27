@@ -11,12 +11,11 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import ViewInventory from './pages/ViewInventory';
 import { CookieProvider } from './contexts/CookieContext';
-import Logout from './components/Logout';
+import Logout from './pages/Logout';
 
 
 const App: React.FC = () => {
   return (
-    
     <CookieProvider>
       <AuthProvider>
         <Navbar />
@@ -29,7 +28,7 @@ const App: React.FC = () => {
 
           <Route element={<UserRouteGuard/>}>
             <Route path="/dealer-dashboard" element={<DealerDashboard />} />
-            <Route path="/user-profile" element={<UserProfile />} />
+            <Route path="/user/profile" element={<UserProfile />} />
           </Route>
         </Routes>
       </AuthProvider>

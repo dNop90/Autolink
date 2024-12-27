@@ -6,11 +6,11 @@ import * as Icon from 'react-bootstrap-icons';
 import { useCookie } from '../../contexts/CookieContext';
 
 const Navbar: React.FC = () => {
-  const authContext = useAuth();
-  const user = authContext.user;
-
   const themeContext = useCookie();
   const theme = themeContext.cookieData.theme;
+
+  const authContext = useAuth();
+  const user = authContext.user;
 
   return (
     <nav>

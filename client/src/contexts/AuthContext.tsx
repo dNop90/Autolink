@@ -2,7 +2,6 @@ import React, { createContext, useState, useContext, ReactNode, useEffect } from
 import { User } from '../data/User';
 import { useCookie } from './CookieContext';
 import { api } from '../services/api';
-import { useNavigate } from 'react-router-dom';
 
 interface AuthContextType {
   user: User | null;
@@ -27,11 +26,15 @@ export const useAuth = () => {
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const cookie = useCookie();
-  const navigate = useNavigate();
+  
   //On page loaded
   //We will verified the user token based on their cookie
   useEffect(() => {
-    InitToken();
+    const runInitToken = async () => {
+      await InitToken();
+    }
+
+    runInitToken();
   }, []);
 
   /**
@@ -39,18 +42,19 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
    */
   async function InitToken()
   {
-    if(cookie.getToken().length > 0)
+    console.log(cookie.cookieData.token.length);
+    if(cookie.cookieData.token.length > 0)
     {
       try
       {
+        console.log(cookie.cookieData.token);
         let res = await api.user.tokenValidation(cookie.cookieData.token);
-        console.log(res);
 
-        // TODO: login the user
+        setUser({userid: res.accountId, username: res.username, role: res.role, imageurl: res.imageurl});
       }
       catch(err)
       {
-        cookie.setToken('');
+        cookie.removeToken();
       }
     }
   }
@@ -63,12 +67,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   function logout()
   {
     setUser(null);
-    cookie.setToken('');
+    cookie.removeToken();
   }
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
-      {children}
-    </AuthContext.Provider>
+    <>
+      <AuthContext.Provider value={{ user, login, logout}}>
+        {children}
+      </AuthContext.Provider>
+    </>
+    
   );
 };
