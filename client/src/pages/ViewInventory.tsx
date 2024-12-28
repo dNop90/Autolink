@@ -19,7 +19,7 @@ const ViewInventory: React.FC = () => {
     const fetchVehicles = async () => {
       try {
         setLoading(true);
-        const response = await fetch("http://localhost:8086/api/vehicles/inventory");
+        const response = await fetch("http://localhost:8080/api/vehicles/inventory");
         if (!response.ok) {
           throw new Error("Failed to fetch data");
         }
