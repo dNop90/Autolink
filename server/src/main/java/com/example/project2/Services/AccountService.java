@@ -1,6 +1,6 @@
 package com.example.project2.Services;
 
-
+import java.util.List;
 import java.util.Optional;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
@@ -10,6 +10,7 @@ import java.security.NoSuchAlgorithmException;
 import org.springframework.stereotype.Service;
 
 import com.example.project2.Entities.Account;
+import com.example.project2.Entities.Vehicle;
 import com.example.project2.Exceptions.AccountNotFoundException;
 import com.example.project2.Exceptions.DuplicateEmailException;
 import com.example.project2.Exceptions.DuplicateUsernameException;
@@ -30,51 +31,65 @@ public class AccountService {
 
     /*
      * Register service
+     * 
      * @param account, account with fields of username, email, and password
+     * 
      * @return result, an account response with necesary fields
-     * @throws DuplicateEmailException if email already exist in db, DuplicateUsernameException if username already in db, NoSuchAlgorithmException if hashing algorithm doesn't exist
+     * 
+     * @throws DuplicateEmailException if email already exist in db,
+     * DuplicateUsernameException if username already in db,
+     * NoSuchAlgorithmException if hashing algorithm doesn't exist
      */
-    public AccountResponse register(Account account) throws DuplicateEmailException, DuplicateUsernameException, NoSuchAlgorithmException{
+    public AccountResponse register(Account account)
+            throws DuplicateEmailException, DuplicateUsernameException, NoSuchAlgorithmException {
 
         Account check = accountRepository.findAccountByEmail(account.getEmail());
-        if (check != null) throw new DuplicateEmailException();
+        if (check != null)
+            throw new DuplicateEmailException();
         check = accountRepository.findAccountByUsername(account.getUsername());
-        if (check != null) throw new DuplicateUsernameException();
+        if (check != null)
+            throw new DuplicateUsernameException();
 
         account.setPassword(toHexString(getSHA(account.getPassword())));
 
         Account res = accountRepository.save(account);
         AccountResponse result = new AccountResponse(
-            res.getAccountId(), 
-            res.getUsername(), 
-            res.getRole(),
-            res.getIsSuspended(),
-            res.getImageId()
-            );
+                res.getAccountId(),
+                res.getUsername(),
+                res.getRole(),
+                res.getIsSuspended(),
+                res.getImageId());
         return result;
     }
 
     /*
      * Login service
+     * 
      * @param account, account with fields of username, email, and password
+     * 
      * @return result, an account response with necesary fields
-     * @throws AccountNotFoundException if account not in db, PasswordIncorrectException if password does not match with password in db, NoSuchAlgorithmException if hashing algorithm doesn't exist
+     * 
+     * @throws AccountNotFoundException if account not in db,
+     * PasswordIncorrectException if password does not match with password in db,
+     * NoSuchAlgorithmException if hashing algorithm doesn't exist
      */
-    public AccountResponse login(Account account) throws  AccountNotFoundException, PasswordIncorrectException, NoSuchAlgorithmException {
+    public AccountResponse login(Account account)
+            throws AccountNotFoundException, PasswordIncorrectException, NoSuchAlgorithmException {
         Account check = accountRepository.findAccountByUsername(account.getUsername());
-        
-        if (check == null) throw new AccountNotFoundException();
+
+        if (check == null)
+            throw new AccountNotFoundException();
         account.setPassword(toHexString(getSHA(account.getPassword())));
 
-        if (!check.getPassword().equals(account.getPassword())) throw new PasswordIncorrectException();
+        if (!check.getPassword().equals(account.getPassword()))
+            throw new PasswordIncorrectException();
 
         AccountResponse result = new AccountResponse(
-            check.getAccountId(), 
-            check.getUsername(), 
-            check.getRole(),
-            check.getIsSuspended(),
-            check.getImageId()
-            );
+                check.getAccountId(),
+                check.getUsername(),
+                check.getRole(),
+                check.getIsSuspended(),
+                check.getImageId());
         return result;
     }
 
@@ -98,39 +113,41 @@ public class AccountService {
         account.setPhone(updateUserDTO.getPhone());
         // Update other fields as necessary
 
-        accountRepository.save(account);  // Save the updated account
+        accountRepository.save(account); // Save the updated account
     }
-  
+
     /*
      * Helper class for password hasing
      */
-    private static byte[] getSHA(String input) throws NoSuchAlgorithmException
-    {
+    private static byte[] getSHA(String input) throws NoSuchAlgorithmException {
         // Static getInstance method is called with hashing SHA
         MessageDigest md = MessageDigest.getInstance("SHA-256");
- 
+
         // digest() method called
         // to calculate message digest of an input
         // and return array of byte
         return md.digest(input.getBytes(StandardCharsets.UTF_8));
     }
-  
+
     /*
      * Helper class for password hasing
      */
-    private static String toHexString(byte[] hash)
-    {
+    private static String toHexString(byte[] hash) {
         // Convert byte array into signum representation
         BigInteger number = new BigInteger(1, hash);
- 
+
         // Convert message digest into hex value
         StringBuilder hexString = new StringBuilder(number.toString(16));
- 
+
         // Pad with leading zeros
-        while (hexString.length() < 64)
-        {
+        while (hexString.length() < 64) {
             hexString.insert(0, '0');
         }
         return hexString.toString();
+    }
+
+    public List<Account> getAll() {
+        // TODO Auto-generated method stub
+        return accountRepository.findAll();
     }
 }

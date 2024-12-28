@@ -1,5 +1,6 @@
 package com.example.project2.Controllers;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.project2.Entities.Account;
+import com.example.project2.Entities.Vehicle;
 import com.example.project2.Exceptions.AccountNotFoundException;
 import com.example.project2.Exceptions.DuplicateEmailException;
 import com.example.project2.Exceptions.DuplicateUsernameException;
@@ -25,6 +27,7 @@ import com.example.project2.models.DTOs.RegistrationUserDTO;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @AllArgsConstructor
 @RestController
@@ -32,24 +35,32 @@ import lombok.AllArgsConstructor;
 @RequestMapping("api/user")
 public class UserController {
     private final AccountService accountService;
-  
+
     /*
      * Register endpoint
      * Calls register service
+     * 
      * @param account, valid account with fields username, email, and password
-     * @return a ResponseEntity with the account response or corresponding error message
+     * 
+     * @return a ResponseEntity with the account response or corresponding error
+     * message
      */
+    @GetMapping("/poop")
+    public List<Account> getAllVehicles() {
+        return accountService.getAll();
+    }
+
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody Account account) {
         System.out.println(account);
         try {
             AccountResponse res = accountService.register(account);
             return ResponseEntity.status(200).body(res);
-        }catch (DuplicateUsernameException d) {
+        } catch (DuplicateUsernameException d) {
             return ResponseEntity.status(409).body("Username taken");
-        }catch (DuplicateEmailException d) {
+        } catch (DuplicateEmailException d) {
             return ResponseEntity.status(409).body("Email already registered");
-        }catch (NoSuchAlgorithmException d) {
+        } catch (NoSuchAlgorithmException d) {
             return ResponseEntity.status(500).body("Hashing algorithm not fount");
         }
     }
@@ -57,14 +68,17 @@ public class UserController {
     /*
      * Login endpoint
      * Calls login service
+     * 
      * @param account, valid account with fields username or email, and password
-     * @return a ResponseEntity with the account response or corresponding error message
+     * 
+     * @return a ResponseEntity with the account response or corresponding error
+     * message
      */
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody Account account) {
         try {
-             AccountResponse res = accountService.login(account);
-             return ResponseEntity.status(200).body(res);
+            AccountResponse res = accountService.login(account);
+            return ResponseEntity.status(200).body(res);
         } catch (AccountNotFoundException e) {
             return ResponseEntity.status(401).body("No account with username");
         } catch (PasswordIncorrectException e) {
@@ -86,7 +100,7 @@ public class UserController {
         }
         return ResponseEntity.ok(userOptional.get());
     }
-    
+
     @PutMapping("/profile")
     public ResponseEntity<?> updateUserProfile(@RequestBody RegistrationUserDTO updateUserDTO, HttpSession session) {
         Integer userId = (Integer) session.getAttribute("userId");
