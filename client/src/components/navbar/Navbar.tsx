@@ -3,14 +3,14 @@ import { Link } from 'react-router-dom';
 import './Navbar.css'
 import { useAuth } from '../../contexts/AuthContext';
 import * as Icon from 'react-bootstrap-icons';
-import { useTheme } from '../../contexts/ThemeContext';
+import { useCookie } from '../../contexts/CookieContext';
 
 const Navbar: React.FC = () => {
+  const themeContext = useCookie();
+  const theme = themeContext.cookieData.theme;
+
   const authContext = useAuth();
   const user = authContext.user;
-
-  const themeContext = useTheme();
-  const theme = themeContext.theme;
 
   return (
     <nav>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "../styles/ViewInventory.css";
+import { api } from "../services/api";
 
 const ViewInventory: React.FC = () => {
   const [vehicles, setVehicles] = useState([]); // State to store fetched vehicles
@@ -19,7 +20,9 @@ const ViewInventory: React.FC = () => {
     const fetchVehicles = async () => {
       try {
         setLoading(true);
+
         const response = await fetch("http://localhost:8080/api/vehicles/inventory");
+
         if (!response.ok) {
           throw new Error("Failed to fetch data");
         }

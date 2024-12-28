@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Button, Form } from 'react-bootstrap'
 import '../styles/Login.css'
 import { api } from '../services/api';
+import { useCookie } from '../contexts/CookieContext';
 
 function Login() {
     const [formInput, setFormInput] = useState({
@@ -18,13 +19,15 @@ function Login() {
     });
     const [account, setAccount] = useState<any | null>(null);
     const context = useAuth();
+    const cookie = useCookie();
+
     if (!context) throw new Error("Login must be used with an AuthProvider");
     const navigate = useNavigate();
     let username = formInput.username;
     let password = formInput.password;
     useEffect(() => {
         if(account) {
-            console.log(account);
+            //console.log(account);
             let accountId = account.accountId;
             let role = account.role;
             let imgeUrl = account.imgeUrl;
@@ -67,9 +70,9 @@ function Login() {
         }
         setFormError(inputError);
         api.user.loginUser(username, password).then((response) => {
-                console.log(response);
-                setAccount(response.data);
-                
+                //console.log(response);
+                cookie.setToken(response.token);
+                setAccount(response);
             })
             .catch((error) => {
                 console.log(error);

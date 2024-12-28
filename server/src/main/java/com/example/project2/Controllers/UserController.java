@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import java.security.NoSuchAlgorithmException;
 
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,10 +22,12 @@ import com.example.project2.Exceptions.AccountNotFoundException;
 import com.example.project2.Exceptions.DuplicateEmailException;
 import com.example.project2.Exceptions.DuplicateUsernameException;
 import com.example.project2.Exceptions.PasswordIncorrectException;
+import com.example.project2.JWT.JWTUtil;
 import com.example.project2.Response.AccountResponse;
 import com.example.project2.Services.AccountService;
 import com.example.project2.models.DTOs.RegistrationUserDTO;
 
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -54,7 +57,7 @@ public class UserController {
     public ResponseEntity register(@RequestBody Account account) {
         System.out.println(account);
         try {
-            AccountResponse res = accountService.register(account);
+            String res = accountService.register(account);
             return ResponseEntity.status(200).body(res);
         } catch (DuplicateUsernameException d) {
             return ResponseEntity.status(409).body("Username taken");
@@ -113,5 +116,46 @@ public class UserController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update user profile.");
         }
+    }
+
+    /**
+     * Check if the user token is valid or not
+     * @param authHeader The token in the Authorization header
+     * @return user information
+     */
+    @PostMapping("/token")
+    public ResponseEntity<?> verifyUserToken(@RequestHeader("Authorization") String authHeader) {
+        //Check if token is valid
+        if(JWTUtil.isValid(authHeader))
+        {
+            AccountResponse res = accountService.getCurrentUser(JWTUtil.parseToken(authHeader).getSubject(), authHeader);
+
+            return ResponseEntity.status(200).body(res);
+        }
+        
+        //Return 401 if its NOT valid
+        return ResponseEntity.status(401).build();
+    }
+    
+
+
+    /*
+     * This is for testing the JWT
+     */
+    @GetMapping("/test")
+    public String getTest(String test) {
+        return JWTUtil.generateToken(test, "123");
+    }
+
+    @PostMapping("/test2")
+    public String getTest3(@RequestHeader("Authorization") String authHeader, String test) {
+        //Not valid
+        if(!JWTUtil.isValid(authHeader))
+        {
+            return "ERROR token";
+        }
+
+        Claims claims = JWTUtil.parseToken(test);
+        return claims.getSubject();
     }
 }

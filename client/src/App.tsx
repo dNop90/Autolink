@@ -10,27 +10,29 @@ import UserRouteGuard from './routeguards/UserRouteGuard';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import ViewInventory from './pages/ViewInventory';
-import { ThemeProvider } from './contexts/ThemeContext';
+import { CookieProvider } from './contexts/CookieContext';
+import Logout from './pages/Logout';
 
 
 const App: React.FC = () => {
   return (
-    <AuthProvider>
-      <ThemeProvider>
+    <CookieProvider>
+      <AuthProvider>
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/logout" element={<Logout/>}/>
           <Route path="/register" element={<Register />} />
           <Route path="/explore" element={<ViewInventory />}/>
 
           <Route element={<UserRouteGuard/>}>
             <Route path="/dealer-dashboard" element={<DealerDashboard />} />
-            <Route path="/user-profile" element={<UserProfile />} />
+            <Route path="/user/profile" element={<UserProfile />} />
           </Route>
         </Routes>
-      </ThemeProvider>
-    </AuthProvider>
+      </AuthProvider>
+    </CookieProvider>
   );
 };
 

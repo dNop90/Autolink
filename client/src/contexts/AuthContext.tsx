@@ -1,5 +1,7 @@
-import React, { createContext, useState, useContext, ReactNode } from 'react';
+import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 import { User } from '../data/User';
+import { useCookie } from './CookieContext';
+import { api } from '../services/api';
 
 interface AuthContextType {
   user: User | null;
@@ -23,6 +25,39 @@ export const useAuth = () => {
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
+  const cookie = useCookie();
+  
+  //On page loaded
+  //We will verified the user token based on their cookie
+  useEffect(() => {
+    const runInitToken = async () => {
+      await InitToken();
+    }
+
+    runInitToken();
+  }, []);
+
+  /**
+   * Init the token
+   */
+  async function InitToken()
+  {
+    console.log(cookie.cookieData.token.length);
+    if(cookie.cookieData.token.length > 0)
+    {
+      try
+      {
+        console.log(cookie.cookieData.token);
+        let res = await api.user.tokenValidation(cookie.cookieData.token);
+
+        setUser({userid: res.accountId, username: res.username, role: res.role, imageurl: res.imageurl});
+      }
+      catch(err)
+      {
+        cookie.removeToken();
+      }
+    }
+  }
 
   function login(userid: number, username: string, role: number, imageurl: string)
   {
@@ -32,11 +67,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   function logout()
   {
     setUser(null);
+    cookie.removeToken();
   }
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
-      {children}
-    </AuthContext.Provider>
+    <>
+      <AuthContext.Provider value={{ user, login, logout}}>
+        {children}
+      </AuthContext.Provider>
+    </>
+    
   );
 };
