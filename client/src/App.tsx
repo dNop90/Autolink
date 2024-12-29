@@ -9,9 +9,10 @@ import Navbar from './components/navbar/Navbar';
 import UserRouteGuard from './routeguards/UserRouteGuard';
 import Login from './pages/Login';
 import Register from './pages/Register';
-import ViewInventory from './pages/ViewInventory';
+import ViewInventory from './pages/Vehicle/ViewInventory';
 import { CookieProvider } from './contexts/CookieContext';
 import Logout from './pages/Logout';
+import AddVehicle from './pages/Vehicle/AddVehicle';
 
 
 const App: React.FC = () => {
@@ -25,7 +26,8 @@ const App: React.FC = () => {
           <Route path="/logout" element={<Logout/>}/>
           <Route path="/register" element={<Register />} />
           <Route path="/explore" element={<ViewInventory />}/>
-
+          {/* testing for Car api request */}
+          <Route path="/addvehicle" element={<AddVehicle />}/>
           <Route element={<UserRouteGuard/>}>
             <Route path="/dealer-dashboard" element={<DealerDashboard />} />
             <Route path="/user/profile" element={<UserProfile />} />
