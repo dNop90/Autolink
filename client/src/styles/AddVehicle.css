@@ -1,0 +1,70 @@
+.add-vehicle-container {
+    max-width: 600px; /* Set a maximum width for the form */
+    margin: 0 auto; /* Center the form horizontally */
+    padding: 20px; /* Add padding around the form */
+    background-color: #f8f9fa; /* Light background color */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+h1 {
+    text-align: center; /* Center the heading */
+    margin-bottom: 20px; /* Space below the heading */
+    color: #343a40; /* Dark text color */
+}
+
+.form-group {
+    margin-bottom: 15px; /* Space between form groups */
+}
+
+label {
+    display: block; /* Make labels block elements */
+    margin-bottom: 5px; /* Space below labels */
+    font-weight: bold; /* Bold text for labels */
+    color: #495057; /* Darker text color for labels */
+}
+
+select,
+input[type="text"] {
+    width: 100%; /* Full width for inputs and selects */
+    padding: 10px; /* Padding inside inputs and selects */
+    border: 1px solid #ced4da; /* Light border */
+    border-radius: 4px; /* Rounded corners */
+    font-size: 16px; /* Font size */
+}
+
+select:focus,
+input[type="text"]:focus {
+    border-color: #80bdff; /* Change border color on focus */
+    outline: none; /* Remove default outline */
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* Add shadow on focus */
+}
+
+button {
+    width: 100%; /* Full width for the button */
+    padding: 10px; /* Padding inside the button */
+    background-color: #007bff; /* Primary button color */
+    color: white; /* White text color */
+    border: none; /* Remove border */
+    border-radius: 4px; /* Rounded corners */
+    font-size: 16px; /* Font size */
+    cursor: pointer; /* Pointer cursor on hover */
+}
+
+button:hover {
+    background-color: #0056b3; /* Darker shade on hover */
+}
+
+@media (max-width: 600px) {
+    .add-vehicle-container {
+        padding: 15px; /* Reduce padding on smaller screens */
+    }
+
+    h1 {
+        font-size: 24px; /* Adjust heading size on smaller screens */
+    }
+}
+
+body{
+    margin-top: 60px;
+  }
