@@ -1,8 +1,11 @@
 package com.example.project2.Controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+
 import java.util.List;
 import com.example.project2.Entities.Vehicle;
 import com.example.project2.Services.VehicleService;
@@ -47,9 +50,16 @@ public class VehicleController {
      * 
      * @return add a new vehicle
      */
+    @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping
     public Vehicle createVehicle(@RequestBody Vehicle vehicle) {
-        return vehicleService.createVehicle(vehicle);
+        System.out.println("Received Vehicle: " + vehicle);
+        try {
+            return vehicleService.createVehicle(vehicle);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error saving vehicle", e);
+        }
     }
 
     /*
