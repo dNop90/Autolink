@@ -1,0 +1,30 @@
+.dashboard-sidebar{
+    display: inline-block;
+    width: 230px;
+    height: 100%;
+    line-height: 1;
+    background-color: var(--color-background);
+    box-shadow: 0 10px 16px 0 rgba(0, 0, 0, 0.1), 0 0 5px 0 rgba(0, 0, 0, 0.1) !important;
+    overflow: auto;
+}
+
+.dashboard-sidebar ul{
+    margin: 35px 0px 0px 0px;
+    padding: 0;
+    text-align: center;
+    list-style-type: none;
+}
+
+.dashboard-sidebar ul li{
+    display: block;
+}
+
+.dashboard-sidebar ul a{
+    display: block;
+    padding: 10px 0px;
+    color: var(--color-text-link);
+}
+
+.dashboard-sidebar ul a:hover{
+    color: var(--color-text-link-hover);
+}
