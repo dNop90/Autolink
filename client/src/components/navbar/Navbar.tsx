@@ -17,7 +17,11 @@ const Navbar: React.FC = () => {
       <div className='left'>
         <Link to="/" >Home</Link>
         <Link to="/explore">Explore</Link>
-        <Link to="/dashboard">Dashboard</Link>
+
+        {
+          user &&
+          <Link to="/dashboard">Dashboard</Link>
+        }
       </div>
 
       <div className='right'>

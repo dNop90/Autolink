@@ -13,6 +13,8 @@ import ViewInventory from './pages/Vehicle/ViewInventory';
 import { CookieProvider } from './contexts/CookieContext';
 import Logout from './pages/Logout';
 import AddVehicle from './pages/Vehicle/AddVehicle';
+import DashboardRoute from './routeguards/DashboardRoute';
+import Dashboard_Home from './pages/Dashboard_Home';
 
 
 const App: React.FC = () => {
@@ -28,9 +30,14 @@ const App: React.FC = () => {
           <Route path="/explore" element={<ViewInventory />}/>
           {/* testing for Car api request */}
           <Route path="/addvehicle" element={<AddVehicle />}/>
+          
           <Route element={<UserRouteGuard/>}>
             <Route path="/dealer-dashboard" element={<DealerDashboard />} />
             <Route path="/user/profile" element={<UserProfile />} />
+
+            <Route element={<DashboardRoute/>}>
+              <Route path="/dashboard" element={<Dashboard_Home/>} />
+            </Route>
           </Route>
         </Routes>
       </AuthProvider>

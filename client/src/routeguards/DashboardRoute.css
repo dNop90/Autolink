@@ -1,0 +1,14 @@
+.dashboard{
+    height: calc(100vh - 50px);
+    margin-top: 50px;
+    overflow: hidden;
+}
+
+.dashboard-content{
+    display: inline-block;
+    height: calc(100vh - 50px);
+    width: calc(100% - 230px);
+    line-height: 1;
+    padding: 30px;
+    overflow: auto;
+}
