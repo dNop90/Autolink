@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import "../styles/ViewInventory.css";
-import { api } from "../services/api";
+import "../../styles/ViewInventory.css";
+import { api } from "../../services/api";
 
 const ViewInventory: React.FC = () => {
   const [vehicles, setVehicles] = useState([]); // State to store fetched vehicles
@@ -173,7 +173,7 @@ const ViewInventory: React.FC = () => {
               />
 
               <div className="mb-2">
-                <label htmlFor="condition" className="form-label text-light">
+                <label htmlFor="condition" className="form-label">
                   Condition
                 </label>
                 <select
@@ -189,7 +189,7 @@ const ViewInventory: React.FC = () => {
               </div>
 
               <div className="mb-2">
-                <label htmlFor="inStock" className="form-label text-light">
+                <label htmlFor="inStock" className="form-label">
                   In Stock
                 </label>
                 <select
