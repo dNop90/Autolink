@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.project2.Entities.Account;
+import com.example.project2.Entities.Application;
 import com.example.project2.Entities.Vehicle;
 import com.example.project2.Exceptions.AccountNotFoundException;
 import com.example.project2.Exceptions.DuplicateEmailException;
@@ -45,7 +46,7 @@ public class UserController {
      * 
      * @param account, valid account with fields username, email, and password
      * 
-     * @return a ResponseEntity with the account response or corresponding error
+     * @return a ResponseEntity with the success or corresponding error
      * message
      */
     @GetMapping("/poop")
@@ -118,26 +119,45 @@ public class UserController {
         }
     }
 
+    /*
+     * Search endpoint for admins looking for a specific account via username
+     * 
+     * @param JWT token for authorization, and username to search
+     * @return a ResponseEntity with the account response or corresponding error
+     * mesage
+     */
+    @GetMapping("/search")
+    public ResponseEntity getUser(@RequestHeader("Authorization") String authHeader, @RequestBody String username) {
+        if (JWTUtil.isValid(authHeader)) {
+            try {
+                AccountResponse user = accountService.getUserByUsername(username);
+                return ResponseEntity.ok(user);
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
+            }
+        }
+        return ResponseEntity.status(401).build();
+    }
+
     /**
      * Check if the user token is valid or not
+     * 
      * @param authHeader The token in the Authorization header
      * @return user information
      */
     @PostMapping("/token")
     public ResponseEntity<?> verifyUserToken(@RequestHeader("Authorization") String authHeader) {
-        //Check if token is valid
-        if(JWTUtil.isValid(authHeader))
-        {
-            AccountResponse res = accountService.getCurrentUser(JWTUtil.parseToken(authHeader).getSubject(), authHeader);
+        // Check if token is valid
+        if (JWTUtil.isValid(authHeader)) {
+            AccountResponse res = accountService.getCurrentUser(JWTUtil.parseToken(authHeader).getSubject(),
+                    authHeader);
 
             return ResponseEntity.status(200).body(res);
         }
-        
-        //Return 401 if its NOT valid
+
+        // Return 401 if its NOT valid
         return ResponseEntity.status(401).build();
     }
-    
-
 
     /*
      * This is for testing the JWT
@@ -149,9 +169,8 @@ public class UserController {
 
     @PostMapping("/test2")
     public String getTest3(@RequestHeader("Authorization") String authHeader, String test) {
-        //Not valid
-        if(!JWTUtil.isValid(authHeader))
-        {
+        // Not valid
+        if (!JWTUtil.isValid(authHeader)) {
             return "ERROR token";
         }
 
