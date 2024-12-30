@@ -18,6 +18,8 @@ import Dashboard_Home from './pages/Dashboard_Home';
 import AdminUserDashboard from './pages/Admin/AdminUserDashboard';
 import AdminDealerDashboard from './pages/Admin/AdminDealerDashboard';
 import VehicleDetails from './pages/Vehicle/VehicleDetails';
+import DelerVehicleList from './pages/Vehicle/DealerVehicleList';
+import UpdateVehicle from './pages/Vehicle/UpdateVehicle';
 
 
 const App: React.FC = () => {
@@ -40,9 +42,18 @@ const App: React.FC = () => {
             <Route path="/dealer-dashboard" element={<DealerDashboard />} />
             <Route path="/user-profile" element={<UserProfile />} />
 
-            <Route element={<DashboardRoute/>}>
-              <Route path="/dashboard" element={<Dashboard_Home/>} />
+
+            <Route element={<DashboardRoute />}>
+              <Route path="/dashboard" element={<Dashboard_Home />} />
+              {/* testing for Car api request */}
+              
               <Route path="/dashboard/dealer/add" element={<AddVehicle />} />
+              <Route path="/dashboard/vehiclelist" element={<DelerVehicleList />} />
+              <Route path="/dashboard/vehiclelist/update-vehicle/:vehicleId" element={<UpdateVehicle />} />
+              
+
+
+
             </Route>
           </Route>
         </Routes>

@@ -10,7 +10,7 @@ function DashboardSidebar() {
     return (
         <div className="dashboard-sidebar">
             <ul>
-                <li><Link to="/dashboard/user/vehiclelist">Vehicle List</Link></li>
+                <li><Link to="/dashboard/vehiclelist">Vehicle List</Link></li>
                 <li><Link to="/dashboard/user/dealer">Become Dealer</Link></li>
             </ul>
 
