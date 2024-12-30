@@ -1,6 +1,5 @@
 package com.example.project2.Controllers;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
@@ -18,8 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.project2.Entities.Account;
-import com.example.project2.Entities.Application;
-import com.example.project2.Entities.Vehicle;
 import com.example.project2.Exceptions.AccountNotFoundException;
 import com.example.project2.Exceptions.DuplicateEmailException;
 import com.example.project2.Exceptions.DuplicateUsernameException;
@@ -29,13 +26,11 @@ import com.example.project2.Response.AccountResponse;
 import com.example.project2.Services.AccountService;
 
 import io.jsonwebtoken.Claims;
-import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @AllArgsConstructor
 @RestController
-@CrossOrigin(origins = "*")  // Allows all origins
+@CrossOrigin
 @RequestMapping("api/user")
 public class UserController {
     private final AccountService accountService;
@@ -49,10 +44,6 @@ public class UserController {
      * @return a ResponseEntity with the success or corresponding error
      * message
      */
-    @GetMapping("/poop")
-    public List<Account> getAllVehicles() {
-        return accountService.getAll();
-    }
 
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody Account account) {
@@ -93,19 +84,21 @@ public class UserController {
     }
 
     @GetMapping("/info")
-public ResponseEntity<?> getUserProfile(@RequestParam String usernameOrEmail) {
-    Optional<Account> userOptional = accountService.getUserByUsernameOrEmail(usernameOrEmail);
-    if (userOptional.isEmpty()) {
-        return ResponseEntity.status(404).body("User not found");
+    public ResponseEntity<?> getUserProfile(@RequestParam String usernameOrEmail) {
+        Optional<Account> userOptional = accountService.getUserByUsernameOrEmail(usernameOrEmail);
+        if (userOptional.isEmpty()) {
+            return ResponseEntity.status(404).body("User not found");
+        }
+        return ResponseEntity.ok(userOptional.get());
     }
-    return ResponseEntity.ok(userOptional.get());
-}
 
-   
     /*
      * Change Password
      * Validates current password and updates the new password
-     * @param account, contains current password, new password, and email or username
+     * 
+     * @param account, contains current password, new password, and email or
+     * username
+     * 
      * @return a ResponseEntity with status of the password change operation
      */
     @PostMapping("/change-password")
@@ -115,21 +108,56 @@ public ResponseEntity<?> getUserProfile(@RequestParam String usernameOrEmail) {
             // If username is not provided, check for email
             usernameOrEmail = account.getEmail();
         }
-
         if (usernameOrEmail == null || usernameOrEmail.isEmpty()) {
             return ResponseEntity.status(401).body("Username or email is missing.");
         }
-
 
         Optional<Account> userOptional = accountService.getUserByUsernameOrEmail(usernameOrEmail);
         if (userOptional.isEmpty()) {
             return ResponseEntity.status(404).body("User not found.");
         }
 
+        Account user = userOptional.get();
+        try {
+            // Check if current password is correct
+            boolean isPasswordValid = accountService.validatePassword(account.getCurrentPassword(), user.getPassword());
+            if (!isPasswordValid) {
+                return ResponseEntity.status(401).body("Current password is incorrect.");
+            }
+            // Update password if current password is valid
+            accountService.updatePassword(user.getAccountId(), account.getNewPassword());
+            return ResponseEntity.status(200).body("Password updated successfully.");
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Failed to update password.");
+        }
+    }
+    /*
+     * Update user profile endpoint
+     * Accepts updated user details along with accountId in the request body
+     */
+    @PutMapping("/edit-profile")
+    public ResponseEntity<?> updateUserProfile(@RequestBody Account updateUserDTO) {
+        Long userId = updateUserDTO.getAccountId();  // Retrieve accountId from request body
+        if (userId == null) {
+            return ResponseEntity.status(401).body("User ID is missing.");
+        }
+
+        try {
+            accountService.updateUserProfile(userId, updateUserDTO);  // Pass Long to service
+            return ResponseEntity.status(200).body("User profile updated successfully.");
+        } catch (AccountNotFoundException e) {
+            return ResponseEntity.status(404).body("User not found.");
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Failed to update user profile.");
+        }
+    }
+    
+
     /*
      * Search endpoint for admins looking for a specific account via username
      * 
      * @param JWT token for authorization, and username to search
+     * 
      * @return a ResponseEntity with the account response or corresponding error
      * mesage
      */
@@ -159,38 +187,16 @@ public ResponseEntity<?> getUserProfile(@RequestParam String usernameOrEmail) {
             AccountResponse res = accountService.getCurrentUser(JWTUtil.parseToken(authHeader).getSubject(),
                     authHeader);
 
-
-        Account user = userOptional.get();
-        try {
-            // Check if current password is correct
-            boolean isPasswordValid = accountService.validatePassword(account.getCurrentPassword(), user.getPassword());
-            if (!isPasswordValid) {
-                return ResponseEntity.status(401).body("Current password is incorrect.");
-            }
-
-            // Update password if current password is valid
-            accountService.updatePassword(user.getAccountId(), account.getNewPassword());
-            return ResponseEntity.status(200).body("Password updated successfully.");
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body("Failed to update password.");
+            return ResponseEntity.status(200).body(res);
         }
-
-    }
 
         // Return 401 if its NOT valid
         return ResponseEntity.status(401).build();
     }
 
     /*
-     * Update user profile endpoint
-     * Accepts updated user details along with accountId in the request body
+     * This is for testing the JWT
      */
-    @PutMapping("/edit-profile")
-    public ResponseEntity<?> updateUserProfile(@RequestBody Account updateUserDTO) {
-        Long userId = updateUserDTO.getAccountId();  // Retrieve accountId from request body
-        if (userId == null) {
-            return ResponseEntity.status(401).body("User ID is missing.");
-
     @GetMapping("/test")
     public String getTest(String test) {
         return JWTUtil.generateToken(test, "123");
@@ -201,17 +207,9 @@ public ResponseEntity<?> getUserProfile(@RequestParam String usernameOrEmail) {
         // Not valid
         if (!JWTUtil.isValid(authHeader)) {
             return "ERROR token";
-
         }
 
-        try {
-            accountService.updateUserProfile(userId, updateUserDTO);  // Pass Long to service
-            return ResponseEntity.status(200).body("User profile updated successfully.");
-        } catch (AccountNotFoundException e) {
-            return ResponseEntity.status(404).body("User not found.");
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body("Failed to update user profile.");
-        }
+        Claims claims = JWTUtil.parseToken(test);
+        return claims.getSubject();
     }
-    
 }

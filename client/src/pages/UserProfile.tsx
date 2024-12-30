@@ -46,7 +46,6 @@ const UserProfile: React.FC = () => {
       console.error(error);
     }
   };
-
   // Handle the password change submission
   const handlePasswordChange = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -80,7 +79,6 @@ const UserProfile: React.FC = () => {
     const { name, value } = e.target;
     setProfile((prev) => ({ ...prev, [name]: value }));
   };
-
   useEffect(() => {
     if (token) {
       fetchProfile();
@@ -88,11 +86,10 @@ const UserProfile: React.FC = () => {
       setMessage("You need to log in to access this page.");
     }
   }, [token]);
-
+  
   return (
     <div className="profile-container">
       <h1 className="profile-title">Your Profile</h1>
-
       {message && <div className="message">{message}</div>}
 
       <form onSubmit={handleProfileSubmit} className="profile-form">
@@ -119,16 +116,15 @@ const UserProfile: React.FC = () => {
             onChange={handleInputChange}
             className="form-control"
             required
+
           />
         </div>
-
         <div className="form-group">
           <button type="submit" className="btn btn-primary">
             Update Profile
           </button>
         </div>
       </form>
-
       <h2 className="password-title">Change Password</h2>
       <form onSubmit={handlePasswordChange} className="password-form">
         <div className="form-group">
@@ -143,7 +139,6 @@ const UserProfile: React.FC = () => {
             required
           />
         </div>
-
         <div className="form-group">
           <label htmlFor="newPassword">New Password</label>
           <input
@@ -179,5 +174,4 @@ const UserProfile: React.FC = () => {
     </div>
   );
 };
-
 export default UserProfile;
