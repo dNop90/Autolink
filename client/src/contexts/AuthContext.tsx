@@ -42,12 +42,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
    */
   async function InitToken()
   {
-    console.log(cookie.cookieData.token.length);
     if(cookie.cookieData.token.length > 0)
     {
       try
       {
-        console.log(cookie.cookieData.token);
         let res = await api.user.tokenValidation(cookie.cookieData.token);
 
         setUser({userid: res.accountId, username: res.username, role: res.role, imageurl: res.imageurl});
