@@ -7,7 +7,7 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
 }
 
-h1 {
+.add-vehicle-container h1 {
     text-align: center; /* Center the heading */
     margin-bottom: 20px; /* Space below the heading */
     color: #343a40; /* Dark text color */
@@ -24,8 +24,8 @@ label {
     color: #495057; /* Darker text color for labels */
 }
 
-select,
-input[type="text"] {
+.add-vehicle-container select,
+.add-vehicle-container input[type="text"] {
     width: 100%; /* Full width for inputs and selects */
     padding: 10px; /* Padding inside inputs and selects */
     border: 1px solid #ced4da; /* Light border */
@@ -33,14 +33,14 @@ input[type="text"] {
     font-size: 16px; /* Font size */
 }
 
-select:focus,
-input[type="text"]:focus {
+.add-vehicle-container select:focus,
+.add-vehicle-container input[type="text"]:focus {
     border-color: #80bdff; /* Change border color on focus */
     outline: none; /* Remove default outline */
     box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* Add shadow on focus */
 }
 
-button {
+.add-vehicle-container button {
     width: 100%; /* Full width for the button */
     padding: 10px; /* Padding inside the button */
     background-color: #007bff; /* Primary button color */
@@ -51,7 +51,7 @@ button {
     cursor: pointer; /* Pointer cursor on hover */
 }
 
-button:hover {
+.add-vehicle-container button:hover {
     background-color: #0056b3; /* Darker shade on hover */
 }
 
@@ -64,7 +64,6 @@ button:hover {
         font-size: 24px; /* Adjust heading size on smaller screens */
     }
 }
-
 body{
-    margin-top: 60px;
+    margin-top: 80px;
   }
