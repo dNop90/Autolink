@@ -15,6 +15,8 @@ import Logout from './pages/Logout';
 import AddVehicle from './pages/Vehicle/AddVehicle';
 import DashboardRoute from './routeguards/DashboardRoute';
 import Dashboard_Home from './pages/Dashboard_Home';
+import AdminUserDashboard from './pages/Admin/AdminUserDashboard';
+import AdminDealerDashboard from './pages/Admin/AdminDealerDashboard';
 import VehicleDetails from './pages/Vehicle/VehicleDetails';
 import DelerVehicleList from './pages/Vehicle/DealerVehicleList';
 import UpdateVehicle from './pages/Vehicle/UpdateVehicle';
@@ -28,14 +30,18 @@ const App: React.FC = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/logout" element={<Logout />} />
+          <Route path="/logout" element={<Logout/>}/>
           <Route path="/register" element={<Register />} />
-          <Route path="/explore" element={<ViewInventory />} />
+          <Route path="/explore" element={<ViewInventory />}/>
+          {/* testing for Car api request */}
+          <Route path="/addvehicle" element={<AddVehicle />}/>
+          <Route path="/dashboard/admin/user" element={<AdminUserDashboard/>}/>
+          <Route path="/dashboard/admin/dealer" element={<AdminDealerDashboard/>}/>
           <Route path="/vehicle/:vehicleId" element={<VehicleDetails/>} />
-
-          <Route element={<UserRouteGuard />}>
+          <Route element={<UserRouteGuard/>}>  
             <Route path="/dealer-dashboard" element={<DealerDashboard />} />
-            <Route path="/user/profile" element={<UserProfile />} />
+            <Route path="/user-profile" element={<UserProfile />} />
+
 
             <Route element={<DashboardRoute />}>
               <Route path="/dashboard" element={<Dashboard_Home />} />
@@ -45,6 +51,9 @@ const App: React.FC = () => {
               <Route path="/dashboard/vehiclelist" element={<DelerVehicleList />} />
               <Route path="/dashboard/vehiclelist/update-vehicle/:vehicleId" element={<UpdateVehicle />} />
               
+
+
+
             </Route>
           </Route>
         </Routes>
