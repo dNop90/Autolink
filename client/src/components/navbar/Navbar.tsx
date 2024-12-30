@@ -37,8 +37,9 @@ const Navbar: React.FC = () => {
           <>
             <ul>
               <span className='username'>{user.username}</span>
-              <li><Link to="/user/profile">Profile</Link></li>
+              <li><Link to="/user-profile">Profile</Link></li>
               <li><Link to="/logout">Logout</Link></li>
+              
             </ul>
           </>
           :
