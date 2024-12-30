@@ -20,8 +20,8 @@ function DashboardSidebar() {
             </ul>
 
             <ul>
-                <li><Link to="/dashboard/admin/userlist">User List</Link></li>
-                <li><Link to="/dashboard/admin/dealerlist">Dealer List</Link></li>
+                <li><Link to="/dashboard/admin/user">User Administrative</Link></li>
+                <li><Link to="/dashboard/admin/dealer">Dealer Administrative</Link></li>
             </ul>
         </div>
     )

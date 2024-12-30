@@ -1,6 +1,5 @@
 package com.example.project2.Controllers;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.project2.Entities.Account;
-import com.example.project2.Entities.Vehicle;
 import com.example.project2.Exceptions.AccountNotFoundException;
 import com.example.project2.Exceptions.DuplicateEmailException;
 import com.example.project2.Exceptions.DuplicateUsernameException;
@@ -28,13 +26,11 @@ import com.example.project2.Response.AccountResponse;
 import com.example.project2.Services.AccountService;
 
 import io.jsonwebtoken.Claims;
-import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @AllArgsConstructor
 @RestController
-@CrossOrigin(origins = "*")  // Allows all origins
+@CrossOrigin
 @RequestMapping("api/user")
 public class UserController {
     private final AccountService accountService;
@@ -45,13 +41,9 @@ public class UserController {
      * 
      * @param account, valid account with fields username, email, and password
      * 
-     * @return a ResponseEntity with the account response or corresponding error
+     * @return a ResponseEntity with the success or corresponding error
      * message
      */
-    @GetMapping("/poop")
-    public List<Account> getAllVehicles() {
-        return accountService.getAll();
-    }
 
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody Account account) {
@@ -92,19 +84,21 @@ public class UserController {
     }
 
     @GetMapping("/info")
-public ResponseEntity<?> getUserProfile(@RequestParam String usernameOrEmail) {
-    Optional<Account> userOptional = accountService.getUserByUsernameOrEmail(usernameOrEmail);
-    if (userOptional.isEmpty()) {
-        return ResponseEntity.status(404).body("User not found");
+    public ResponseEntity<?> getUserProfile(@RequestParam String usernameOrEmail) {
+        Optional<Account> userOptional = accountService.getUserByUsernameOrEmail(usernameOrEmail);
+        if (userOptional.isEmpty()) {
+            return ResponseEntity.status(404).body("User not found");
+        }
+        return ResponseEntity.ok(userOptional.get());
     }
-    return ResponseEntity.ok(userOptional.get());
-}
 
-   
     /*
      * Change Password
      * Validates current password and updates the new password
-     * @param account, contains current password, new password, and email or username
+     * 
+     * @param account, contains current password, new password, and email or
+     * username
+     * 
      * @return a ResponseEntity with status of the password change operation
      */
     @PostMapping("/change-password")
@@ -114,7 +108,6 @@ public ResponseEntity<?> getUserProfile(@RequestParam String usernameOrEmail) {
             // If username is not provided, check for email
             usernameOrEmail = account.getEmail();
         }
-
         if (usernameOrEmail == null || usernameOrEmail.isEmpty()) {
             return ResponseEntity.status(401).body("Username or email is missing.");
         }
@@ -131,7 +124,6 @@ public ResponseEntity<?> getUserProfile(@RequestParam String usernameOrEmail) {
             if (!isPasswordValid) {
                 return ResponseEntity.status(401).body("Current password is incorrect.");
             }
-
             // Update password if current password is valid
             accountService.updatePassword(user.getAccountId(), account.getNewPassword());
             return ResponseEntity.status(200).body("Password updated successfully.");
@@ -139,8 +131,6 @@ public ResponseEntity<?> getUserProfile(@RequestParam String usernameOrEmail) {
             return ResponseEntity.status(500).body("Failed to update password.");
         }
     }
-
-
     /*
      * Update user profile endpoint
      * Accepts updated user details along with accountId in the request body
@@ -162,4 +152,64 @@ public ResponseEntity<?> getUserProfile(@RequestParam String usernameOrEmail) {
         }
     }
     
+
+    /*
+     * Search endpoint for admins looking for a specific account via username
+     * 
+     * @param JWT token for authorization, and username to search
+     * 
+     * @return a ResponseEntity with the account response or corresponding error
+     * mesage
+     */
+    @GetMapping("/search")
+    public ResponseEntity getUser(@RequestHeader("Authorization") String authHeader, @RequestBody String username) {
+        if (JWTUtil.isValid(authHeader)) {
+            try {
+                AccountResponse user = accountService.getUserByUsername(username);
+                return ResponseEntity.ok(user);
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
+            }
+        }
+        return ResponseEntity.status(401).build();
+    }
+
+    /**
+     * Check if the user token is valid or not
+     * 
+     * @param authHeader The token in the Authorization header
+     * @return user information
+     */
+    @PostMapping("/token")
+    public ResponseEntity<?> verifyUserToken(@RequestHeader("Authorization") String authHeader) {
+        // Check if token is valid
+        if (JWTUtil.isValid(authHeader)) {
+            AccountResponse res = accountService.getCurrentUser(JWTUtil.parseToken(authHeader).getSubject(),
+                    authHeader);
+
+            return ResponseEntity.status(200).body(res);
+        }
+
+        // Return 401 if its NOT valid
+        return ResponseEntity.status(401).build();
+    }
+
+    /*
+     * This is for testing the JWT
+     */
+    @GetMapping("/test")
+    public String getTest(String test) {
+        return JWTUtil.generateToken(test, "123");
+    }
+
+    @PostMapping("/test2")
+    public String getTest3(@RequestHeader("Authorization") String authHeader, String test) {
+        // Not valid
+        if (!JWTUtil.isValid(authHeader)) {
+            return "ERROR token";
+        }
+
+        Claims claims = JWTUtil.parseToken(test);
+        return claims.getSubject();
+    }
 }

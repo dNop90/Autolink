@@ -10,7 +10,6 @@ import java.security.NoSuchAlgorithmException;
 import org.springframework.stereotype.Service;
 
 import com.example.project2.Entities.Account;
-import com.example.project2.Entities.Vehicle;
 import com.example.project2.Exceptions.AccountNotFoundException;
 import com.example.project2.Exceptions.DuplicateEmailException;
 import com.example.project2.Exceptions.DuplicateUsernameException;
@@ -34,15 +33,15 @@ public class AccountService {
      * 
      * @param account, account with fields of username, email, and password
      * 
-     * @return result, an account response with necesary fields
+     * @return success message
      * 
      * @throws DuplicateEmailException if email already exist in db,
      * DuplicateUsernameException if username already in db,
      * NoSuchAlgorithmException if hashing algorithm doesn't exist
      */
 
-    public String register(Account account) throws DuplicateEmailException, DuplicateUsernameException, NoSuchAlgorithmException{
-
+    public String register(Account account)
+            throws DuplicateEmailException, DuplicateUsernameException, NoSuchAlgorithmException {
 
         Account check = accountRepository.findAccountByEmail(account.getEmail());
         if (check != null)
@@ -52,10 +51,7 @@ public class AccountService {
             throw new DuplicateUsernameException();
 
         account.setPassword(toHexString(getSHA(account.getPassword())));
-
-        Account res = accountRepository.save(account);
-
-        
+        accountRepository.save(account);
         return "Success";
 
     }
@@ -77,71 +73,96 @@ public class AccountService {
 
         if (check == null)
             throw new AccountNotFoundException();
+
         account.setPassword(toHexString(getSHA(account.getPassword())));
 
-
-        if (!check.getPassword().equals(account.getPassword())) throw new PasswordIncorrectException();
+        if (!check.getPassword().equals(account.getPassword()))
+            throw new PasswordIncorrectException();
         String token = JWTUtil.generateToken(check.getUsername(), String.valueOf(check.getAccountId()));
         AccountResponse result = new AccountResponse(
-            check.getAccountId(), 
-            check.getUsername(), 
-            check.getRole(),
-            check.getIsSuspended(),
-            check.getImageId(),
-            token
-            );
+                check.getAccountId(),
+                check.getUsername(),
+                check.getRole(),
+                check.getIsSuspended(),
+                check.getImageId(),
+                token);
+        return result;
+    }
+
+    public AccountResponse getCurrentUser(String username, String token) {
+        Account check = accountRepository.findAccountByUsername(username);
+        AccountResponse result = new AccountResponse(
+                check.getAccountId(),
+                check.getUsername(),
+                check.getRole(),
+                check.getIsSuspended(),
+                check.getImageId(),
+                token);
+
+        return result;
+    }
+
+    public AccountResponse getUserByUsername(String username) throws AccountNotFoundException {
+        Account check = accountRepository.findAccountByUsername(username);
+        if (check == null)
+            throw new AccountNotFoundException();
+
+        AccountResponse result = new AccountResponse(
+                check.getAccountId(),
+                check.getUsername(),
+                check.getRole(),
+                check.getIsSuspended(),
+                null,
+                null);
         return result;
     }
 
     public Optional<Account> getUserByUsernameOrEmail(String usernameOrEmail) {
         return accountRepository.findByUsernameOrEmail(usernameOrEmail);
     }
-    
 
-   // Update user profile
-   public void updateUserProfile(Long userId, Account updateUserDTO) throws AccountNotFoundException {
-    Optional<Account> optionalAccount = accountRepository.findById(userId.longValue());
+    // Update user profile
+    public void updateUserProfile(Long userId, Account updateUserDTO) throws AccountNotFoundException {
+        Optional<Account> optionalAccount = accountRepository.findById(userId.longValue());
+        if (optionalAccount.isEmpty()) {
+            throw new AccountNotFoundException();
+        }
 
-    if (optionalAccount.isEmpty()) {
-        throw new AccountNotFoundException();
+        Account account = optionalAccount.get();
+        account.setFirstName(updateUserDTO.getFirstName());
+        account.setLastName(updateUserDTO.getLastName());
+        account.setEmail(updateUserDTO.getEmail());
+        account.setPhone(updateUserDTO.getPhone());
+
+        accountRepository.save(account); // Save the updated account
     }
 
-    Account account = optionalAccount.get();
-    account.setFirstName(updateUserDTO.getFirstName());
-    account.setLastName(updateUserDTO.getLastName());
-    account.setEmail(updateUserDTO.getEmail());
-    account.setPhone(updateUserDTO.getPhone());
-
-    accountRepository.save(account);  // Save the updated account
-}
-
-public void updatePassword(Long accountId, String newPassword) throws AccountNotFoundException, NoSuchAlgorithmException {
-    Optional<Account> optionalAccount = accountRepository.findById(accountId);
-    
-    // If account is not found, throw an exception
-    if (optionalAccount.isEmpty()) {
-        throw new AccountNotFoundException();
+    public void updatePassword(Long accountId, String newPassword) throws AccountNotFoundException, NoSuchAlgorithmException {
+        Optional<Account> optionalAccount = accountRepository.findById(accountId);
+        
+        // If account is not found, throw an exception
+        if (optionalAccount.isEmpty()) {
+            throw new AccountNotFoundException();
+        }
+        
+        // Get the account from the database
+        Account account = optionalAccount.get();
+        
+        // Hash the new password before saving it
+        account.setPassword(toHexString(getSHA(newPassword))); // Assuming your password is hashed
+        accountRepository.save(account); // Save the updated account
     }
-    
-    // Get the account from the database
-    Account account = optionalAccount.get();
-    
-    // Hash the new password before saving it
-    account.setPassword(toHexString(getSHA(newPassword))); // Assuming your password is hashed
-    accountRepository.save(account); // Save the updated account
-}
 
-public boolean validatePassword(String username, String currentPassword) throws NoSuchAlgorithmException {
-    Account account = accountRepository.findAccountByUsername(username);
-    
-    if (account == null) {
-        return false;  // Account not found
+    public boolean validatePassword(String username, String currentPassword) throws NoSuchAlgorithmException {
+        Account account = accountRepository.findAccountByUsername(username);
+        
+        if (account == null) {
+            return false;  // Account not found
+        }
+        
+        // Check if the current password matches the stored password (hashed)
+        return account.getPassword().equals(toHexString(getSHA(currentPassword)));
     }
-    
-    // Check if the current password matches the stored password (hashed)
-    return account.getPassword().equals(toHexString(getSHA(currentPassword)));
-}
-
 
     /*
      * Helper class for password hasing
