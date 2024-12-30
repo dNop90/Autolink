@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.project2.Entities.Account;
+import com.example.project2.Entities.Application;
 import com.example.project2.Entities.Vehicle;
 import com.example.project2.Exceptions.AccountNotFoundException;
 import com.example.project2.Exceptions.DuplicateEmailException;
@@ -45,7 +46,7 @@ public class UserController {
      * 
      * @param account, valid account with fields username, email, and password
      * 
-     * @return a ResponseEntity with the account response or corresponding error
+     * @return a ResponseEntity with the success or corresponding error
      * message
      */
     @GetMapping("/poop")
@@ -119,10 +120,45 @@ public ResponseEntity<?> getUserProfile(@RequestParam String usernameOrEmail) {
             return ResponseEntity.status(401).body("Username or email is missing.");
         }
 
+
         Optional<Account> userOptional = accountService.getUserByUsernameOrEmail(usernameOrEmail);
         if (userOptional.isEmpty()) {
             return ResponseEntity.status(404).body("User not found.");
         }
+
+    /*
+     * Search endpoint for admins looking for a specific account via username
+     * 
+     * @param JWT token for authorization, and username to search
+     * @return a ResponseEntity with the account response or corresponding error
+     * mesage
+     */
+    @GetMapping("/search")
+    public ResponseEntity getUser(@RequestHeader("Authorization") String authHeader, @RequestBody String username) {
+        if (JWTUtil.isValid(authHeader)) {
+            try {
+                AccountResponse user = accountService.getUserByUsername(username);
+                return ResponseEntity.ok(user);
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
+            }
+        }
+        return ResponseEntity.status(401).build();
+    }
+
+    /**
+     * Check if the user token is valid or not
+     * 
+     * @param authHeader The token in the Authorization header
+     * @return user information
+     */
+    @PostMapping("/token")
+    public ResponseEntity<?> verifyUserToken(@RequestHeader("Authorization") String authHeader) {
+        // Check if token is valid
+        if (JWTUtil.isValid(authHeader)) {
+            AccountResponse res = accountService.getCurrentUser(JWTUtil.parseToken(authHeader).getSubject(),
+                    authHeader);
+
 
         Account user = userOptional.get();
         try {
@@ -138,8 +174,12 @@ public ResponseEntity<?> getUserProfile(@RequestParam String usernameOrEmail) {
         } catch (Exception e) {
             return ResponseEntity.status(500).body("Failed to update password.");
         }
+
     }
 
+        // Return 401 if its NOT valid
+        return ResponseEntity.status(401).build();
+    }
 
     /*
      * Update user profile endpoint
@@ -150,6 +190,18 @@ public ResponseEntity<?> getUserProfile(@RequestParam String usernameOrEmail) {
         Long userId = updateUserDTO.getAccountId();  // Retrieve accountId from request body
         if (userId == null) {
             return ResponseEntity.status(401).body("User ID is missing.");
+
+    @GetMapping("/test")
+    public String getTest(String test) {
+        return JWTUtil.generateToken(test, "123");
+    }
+
+    @PostMapping("/test2")
+    public String getTest3(@RequestHeader("Authorization") String authHeader, String test) {
+        // Not valid
+        if (!JWTUtil.isValid(authHeader)) {
+            return "ERROR token";
+
         }
 
         try {

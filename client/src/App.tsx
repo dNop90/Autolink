@@ -16,6 +16,9 @@ import AddVehicle from './pages/Vehicle/AddVehicle';
 import DashboardRoute from './routeguards/DashboardRoute';
 import Dashboard_Home from './pages/Dashboard_Home';
 import VehicleDetails from './pages/Vehicle/VehicleDetails';
+import AdminUserDashboard from './pages/Admin/AdminUserDashboard';
+import AdminDealerDashboard from './pages/Admin/AdminDealerDashboard';
+
 
 
 const App: React.FC = () => {
@@ -28,10 +31,17 @@ const App: React.FC = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/logout" element={<Logout />} />
           <Route path="/register" element={<Register />} />
+
           <Route path="/explore" element={<ViewInventory />} />
           <Route path="/vehicle/:vehicleId" element={<VehicleDetails/>} />
 
           <Route element={<UserRouteGuard />}>
+          <Route path="/explore" element={<ViewInventory />}/>
+          {/* testing for Car api request */}
+          <Route path="/addvehicle" element={<AddVehicle />}/>
+          <Route path="/dashboard/admin/user" element={<AdminUserDashboard/>}/>
+          <Route path="/dashboard/admin/dealer" element={<AdminDealerDashboard/>}/>
+          <Route element={<UserRouteGuard/>}>
             <Route path="/dealer-dashboard" element={<DealerDashboard />} />
             <Route path="/user-profile" element={<UserProfile />} />
 

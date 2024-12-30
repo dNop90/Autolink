@@ -10,7 +10,6 @@ import java.security.NoSuchAlgorithmException;
 import org.springframework.stereotype.Service;
 
 import com.example.project2.Entities.Account;
-import com.example.project2.Entities.Vehicle;
 import com.example.project2.Exceptions.AccountNotFoundException;
 import com.example.project2.Exceptions.DuplicateEmailException;
 import com.example.project2.Exceptions.DuplicateUsernameException;
@@ -34,7 +33,7 @@ public class AccountService {
      * 
      * @param account, account with fields of username, email, and password
      * 
-     * @return result, an account response with necesary fields
+     * @return success message
      * 
      * @throws DuplicateEmailException if email already exist in db,
      * DuplicateUsernameException if username already in db,
@@ -52,10 +51,7 @@ public class AccountService {
             throw new DuplicateUsernameException();
 
         account.setPassword(toHexString(getSHA(account.getPassword())));
-
-        Account res = accountRepository.save(account);
-
-        
+        accountRepository.save(account);        
         return "Success";
 
     }
@@ -75,10 +71,9 @@ public class AccountService {
             throws AccountNotFoundException, PasswordIncorrectException, NoSuchAlgorithmException {
         Account check = accountRepository.findAccountByUsername(account.getUsername());
 
-        if (check == null)
-            throw new AccountNotFoundException();
-        account.setPassword(toHexString(getSHA(account.getPassword())));
+        if (check == null) throw new AccountNotFoundException();
 
+        account.setPassword(toHexString(getSHA(account.getPassword())));
 
         if (!check.getPassword().equals(account.getPassword())) throw new PasswordIncorrectException();
         String token = JWTUtil.generateToken(check.getUsername(), String.valueOf(check.getAccountId()));
@@ -104,6 +99,20 @@ public class AccountService {
 
     if (optionalAccount.isEmpty()) {
         throw new AccountNotFoundException();
+    }
+    public AccountResponse getUserByUsername(String username) throws AccountNotFoundException{
+        Account check = accountRepository.findAccountByUsername(username);
+        if (check == null) throw new AccountNotFoundException();
+
+        AccountResponse result = new AccountResponse(
+            check.getAccountId(), 
+            check.getUsername(), 
+            check.getRole(),
+            check.getIsSuspended(),
+            null,
+            null
+            );
+        return result;
     }
 
     Account account = optionalAccount.get();
