@@ -12,14 +12,16 @@ public class KafkaService {
     @Autowired
     private KafkaTemplate<String, Message> kafkaTemplate;
 
+    private static final String TOPIC = "message-topic";
+
     /**
      * Kafka Consumer
      * @param message The message that got send by the producer
      */
-    @KafkaListener(topics="message-topics", groupId = "message-group", containerFactory = "kafkaListenerContainerFactory")
+    @KafkaListener(topics=TOPIC, groupId = "message-group", containerFactory = "kafkaListenerContainerFactory")
     public void consume(Message message)
     {
-
+        System.out.println(message.toString());
     }
 
     /**
@@ -28,6 +30,6 @@ public class KafkaService {
      */
     public void send(Message message)
     {
-        kafkaTemplate.send("message-topics", message);
+        kafkaTemplate.send(TOPIC, message);
     }
 }
