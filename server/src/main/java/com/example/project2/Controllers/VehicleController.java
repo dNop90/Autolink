@@ -8,9 +8,11 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import com.example.project2.Entities.Vehicle;
+import com.example.project2.JWT.JWTUtil;
 import com.example.project2.Services.VehicleService;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/api/vehicles")
 public class VehicleController {
 
@@ -25,7 +27,6 @@ public class VehicleController {
      * @return list of all vehicles
      */
 
-    @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/inventory")
     public List<Vehicle> getAllVehicles() {
         return vehicleService.getAllVehicles();
@@ -50,15 +51,38 @@ public class VehicleController {
      * 
      * @return add a new vehicle
      */
-    @CrossOrigin(origins = "http://localhost:3000")
+    // @PostMapping
+    // public Vehicle createVehicle(@RequestHeader("Authorization") String
+    // authHeader, @RequestBody Vehicle vehicle) {
+    // System.out.println("Received Vehicle: " + vehicle);
+    // if (JWTUtil.isValid(authHeader)) {
+    // try {
+    // return vehicleService.createVehicle(vehicle);
+    // } catch (Exception e) {
+    // e.printStackTrace();
+    // throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error
+    // saving vehicle", e);
+    // }
+    // }
+
+    // return ResponseEntity.status(401).build();
+
+    // }
     @PostMapping
-    public Vehicle createVehicle(@RequestBody Vehicle vehicle) {
+    public Vehicle createVehicle(@RequestHeader("Authorization") String authHeader, @RequestBody Vehicle vehicle) {
         System.out.println("Received Vehicle: " + vehicle);
-        try {
-            return vehicleService.createVehicle(vehicle);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error saving vehicle", e);
+
+        // Check if the authorization header is valid
+        if (JWTUtil.isValid(authHeader)) {
+            try {
+                return vehicleService.createVehicle(vehicle);
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error saving vehicle", e);
+            }
+        } else {
+            // If the authHeader is not valid, throw a 401 Unauthorized exception
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid authorization header");
         }
     }
 
@@ -71,9 +95,30 @@ public class VehicleController {
      * 
      * @return change the old data and new data (updated version is saved)
      */
+    // @PutMapping("/{id}")
+    // public ResponseEntity<Vehicle> updateVehicle(@PathVariable Long id,
+    // @RequestBody Vehicle vehicle) {
+    // return vehicleService.updateVehicle(id, vehicle);
+    // }
     @PutMapping("/{id}")
-    public ResponseEntity<Vehicle> updateVehicle(@PathVariable Long id, @RequestBody Vehicle vehicle) {
-        return vehicleService.updateVehicle(id, vehicle);
+    public ResponseEntity<ResponseEntity<Vehicle>> updateVehicle(
+            @RequestHeader("Authorization") String authHeader,
+            @PathVariable Long id,
+            @RequestBody Vehicle vehicle) {
+
+        // Check if the authorization header is valid
+        if (JWTUtil.isValid(authHeader)) {
+            try {
+                ResponseEntity<Vehicle> updatedVehicle = vehicleService.updateVehicle(id, vehicle);
+                return ResponseEntity.ok(updatedVehicle);
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error updating vehicle", e);
+            }
+        } else {
+            // If the authHeader is not valid, throw a 401 Unauthorized exception
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid authorization header");
+        }
     }
 
     /*
@@ -83,8 +128,28 @@ public class VehicleController {
      * 
      * @return remove the vehicle and save the data.
      */
+    // @DeleteMapping("/{id}")
+    // public ResponseEntity<Void> deleteVehicle(@PathVariable Long id) {
+    // return vehicleService.deleteVehicle(id);
+    // }
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteVehicle(@PathVariable Long id) {
-        return vehicleService.deleteVehicle(id);
+    public ResponseEntity<Void> deleteVehicle(
+            @RequestHeader("Authorization") String authHeader,
+            @PathVariable Long id) {
+
+        // Check if the authorization header is valid
+        if (JWTUtil.isValid(authHeader)) {
+            try {
+                vehicleService.deleteVehicle(id);
+                return ResponseEntity.noContent().build(); // Return 204 No Content
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error deleting vehicle", e);
+            }
+        } else {
+            // If the authHeader is not valid, throw a 401 Unauthorized exception
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid authorization header");
+        }
+
     }
 }

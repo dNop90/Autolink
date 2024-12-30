@@ -9,6 +9,7 @@ const UserProfile: React.FC = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const token = localStorage.getItem("jwtToken");
   const API_LINK = process.env.REACT_APP_API_USER;
+
   // Fetch the user's profile information
   const fetchProfile = async () => {
     try {
@@ -85,10 +86,12 @@ const UserProfile: React.FC = () => {
       setMessage("You need to log in to access this page.");
     }
   }, [token]);
+  
   return (
     <div className="profile-container">
       <h1 className="profile-title">Your Profile</h1>
       {message && <div className="message">{message}</div>}
+
       <form onSubmit={handleProfileSubmit} className="profile-form">
         <div className="form-group">
           <label htmlFor="name">Name</label>
@@ -102,6 +105,7 @@ const UserProfile: React.FC = () => {
             required
           />
         </div>
+
         <div className="form-group">
           <label htmlFor="email">Email</label>
           <input
@@ -112,6 +116,7 @@ const UserProfile: React.FC = () => {
             onChange={handleInputChange}
             className="form-control"
             required
+
           />
         </div>
         <div className="form-group">
@@ -146,6 +151,7 @@ const UserProfile: React.FC = () => {
             required
           />
         </div>
+
         <div className="form-group">
           <label htmlFor="confirmPassword">Confirm New Password</label>
           <input
@@ -158,6 +164,7 @@ const UserProfile: React.FC = () => {
             required
           />
         </div>
+
         <div className="form-group">
           <button type="submit" className="btn btn-primary">
             Change Password
