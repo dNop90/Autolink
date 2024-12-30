@@ -48,10 +48,6 @@ public class UserController {
      * @return a ResponseEntity with the account response or corresponding error
      * message
      */
-    @GetMapping("/poop")
-    public List<Account> getAllVehicles() {
-        return accountService.getAll();
-    }
 
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody Account account) {
@@ -120,24 +116,23 @@ public class UserController {
 
     /**
      * Check if the user token is valid or not
+     * 
      * @param authHeader The token in the Authorization header
      * @return user information
      */
     @PostMapping("/token")
     public ResponseEntity<?> verifyUserToken(@RequestHeader("Authorization") String authHeader) {
-        //Check if token is valid
-        if(JWTUtil.isValid(authHeader))
-        {
-            AccountResponse res = accountService.getCurrentUser(JWTUtil.parseToken(authHeader).getSubject(), authHeader);
+        // Check if token is valid
+        if (JWTUtil.isValid(authHeader)) {
+            AccountResponse res = accountService.getCurrentUser(JWTUtil.parseToken(authHeader).getSubject(),
+                    authHeader);
 
             return ResponseEntity.status(200).body(res);
         }
-        
-        //Return 401 if its NOT valid
+
+        // Return 401 if its NOT valid
         return ResponseEntity.status(401).build();
     }
-    
-
 
     /*
      * This is for testing the JWT
@@ -149,9 +144,8 @@ public class UserController {
 
     @PostMapping("/test2")
     public String getTest3(@RequestHeader("Authorization") String authHeader, String test) {
-        //Not valid
-        if(!JWTUtil.isValid(authHeader))
-        {
+        // Not valid
+        if (!JWTUtil.isValid(authHeader)) {
             return "ERROR token";
         }
 
