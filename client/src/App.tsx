@@ -16,6 +16,8 @@ import AddVehicle from './pages/Vehicle/AddVehicle';
 import DashboardRoute from './routeguards/DashboardRoute';
 import Dashboard_Home from './pages/Dashboard_Home';
 import VehicleDetails from './pages/Vehicle/VehicleDetails';
+import DelerVehicleList from './pages/Vehicle/DealerVehicleList';
+import UpdateVehicle from './pages/Vehicle/UpdateVehicle';
 
 
 const App: React.FC = () => {
@@ -38,7 +40,10 @@ const App: React.FC = () => {
             <Route element={<DashboardRoute />}>
               <Route path="/dashboard" element={<Dashboard_Home />} />
               {/* testing for Car api request */}
+              
               <Route path="/dashboard/dealer/add" element={<AddVehicle />} />
+              <Route path="/dashboard/vehiclelist" element={<DelerVehicleList />} />
+              <Route path="/dashboard/vehiclelist/update-vehicle/:vehicleId" element={<UpdateVehicle />} />
               
             </Route>
           </Route>
