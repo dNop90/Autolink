@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from "react";
 import "../../styles/ViewInventory.css";
+
 import { api } from "../../services/api";
+import { Link } from 'react-router-dom';
+
+
+const API_LINK = process.env.REACT_APP_API_VEHICLE;
 
 const ViewInventory: React.FC = () => {
   const [vehicles, setVehicles] = useState([]); // State to store fetched vehicles
@@ -21,7 +26,7 @@ const ViewInventory: React.FC = () => {
       try {
         setLoading(true);
 
-        const response = await fetch("http://localhost:8080/api/vehicles/inventory");
+        const response = await fetch(`${API_LINK}/inventory`);
 
         if (!response.ok) {
           throw new Error("Failed to fetch data");
@@ -210,27 +215,32 @@ const ViewInventory: React.FC = () => {
             <div className="row">
               {filteredVehicles.map((vehicle: any) => (
                 <div className="col-md-4 mb-4" key={vehicle.vehicleId}>
-                  <div className="card bg-dark text-light"> {/* color for cards */}
-                    <img
-                      src="https://images.pexels.com/photos/35967/mini-cooper-auto-model-vehicle.jpg?cs=srgb&dl=pexels-pixabay-35967.jpg&fm=jpg"
-                      className="card-img-top"
-                      alt={vehicle.model}
-                    />
-                    <div className="card-body">
-                      <h5 className="card-title">
-                        {vehicle.make} {vehicle.model}
-                      </h5>
-                      <p className="card-text">Price: ${vehicle.price}</p>
-                      <p className="card-text">Year: {vehicle.year}</p>
-                      <p className="card-text">
-                        Condition: {vehicle.condition}
-                      </p>
-                      <p className="card-text">
-                        In Stock: {vehicle.inStock ? "Yes" : "No"}
-                      </p>
-                    </div>
+                  <Link to={`/vehicle/${vehicle.vehicleId}`}>
+                <div className="card bg-dark text-light">
+                  <img
+                    src="https://images.pexels.com/photos/35967/mini-cooper-auto-model-vehicle.jpg?cs=srgb&dl=pexels-pixabay-35967.jpg&fm=jpg"
+                    className="card-img-top"
+                    alt={vehicle.model}
+                  />
+                  <div className="card-body">
+                  
+                    <h5 className="card-title">
+                      {vehicle.make} {vehicle.model}
+                    </h5>
+                    <p className="card-text">Price: ${vehicle.price}</p>
+                    <p className="card-text">Year: {vehicle.year}</p>
+                    <p className="card-text">
+                      Condition: {vehicle.condition}
+                    </p>
+                    <p className="card-text">
+                      In Stock: {vehicle.inStock ? "Yes" : "No"}
+                    </p>
+                  
+                   
                   </div>
                 </div>
+                </Link>
+              </div>
               ))}
             </div>
           </div>

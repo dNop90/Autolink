@@ -1,9 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { authenticate, fetchData } from "../../services/apiService";
 import "../../styles/AddVehicle.css";
+import { useCookie } from "../../contexts/CookieContext";
+
+
+const API_LINK = process.env.REACT_APP_API_VEHICLE;
+
 
 const AddVehicle: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const cookie = useCookie();
 
   const [formData, setFormData] = useState({
     year: "",
@@ -148,10 +154,11 @@ const AddVehicle: React.FC = () => {
     e.preventDefault();
     console.log("Form to be submitted: ", formData)
     try {
-      const response = await fetch("http://localhost:8080/api/vehicles", {
+      const response = await fetch(`${API_LINK}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": cookie.cookieData.token
         },
         body: JSON.stringify(formData), // Send the formData object
       });
@@ -267,8 +274,8 @@ const AddVehicle: React.FC = () => {
             <input type="number" className="form-control" id="price" placeholder="Enter Price"
               value={formData.price} onChange={(e) => setFormData({ ...formData, price: Number(e.target.value) })} />
           </div>
-          <div className="form-group">
-            <label htmlFor="inStock">In Stock</label>
+          <div className="form-group" style={{ display: 'flex', alignItems: 'center' }}>
+            <label htmlFor="inStock" style={{ marginRight: '8px' }}>In Stock</label>
             <input
               type="checkbox"
               id="inStock"
