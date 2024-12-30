@@ -29,7 +29,7 @@ const App: React.FC = () => {
           <Route path="/logout" element={<Logout />} />
           <Route path="/register" element={<Register />} />
           <Route path="/explore" element={<ViewInventory />} />
-
+          <Route path="/vehicle/:vehicleId" element={<VehicleDetails/>} />
 
           <Route element={<UserRouteGuard />}>
             <Route path="/dealer-dashboard" element={<DealerDashboard />} />
@@ -39,7 +39,7 @@ const App: React.FC = () => {
               <Route path="/dashboard" element={<Dashboard_Home />} />
               {/* testing for Car api request */}
               <Route path="/dashboard/dealer/add" element={<AddVehicle />} />
-              <Route path="/vehicle/:vehicleId" element={<VehicleDetails/>} />
+              
             </Route>
           </Route>
         </Routes>
