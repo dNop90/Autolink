@@ -20,7 +20,6 @@ import AdminDealerDashboard from './pages/Admin/AdminDealerDashboard';
 import VehicleDetails from './pages/Vehicle/VehicleDetails';
 
 
-
 const App: React.FC = () => {
   return (
     <CookieProvider>
@@ -29,27 +28,21 @@ const App: React.FC = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/logout" element={<Logout />} />
+          <Route path="/logout" element={<Logout/>}/>
           <Route path="/register" element={<Register />} />
-
           <Route path="/explore" element={<ViewInventory />}/>
           {/* testing for Car api request */}
           <Route path="/addvehicle" element={<AddVehicle />}/>
-          
           <Route path="/dashboard/admin/user" element={<AdminUserDashboard/>}/>
           <Route path="/dashboard/admin/dealer" element={<AdminDealerDashboard/>}/>
-          
-          <Route element={<UserRouteGuard/>}>
           <Route path="/vehicle/:vehicleId" element={<VehicleDetails/>} />
-
+          <Route element={<UserRouteGuard/>}>  
             <Route path="/dealer-dashboard" element={<DealerDashboard />} />
             <Route path="/user-profile" element={<UserProfile />} />
 
-            <Route element={<DashboardRoute />}>
-              <Route path="/dashboard" element={<Dashboard_Home />} />
-              {/* testing for Car api request */}
+            <Route element={<DashboardRoute/>}>
+              <Route path="/dashboard" element={<Dashboard_Home/>} />
               <Route path="/dashboard/dealer/add" element={<AddVehicle />} />
-              
             </Route>
           </Route>
         </Routes>
