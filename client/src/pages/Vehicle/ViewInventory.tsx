@@ -215,6 +215,7 @@ const ViewInventory: React.FC = () => {
             <div className="row">
               {filteredVehicles.map((vehicle: any) => (
                 <div className="col-md-4 mb-4" key={vehicle.vehicleId}>
+                  <Link to={`/vehicle/${vehicle.vehicleId}`}>
                 <div className="card bg-dark text-light">
                   <img
                     src="https://images.pexels.com/photos/35967/mini-cooper-auto-model-vehicle.jpg?cs=srgb&dl=pexels-pixabay-35967.jpg&fm=jpg"
@@ -222,6 +223,7 @@ const ViewInventory: React.FC = () => {
                     alt={vehicle.model}
                   />
                   <div className="card-body">
+                  
                     <h5 className="card-title">
                       {vehicle.make} {vehicle.model}
                     </h5>
@@ -233,11 +235,11 @@ const ViewInventory: React.FC = () => {
                     <p className="card-text">
                       In Stock: {vehicle.inStock ? "Yes" : "No"}
                     </p>
-                    <Link to={`/vehicle/${vehicle.vehicleId}`} className="btn btn-primary">
-                      View Details
-                    </Link>
+                  
+                   
                   </div>
                 </div>
+                </Link>
               </div>
               ))}
             </div>
