@@ -29,4 +29,5 @@ public class Application {
     private String city;
     private String state;
     private Integer zipCode;
+    private String status = "Pending";
 }

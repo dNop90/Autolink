@@ -165,6 +165,23 @@ public class AccountService {
     }
 
     /*
+     * Promotion service to change regular account to admin account
+     * 
+     * @param username, username of the account to be promoted
+     * @return Promoted message
+     * @throws AccountNotFoundException if username not in database
+     */
+    public String promote(String username) throws AccountNotFoundException{
+        Account a = accountRepository.findAccountByUsername(username);
+        if (a != null) {
+            accountRepository.updateRole(a.getAccountId(), 3);
+            return "Promoted";
+        } else {
+            throw new AccountNotFoundException();
+        }
+    }
+
+    /*
      * Helper class for password hasing
      */
     private static byte[] getSHA(String input) throws NoSuchAlgorithmException {
