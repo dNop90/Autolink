@@ -38,10 +38,11 @@ const App: React.FC = () => {
           <Route path="/dashboard/admin/user" element={<AdminUserDashboard/>}/>
           <Route path="/dashboard/admin/dealer" element={<AdminDealerDashboard/>}/>
           <Route path="/vehicle/:vehicleId" element={<VehicleDetails/>} />
+
+
           <Route element={<UserRouteGuard/>}>  
             <Route path="/dealer-dashboard" element={<DealerDashboard />} />
-            <Route path="/user-profile" element={<UserProfile />} />
-
+            <Route path="/user/profile" element={<UserProfile />} />
 
             <Route element={<DashboardRoute />}>
               <Route path="/dashboard" element={<Dashboard_Home />} />
@@ -50,9 +51,6 @@ const App: React.FC = () => {
               <Route path="/dashboard/dealer/add" element={<AddVehicle />} />
               <Route path="/dashboard/vehiclelist" element={<DelerVehicleList />} />
               <Route path="/dashboard/vehiclelist/update-vehicle/:vehicleId" element={<UpdateVehicle />} />
-              
-
-
 
             </Route>
           </Route>
