@@ -1,18 +1,29 @@
-package com.example.project2.models;
+package com.example.project2.Entities;
 
 import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
-/**
- * This is use for kafka data
- * It is NOT for the table entity
- */
+@Entity
+@Table(name="message")
 public class Message {
-    private Integer ID;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long messageId;
+
+    @Column(nullable = false)
     private Long fromAccountID;
+
+    @Column(nullable = false)
     private Long toAccountID;
+
     private String message;
 
     @CreationTimestamp
@@ -23,19 +34,18 @@ public class Message {
 
     }
 
-    public Message(Integer iD, Long fromAccountID, Long toAccountID, String message) {
-        ID = iD;
+    public Message(Long fromAccountID, Long toAccountID, String message) {
         this.fromAccountID = fromAccountID;
         this.toAccountID = toAccountID;
         this.message = message;
     }
 
-    public Integer getID() {
-        return ID;
+    public Long getMessageId() {
+        return messageId;
     }
 
-    public void setID(Integer iD) {
-        ID = iD;
+    public void setMessageId(Long messageId) {
+        this.messageId = messageId;
     }
 
     public Long getFromAccountID() {
