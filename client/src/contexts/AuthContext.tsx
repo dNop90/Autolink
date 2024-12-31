@@ -2,6 +2,7 @@ import React, { createContext, useState, useContext, ReactNode, useEffect } from
 import { User } from '../data/User';
 import { useCookie } from './CookieContext';
 import { api } from '../services/api';
+import { socket } from '../services/websocket';
 
 interface AuthContextType {
   user: User | null;
@@ -32,6 +33,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   useEffect(() => {
     const runInitToken = async () => {
       await InitToken();
+      socket.init();
     }
 
     runInitToken();

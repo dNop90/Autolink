@@ -1,11 +1,14 @@
 :root{
     --color-background: white;
+    --color-background2: #ffffff;
+    --color-border: #afafaf;
     --color-background-body: #f4f4f4;
     --color-text-link: #6b6b6b;
     --color-text-link-hover: black;
     --color-button-text: white;
     --color-button-background: #6b6b6b;
     --color-button-background-hover: black;
+    --color-form-background: #f8f9fa;
 }
 
 body{
@@ -19,4 +22,20 @@ button, .btn{
 
 button:hover, .btn:hover{
     color: var(--color-button-text);
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+  
+::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 5px;
+}
+  
+::-webkit-scrollbar-thumb {
+    background: var(--color-button-background-hover);
+    border-radius: 5px;
+    border: 1px solid var(--color-border);
 }
