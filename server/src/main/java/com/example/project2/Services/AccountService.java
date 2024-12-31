@@ -103,10 +103,10 @@ public class AccountService {
     }
 
     public AccountResponse getUserByUsername(String username) throws AccountNotFoundException {
+        System.out.println(username);
         Account check = accountRepository.findAccountByUsername(username);
         if (check == null)
             throw new AccountNotFoundException();
-
         AccountResponse result = new AccountResponse(
                 check.getAccountId(),
                 check.getUsername(),

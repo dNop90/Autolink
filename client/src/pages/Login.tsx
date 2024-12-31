@@ -78,7 +78,7 @@ function Login() {
                 console.log(error);
                 console.log(error.response.data);
                 let errorData = error.response.data;
-                if (errorData == "No account with username") {
+                if (errorData === "No account with username") {
                     setFormError({
                         ...inputError,
                         errorMessage: `${errorData} ${username}. Click here to `,

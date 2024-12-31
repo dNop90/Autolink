@@ -164,13 +164,13 @@ public class UserController {
      * @return a ResponseEntity with the account response or corresponding error
      * mesage
      */
-    @GetMapping("/search")
+    @PostMapping("/search")
     public ResponseEntity getUser(@RequestHeader("Authorization") String authHeader, @RequestBody String username) {
         if (JWTUtil.isValid(authHeader)) {
             try {
                 AccountResponse user = accountService.getUserByUsername(username);
                 return ResponseEntity.ok(user);
-            } catch (Exception e) {
+            } catch (AccountNotFoundException e) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
             }
         }
