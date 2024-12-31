@@ -5,7 +5,7 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
-import com.example.project2.models.Message;
+import com.example.project2.Entities.Message;
 
 @Service
 public class KafkaService {

@@ -1,6 +1,8 @@
+const api_app_domain = process.env.REACT_APP_API_DOMAIN
 export const authenticate = async (): Promise<string | null> => {
+  
   try {
-    const response = await fetch("http://localhost:8080/api/auth/login", {
+    const response = await fetch(`${api_app_domain}/auth/login`, {
       method: "POST",
     });
 
@@ -25,7 +27,7 @@ export const fetchData = async (endpoint: string): Promise<any> => {
   }
 
   try {
-    const response = await fetch(`http://localhost:8080/api/${endpoint}`, {
+    const response = await fetch(`${api_app_domain}/${endpoint}`, {
       headers: {
         Authorization: `Bearer ${jwt}`,
       },
