@@ -34,3 +34,42 @@
     color: white;
     font-weight: 300;
 }
+
+.home-section{
+    padding: 70px;
+    text-align: center;
+    line-height: 1;
+}
+
+.home-section h1{
+    font-family: "Open Sans", serif;
+    text-transform: uppercase;
+    color: var(--color-text-link-hover);
+}
+
+.home-section-content{
+    margin: 50px auto 30px;
+    width: calc(100% / 1.2);
+}
+
+.home-section-content table{
+    width: 100%;
+    border-collapse: unset;
+    table-layout: fixed;
+}
+
+.home-section-content table td{
+    padding: 50px 25px 0px;
+    vertical-align: baseline;
+}
+
+.home-section-content .home-icon{
+    font-size: 70px;
+}
+
+.home-section-content .home-person-description{
+    display: block;
+    margin-top: 10px;
+    font-size: 20px;
+    text-transform: uppercase;
+}
