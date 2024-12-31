@@ -1,6 +1,7 @@
+const app_vehicle = process.env.REACT_APP_API_VEHICLE
 export const authenticate = async (): Promise<string | null> => {
     try {
-      const response = await fetch("http://localhost:8080/vehicles/auth/login", {
+      const response = await fetch(`${app_vehicle}/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -21,7 +22,7 @@ export const authenticate = async (): Promise<string | null> => {
   
   export const fetchData = async (endpoint: string, jwt: string): Promise<any> => {
     try {
-      const response = await fetch(`http://localhost:8080/vehicles/${endpoint}`, {
+      const response = await fetch(`${app_vehicle}/${endpoint}`, {
         headers: {
           Authorization: `Bearer ${jwt}`,
           Accept: "application/json",
