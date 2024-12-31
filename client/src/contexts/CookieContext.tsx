@@ -1,7 +1,6 @@
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 import Cookies from 'js-cookie'
 import { CookieData } from '../data/CookieData';
-import { useAuth } from './AuthContext';
 
 interface CookieContextType {
     cookieData: CookieData;

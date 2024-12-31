@@ -9,14 +9,15 @@ function UserRouteGuard() {
     //Check if user login
     if(!user)
     {
-        return <Navigate to="/" replace/>;
+        return(<Navigate to="/" replace/>);
     }
 
     return (
         <>
             <Outlet/>
         </>
-    )
+    );
+   
 }
 
 export default UserRouteGuard
