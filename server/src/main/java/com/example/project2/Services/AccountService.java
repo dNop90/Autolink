@@ -103,10 +103,10 @@ public class AccountService {
     }
 
     public AccountResponse getUserByUsername(String username) throws AccountNotFoundException {
+        System.out.println(username);
         Account check = accountRepository.findAccountByUsername(username);
         if (check == null)
             throw new AccountNotFoundException();
-
         AccountResponse result = new AccountResponse(
                 check.getAccountId(),
                 check.getUsername(),
@@ -162,6 +162,23 @@ public class AccountService {
         
         // Check if the current password matches the stored password (hashed)
         return account.getPassword().equals(toHexString(getSHA(currentPassword)));
+    }
+
+    /*
+     * Promotion service to change regular account to admin account
+     * 
+     * @param username, username of the account to be promoted
+     * @return Promoted message
+     * @throws AccountNotFoundException if username not in database
+     */
+    public String promote(String username) throws AccountNotFoundException{
+        Account a = accountRepository.findAccountByUsername(username);
+        if (a != null) {
+            accountRepository.updateRole(a.getAccountId(), 3);
+            return "Promoted";
+        } else {
+            throw new AccountNotFoundException();
+        }
     }
 
     /*

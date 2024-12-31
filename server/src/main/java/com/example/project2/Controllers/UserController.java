@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import java.security.NoSuchAlgorithmException;
@@ -27,6 +28,8 @@ import com.example.project2.Services.AccountService;
 
 import io.jsonwebtoken.Claims;
 import lombok.AllArgsConstructor;
+import org.springframework.web.bind.annotation.PathVariable;
+
 
 @AllArgsConstructor
 @RestController
@@ -161,17 +164,31 @@ public class UserController {
      * @return a ResponseEntity with the account response or corresponding error
      * mesage
      */
-    @GetMapping("/search")
+    @PostMapping("/search")
     public ResponseEntity getUser(@RequestHeader("Authorization") String authHeader, @RequestBody String username) {
         if (JWTUtil.isValid(authHeader)) {
             try {
                 AccountResponse user = accountService.getUserByUsername(username);
                 return ResponseEntity.ok(user);
-            } catch (Exception e) {
+            } catch (AccountNotFoundException e) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
             }
         }
         return ResponseEntity.status(401).build();
+    }
+
+    /*
+     * Promote endpoint for admins to set a user account as admin
+     * @param JWT token for authorization, and username to search for account
+     * @return a ResponseEntity with the corresponding message
+     */
+    @PatchMapping("/promote")
+    public ResponseEntity putMethodName(@RequestHeader("Authorization") String authHeader, @RequestBody String username) {
+        try {
+            return ResponseEntity.status(200).body(accountService.promote(username));
+        } catch (AccountNotFoundException e) {
+            return ResponseEntity.status(404).body("User not found.");
+        }
     }
 
     /**

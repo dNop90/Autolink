@@ -88,10 +88,10 @@ const ViewInventory: React.FC = () => {
   });
 
   return (
-    <div style={{ padding: "35px" }}>
+    <div className="VehicleInventory">
       {/* Hero Section */}
       <div
-        className=" rounded-3 p-4 mb-5 text-center d-flex align-items-center justify-content-center"
+        className="p-4 mb-5 text-center d-flex align-items-center justify-content-center"
         style={{
           backgroundImage:
             "url('https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?fit=crop&w=1600&q=80')",
@@ -102,8 +102,8 @@ const ViewInventory: React.FC = () => {
         }}
       >
         <div>
-          <h1 className="fw-bolder text-white">Your Dream Vehicle Awaits</h1>
-          <p>Find the perfect car to match your lifestyle and budget.</p>
+          <h1 className="text-white">Your Dream Vehicle Awaits</h1>
+          <p className="text-white">Find the perfect car to match your lifestyle and budget.</p>
         </div>
       </div>
 
@@ -216,7 +216,7 @@ const ViewInventory: React.FC = () => {
               {filteredVehicles.map((vehicle: any) => (
                 <div className="col-md-4 mb-4" key={vehicle.vehicleId}>
                   <Link to={`/vehicle/${vehicle.vehicleId}`}>
-                <div className="card bg-dark text-light">
+                <div className="card">
                   <img
                     src="https://images.pexels.com/photos/35967/mini-cooper-auto-model-vehicle.jpg?cs=srgb&dl=pexels-pixabay-35967.jpg&fm=jpg"
                     className="card-img-top"
