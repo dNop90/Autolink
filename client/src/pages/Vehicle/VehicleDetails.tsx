@@ -8,11 +8,12 @@ const VehicleDetail: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const API_LINK = process.env.REACT_APP_API_VEHICLE
   useEffect(() => {
     const fetchVehicle = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`${process.env.REACT_APP_API_VEHICLE}/${vehicleId}`);
+        const response = await fetch(`${API_LINK}/${vehicleId}`);
         if (!response.ok) {
           throw new Error("Failed to fetch vehicle details");
         }

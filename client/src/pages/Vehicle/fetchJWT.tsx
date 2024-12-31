@@ -1,14 +1,20 @@
+//link for authenticating api login
+const API_LINK = process.env.REACT_APP_API_VEHICLE
+const car_api_link = process.env.CAR_API_LINK
+const car_api_token = process.env.CAR_API_TOKEN
+const car_api_secret = process.env.CAR_API_SECRET
+
 const fetchJWT = async () => {
     try {
-      const response = await fetch("https://carapi.app/api/auth/login", {
+      const response = await fetch(`${car_api_link}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
         },
         body: JSON.stringify({
-          api_token: "27588508-be3d-4695-8c6b-9a40267a8bc6",
-          api_secret: "b476031dd242ed8263546b43d870c870",
+          api_token: `${car_api_token}`,
+          api_secret: `${car_api_secret}`,
         }),
       });
   
