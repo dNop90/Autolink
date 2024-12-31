@@ -20,6 +20,7 @@ import AdminDealerDashboard from './pages/Admin/AdminDealerDashboard';
 import VehicleDetails from './pages/Vehicle/VehicleDetails';
 import DelerVehicleList from './pages/Vehicle/DealerVehicleList';
 import UpdateVehicle from './pages/Vehicle/UpdateVehicle';
+import MessageSystem from './components/message/MessageSystem';
 
 
 const App: React.FC = () => {
@@ -55,6 +56,8 @@ const App: React.FC = () => {
             </Route>
           </Route>
         </Routes>
+
+        <MessageSystem/>
       </AuthProvider>
     </CookieProvider>
   );

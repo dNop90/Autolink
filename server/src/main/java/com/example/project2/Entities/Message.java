@@ -40,11 +40,11 @@ public class Message {
         this.message = message;
     }
 
-    public Long getmessageId() {
+    public Long getMessageId() {
         return messageId;
     }
 
-    public void setmessageId(Long messageId) {
+    public void setMessageId(Long messageId) {
         this.messageId = messageId;
     }
 
