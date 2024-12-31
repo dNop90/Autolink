@@ -12,6 +12,9 @@ public class KafkaService {
     @Autowired
     private KafkaTemplate<String, Message> kafkaTemplate;
 
+    @Autowired
+    private WebSocketService webSocketService;
+
     private static final String TOPIC = "message-topic";
 
     /**
@@ -21,7 +24,7 @@ public class KafkaService {
     @KafkaListener(topics=TOPIC, groupId = "message-group", containerFactory = "kafkaListenerContainerFactory")
     public void consume(Message message)
     {
-        System.out.println(message.toString());
+        webSocketService.sendMessage(message);
     }
 
     /**
