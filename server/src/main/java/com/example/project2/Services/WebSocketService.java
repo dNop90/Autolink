@@ -19,7 +19,9 @@ public class WebSocketService {
         Map<String, Object> data = new HashMap<>();
         data.put("messageId", message.getMessageId());
         data.put("fromAccountID", message.getFromAccountID());
+        data.put("fromUsername", message.getFromUsername());
         data.put("toAccountID", message.getToAccountID());
+        data.put("toUsername", message.getFromUsername());
         data.put("message", message.getMessage());
         data.put("createAt", message.getCreateAt().toString());
 

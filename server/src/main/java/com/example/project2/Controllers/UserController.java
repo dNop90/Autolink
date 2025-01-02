@@ -183,9 +183,22 @@ public class UserController {
      * @return a ResponseEntity with the corresponding message
      */
     @PatchMapping("/promote")
-    public ResponseEntity putMethodName(@RequestHeader("Authorization") String authHeader, @RequestBody String username) {
+    public ResponseEntity promote(@RequestHeader("Authorization") String authHeader, @RequestBody String username) {
         try {
             return ResponseEntity.status(200).body(accountService.promote(username));
+        } catch (AccountNotFoundException e) {
+            return ResponseEntity.status(404).body("User not found.");
+        }
+    }
+    /*
+     * Promote endpoint for admins to set a user account as admin
+     * @param JWT token for authorization, and username to search for account
+     * @return a ResponseEntity with the corresponding message
+     */
+    @PatchMapping("/suspend/{status}")
+    public ResponseEntity suspend(@RequestHeader("Authorization") String authHeader, @PathVariable Boolean status, @RequestBody String username) {
+        try {
+            return ResponseEntity.status(200).body(accountService.suspend(username, status));
         } catch (AccountNotFoundException e) {
             return ResponseEntity.status(404).body("User not found.");
         }

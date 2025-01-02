@@ -21,6 +21,7 @@
 	object-position: 50% 50%;
     background-color: black;
     filter: brightness(90%) contrast(120%);
+    pointer-events: none;
 }
 
 .vid .vid-context > h1{

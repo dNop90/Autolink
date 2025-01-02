@@ -2,6 +2,7 @@ import React from 'react'
 import './DashboardSidebar.css'
 import { useAuth } from '../../contexts/AuthContext'
 import { Link } from 'react-router-dom';
+import MessageSystem from '../message/MessageSystem';
 
 function DashboardSidebar() {
     const auth = useAuth();
@@ -13,9 +14,9 @@ function DashboardSidebar() {
                 <li><Link to="/dashboard/vehiclelist">Vehicle List</Link></li>
                 <li><Link to="/dashboard/user/dealer">Become Dealer</Link></li>
             </ul>
-
+            
             <ul>
-                <li><Link to="/dashboard/dealer/list">Dealer Vehicle List</Link></li>
+                <li><Link to="/dashboard/dealerVehicleList">Dealer Vehicle List</Link></li>
                 <li><Link to="/dashboard/dealer/add">Add New Vehicle</Link></li>
             </ul>
 

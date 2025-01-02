@@ -72,6 +72,7 @@ public class VehicleController {
     public Vehicle createVehicle(@RequestHeader("Authorization") String authHeader, @RequestBody Vehicle vehicle) {
         System.out.println("Received Vehicle: " + vehicle);
 
+        JWTUtil.parseToken(authHeader).getId();
         // Check if the authorization header is valid
         if (JWTUtil.isValid(authHeader)) {
             try {
@@ -82,6 +83,19 @@ public class VehicleController {
             }
         } else {
             // If the authHeader is not valid, throw a 401 Unauthorized exception
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid authorization header");
+        }
+    }
+
+    @GetMapping("/buyers/{accountId}")
+    public List<Long> getBuyerIdsByAccountId(
+            @RequestHeader("Authorization") String authHeader,
+            @PathVariable Long accountId) {
+
+        // Validate the authorization header
+        if (JWTUtil.isValid(authHeader)) {
+            return vehicleService.getBuyerIdsByAccountId(accountId);
+        } else {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid authorization header");
         }
     }
