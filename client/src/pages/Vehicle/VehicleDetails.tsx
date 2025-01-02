@@ -33,7 +33,7 @@ const VehicleDetail: React.FC = () => {
   if (error) return <p className="text-danger">{error}</p>;
 
   return (
-    <div style={{ padding: "35px", maxWidth: "800px", margin: "auto" }}>
+    <div style={{ padding: "35px", maxWidth: "800px", margin: "auto", marginTop: "60px", position: "relative", boxShadow:"0 4px 8px rgba(0, 0, 0, 0.2)"}}>
   <h1 className="text-center mb-4">{vehicle.make} {vehicle.model}</h1>
   
   <img
@@ -47,9 +47,32 @@ const VehicleDetail: React.FC = () => {
     <p><strong>Price:</strong> ${vehicle.price.toLocaleString()}</p>
     <p><strong>Year:</strong> {vehicle.year}</p>
     <p><strong>Condition:</strong> {vehicle.condition}</p>
-    <p><strong>In Stock:</strong> {vehicle.inStock ? "Yes" : "No"}</p>
     <p><strong>Description:</strong> {vehicle.description || "No description available."}</p>
   </div>
+ {/* Chat Button */}
+ <button
+    style={{
+      position: "absolute",
+      bottom: "20px",
+      right: "20px",
+      width: "60px",
+      height: "60px",
+      backgroundColor: "var(--color-text-link)",
+      color: "white",
+      border: "none",
+      borderRadius: "50%",
+      boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+      cursor: "pointer",
+      fontSize: "18px",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center"
+    }}
+    onClick={() => alert("Chat feature thing!")} // Replace with actual chat functionality
+  >
+    💬
+  </button>
+  
 </div>
   );
 };

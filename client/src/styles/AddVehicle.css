@@ -20,7 +20,6 @@
 }
 
 .add-vehicle-container label {
-.add-vehicle-container label {
     display: block; /* Make labels block elements */
     margin-bottom: 5px; /* Space below labels */
     font-weight: bold; /* Bold text for labels */

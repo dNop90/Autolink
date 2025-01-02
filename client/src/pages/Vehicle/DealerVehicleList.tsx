@@ -4,6 +4,7 @@ import { useCookie } from "../../contexts/CookieContext";
 
 const API_LINK = process.env.REACT_APP_API_VEHICLE;
 
+
 interface Vehicle {
   vehicleId: string; // Ensure vehicleId is included in the interface
   year: string; // Change to string if you want to allow empty strings
@@ -12,24 +13,26 @@ interface Vehicle {
   engineType: string;
   color: string;
   price: number; // Numeric input
-  inStock: boolean; // Boolean input
   condition: "Used" | "New"; // Dropdown for "Used" or "New"
 }
 
-const DealerVehicleList: React.FC = () => {
+function DealerVehicleList(props: {dLer: boolean}){
+
+
+
   const [vehicles, setVehicles] = useState<Vehicle[]>([]); // State to store fetched vehicles
   const [loading, setLoading] = useState(true); // Loading state
   const [error, setError] = useState<string | null>(null); // Error state
   const cookie = useCookie();
   const navigate = useNavigate();
 
+
   const [filters, setFilters] = useState({
     priceRange: [0, 100000],
     make: "",
     model: "",
     year: "",
-    condition: "",
-    inStock: "", // State for inStock filter
+    condition: ""
   });
 
   // Fetch vehicles from the backend
@@ -97,11 +100,6 @@ const DealerVehicleList: React.FC = () => {
       (filters.year ? vehicle.year === filters.year : true) &&
       (filters.condition
         ? vehicle.condition.toLowerCase() === filters.condition.toLowerCase()
-        : true) &&
-      (filters.inStock
-        ? filters.inStock === "true"
-          ? vehicle.inStock === true
-          : vehicle.inStock === false
         : true)
     );
   });
@@ -134,13 +132,27 @@ const DealerVehicleList: React.FC = () => {
                         <p className="card-text">
                           Condition: {vehicle.condition}
                         </p>
-                        <p className="card-text">
-                          In Stock: {vehicle.inStock ? "Yes" : "No"}
-                        </p>
+
                       </div>
                     </Link>
-                    <button className="btn btn-warning ms-2 me-2" onClick={() => handleUpdate(vehicle.vehicleId)}>Update</button>
-                    <button className="btn btn-danger ms-2 m-2" onClick={() => handleDelete(vehicle.vehicleId)}>Delete</button>
+                    {/* <button className="btn btn-warning ms-2 me-2" onClick={() => handleUpdate(vehicle.vehicleId)}>Update</button>
+                    <button className="btn btn-danger ms-2 m-2" onClick={() => handleDelete(vehicle.vehicleId)}>Delete</button> */}
+                    
+                  {props.dLer && (
+                    <>
+                      <button
+                        className="btn btn-warning ms-2 me-2"
+                        onClick={() => handleUpdate(vehicle.vehicleId)}
+                      >
+                        Update
+                      </button>
+                      <button
+                        className="btn btn-danger ms-2 m-2"
+                        onClick={() => handleDelete(vehicle.vehicleId)}
+                      >
+                        Delete
+                      </button>
+                    </>)}
                   </div>
                 </div>
               ))}

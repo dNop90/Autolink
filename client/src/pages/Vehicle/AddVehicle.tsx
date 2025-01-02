@@ -18,7 +18,6 @@ const AddVehicle: React.FC = () => {
     engineType: "",
     color: "",
     price: 0, // Numeric input
-    inStock: false, // Boolean input
     condition: "Used", // Dropdown for "Used" or "New"
   });
 
@@ -273,15 +272,6 @@ const AddVehicle: React.FC = () => {
             <label htmlFor="price">Price</label>
             <input type="number" className="form-control" id="price" placeholder="Enter Price"
               value={formData.price} onChange={(e) => setFormData({ ...formData, price: Number(e.target.value) })} />
-          </div>
-          <div className="form-group" style={{ display: 'flex', alignItems: 'center' }}>
-            <label htmlFor="inStock" style={{ marginRight: '8px' }}>In Stock</label>
-            <input
-              type="checkbox"
-              id="inStock"
-              checked={formData.inStock}
-              onChange={(e) => setFormData({ ...formData, inStock: e.target.checked })}
-            />
           </div>
           <div className="form-group">
             <label htmlFor="condition">Condition</label>

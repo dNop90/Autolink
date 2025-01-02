@@ -12,7 +12,6 @@ interface Vehicle {
   engineType: string;
   color: string;
   price: number;
-  inStock: boolean;
   condition: "Used" | "New";
 }
 
@@ -153,17 +152,6 @@ const UpdateVehicle: React.FC = () => {
           </select>
         </div>
 
-        <div className="mb-3">
-          <label htmlFor="inStock" className="form-label">In Stock</label>
-          <input
-            type="checkbox"
-            className="form-check-input"
-            id="inStock"
-            name="inStock"
-            checked={vehicle?.inStock || false}
-            onChange={handleCheckboxChange}
-          />
-        </div>
 
         <button type="submit" className="btn btn-primary">Update Vehicle</button>
       </form>
