@@ -22,6 +22,10 @@ public class VehicleService {
         return vehicleRepository.findAll();
     }
 
+    public List<Long> getBuyerIdsByAccountId(Long accountId) {
+        return vehicleRepository.findBuyerIdsByAccountId(accountId);
+    }
+
     /*
      * get the vehicle by passing in the id
      * 
@@ -66,6 +70,7 @@ public class VehicleService {
             vehicle.setColor(vehicleDetails.getColor());
             vehicle.setEngineType(vehicleDetails.getEngineType());
             vehicle.setImgUrl(vehicleDetails.getImgUrl());
+            vehicle.setBuyer(vehicle.getBuyer());
             return ResponseEntity.ok(vehicleRepository.save(vehicle));
         } else {
             return ResponseEntity.notFound().build();

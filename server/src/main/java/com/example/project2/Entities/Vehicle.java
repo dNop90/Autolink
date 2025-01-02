@@ -44,6 +44,10 @@ public class Vehicle {
     @Column(nullable = true)
     private String imgUrl;
 
+    @ManyToOne
+    @JoinColumn(name = "buyer_id")
+    private Account buyer;
+
     // Getters and Setters for the Vehicle entities.
 
     public Long getVehicleId() {
@@ -120,5 +124,13 @@ public class Vehicle {
 
     public void setImgUrl(String url) {
         this.imgUrl = url;
+    }
+
+    public Account getBuyer() {
+        return buyer;
+    }
+
+    public void setBuyer(Account buyer) {
+        this.buyer = buyer;
     }
 }
