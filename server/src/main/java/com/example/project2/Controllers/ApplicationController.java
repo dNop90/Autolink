@@ -68,7 +68,7 @@ public class ApplicationController {
      * @return a ResponseEntity with the list of applications
      * or corresponding error mesage
      */
-    @GetMapping("/application")
+    @GetMapping("/application/{accountId}")
     public ResponseEntity getDealerApplication(@RequestHeader("Authorization") String authHeader, @PathVariable Integer accountId) {
         if(JWTUtil.isValid(authHeader)) {
             return ResponseEntity.status(200).body(applicationService.geApplicationByAccountId(accountId));
@@ -84,7 +84,7 @@ public class ApplicationController {
      * @return a ResponseEntity with the status of the application
      * or corresponding error mesage
      */
-    @PatchMapping("/approve")
+    @PatchMapping("/approve/{applicationId}/{status}")
     public ResponseEntity approveApplication(@RequestHeader("Authorization") String authHeader,
             @PathVariable Long applicationId, @PathVariable String status) {
         if (JWTUtil.isValid(authHeader)) {

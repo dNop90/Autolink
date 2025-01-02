@@ -21,6 +21,7 @@ import VehicleDetails from './pages/Vehicle/VehicleDetails';
 import DealerVehicleList from './pages/Vehicle/DealerVehicleList';
 import UpdateVehicle from './pages/Vehicle/UpdateVehicle';
 import MessageSystem from './components/message/MessageSystem';
+import DealerApp from './pages/DealerApp';
 
 
 const App: React.FC = () => {
@@ -31,34 +32,35 @@ const App: React.FC = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/logout" element={<Logout/>}/>
+          <Route path="/logout" element={<Logout />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/explore" element={<ViewInventory />}/>
+          <Route path="/explore" element={<ViewInventory />} />
           {/* testing for Car api request */}
-          <Route path="/addvehicle" element={<AddVehicle />}/>
-          <Route path="/dashboard/admin/user" element={<AdminUserDashboard/>}/>
-          <Route path="/dashboard/admin/dealer" element={<AdminDealerDashboard/>}/>
-          <Route path="/vehicle/:vehicleId" element={<VehicleDetails/>} />
+          <Route path="/addvehicle" element={<AddVehicle />} />
 
-
-          <Route element={<UserRouteGuard/>}>  
+          <Route path="/vehicle/:vehicleId" element={<VehicleDetails />} />
+          
+          <Route element={<UserRouteGuard />}>
             <Route path="/dealer-dashboard" element={<DealerDashboard />} />
             <Route path="/user/profile" element={<UserProfile />} />
 
             <Route element={<DashboardRoute />}>
               <Route path="/dashboard" element={<Dashboard_Home />} />
               {/* testing for Car api request */}
-              
+
               <Route path="/dashboard/dealer/add" element={<AddVehicle />} />
               <Route path="/dashboard/vehiclelist" element={<DealerVehicleList dLer={false} />} />
               <Route path="/dashboard/dealerVehicleList" element={<DealerVehicleList dLer={true}/>} />
               <Route path="/dashboard/vehiclelist/update-vehicle/:vehicleId" element={<UpdateVehicle />} />
 
+              <Route path="/dashboard/admin/user" element={<AdminUserDashboard />} />
+              <Route path="/dashboard/admin/dealer" element={<AdminDealerDashboard />} />
+              <Route path="/dashboard/user/dealer" element={<DealerApp />} />
             </Route>
           </Route>
         </Routes>
 
-        <MessageSystem/>
+        <MessageSystem />
       </AuthProvider>
     </CookieProvider>
   );
