@@ -8,7 +8,7 @@
 }
 
 p{
-  color: rgb(180, 180, 180);
+  color: var(--color-text-link);
 }
 
 body{

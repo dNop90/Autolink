@@ -2,7 +2,7 @@
     max-width: 600px; /* Set a maximum width for the form */
     margin: 0 auto; /* Center the form horizontally */
     padding: 20px; /* Add padding around the form */
-    background-color: #f8f9fa; /* Light background color */
+    background-color: var(--color-background); /* Light background color */
     border-radius: 8px; /* Rounded corners */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
 }
@@ -17,7 +17,7 @@
     margin-bottom: 15px; /* Space between form groups */
 }
 
-label {
+.add-vehicle-container label {
     display: block; /* Make labels block elements */
     margin-bottom: 5px; /* Space below labels */
     font-weight: bold; /* Bold text for labels */
