@@ -16,7 +16,7 @@ interface Vehicle {
   condition: "Used" | "New"; // Dropdown for "Used" or "New"
 }
 
-const DealerVehicleList: React.FC = () => {
+function DealerVehicleList() {
   const [vehicles, setVehicles] = useState<Vehicle[]>([]); // State to store fetched vehicles
   const [loading, setLoading] = useState(true); // Loading state
   const [error, setError] = useState<string | null>(null); // Error state

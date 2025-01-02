@@ -2,7 +2,6 @@ import React, { createContext, useState, useContext, ReactNode, useEffect } from
 import { User } from '../data/User';
 import { useCookie } from './CookieContext';
 import { api } from '../services/api';
-import { socket } from '../services/websocket';
 
 interface AuthContextType {
   user: User | null;
@@ -33,7 +32,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   useEffect(() => {
     const runInitToken = async () => {
       await InitToken();
-      socket.init();
     }
 
     runInitToken();
@@ -50,7 +48,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       {
         let res = await api.user.tokenValidation(cookie.cookieData.token);
 
-        setUser({userid: res.accountId, username: res.username, role: res.role, imageurl: res.imageurl});
+        await setUser({userid: res.accountId, username: res.username, role: res.role, imageurl: res.imageurl});
       }
       catch(err)
       {

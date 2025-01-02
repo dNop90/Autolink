@@ -1,14 +1,68 @@
 .MessageBox{
-    display: block;
+    display: flex;
+    align-items: flex-end;
     position: fixed;
     bottom: 0;
     right: 0;
     line-height: 1;
     font-family: "Open Sans", serif;
+    height: calc(100% / 2);
+}
+
+#MessageChatList{
+    display: inline-block;
+    display: flex;
+    align-items: flex-end;
+    height: 100%;
+}
+
+.Message-Chat{
+    display: inline-block;
+    width: 250px;
+    height: 35px;
+    background-color: var(--color-background2);
+    box-shadow: 0px 0px 16px 0px rgba(0, 0, 0, 0.1), 0px 0px 5px 5px rgba(0, 0, 0, 0.1) !important;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    margin-right: 20px;
+    vertical-align: bottom;
+}
+
+.Message-Chat > div{
+    display: none;
+    height: calc(100% - 35px);
+    background-color: inherit;
+    box-shadow: inherit;
+}
+
+.Message-Chat:has(div.active){
+    height: 100%;
+}
+
+.Message-Chat ul{
+    height: calc(100% - 36px);
+    overflow-y: auto;
+}
+
+.Message-Chat ul li{
+    display: block;
+    margin: 20px 20px;
+    text-align: left;
+}
+
+.Message-Chat ul li.message-self{
+    text-align: right;
+    color: var(--color-text-link);
+}
+
+.Message-Chat input[type="text"]
+{
+    width: 100%;
+    padding: 5px;
 }
 
 #MessageList{
-    display: block;
+    display: inline-block;
     width: 250px;
     height: 35px;
     background-color: var(--color-background2);
@@ -16,7 +70,7 @@
     border-top-left-radius: 10px;
 }
 
-#MessageList > span{
+.Message-Chat > span, #MessageList > span{
     display: block;
     line-height: 35px;
     text-transform: uppercase;
@@ -31,13 +85,14 @@
     display: none;
     height: calc(100% - 35px);
     overflow-y: auto;
+    box-shadow: inherit;
 }
 
-#MessageList ul{
+.Message-Chat ul, #MessageList ul{
     display: block;
     list-style-type: none;
-    padding: 0;
-    margin: 20px 0px;
+    padding: 20px 0px;
+    margin: 0;
 }
 
 #MessageList ul li{
@@ -54,10 +109,10 @@
     color: var(--color-text-link-hover);
 }
 
-#MessageList .active{
+.Message-Chat .active, #MessageList .active{
     display: block;
 }
 
 #MessageList:has(div.active){
-    height: 400px;
+    height: 100%;
 }
