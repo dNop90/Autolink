@@ -69,4 +69,16 @@ export class api_user {
             }
         })
     }
+
+    async suspendUser(token: string, username: string, status: boolean) {
+        const response = await axios({
+            method: 'PATCH',
+            url: `${this.api_link}/suspend/${status}`,
+            data: username,
+            headers: {
+                'Authorization' : token,
+                "Content-Type": "text/plain"
+            }
+        })
+    }
 }
