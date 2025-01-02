@@ -33,13 +33,14 @@ const VehicleDetail: React.FC = () => {
   if (error) return <p className="text-danger">{error}</p>;
 
   return (
-    <div style={{ padding: "35px", maxWidth: "800px", margin: "auto", marginTop: "60px", position: "relative", boxShadow:"0 4px 8px rgba(0, 0, 0, 0.2)"}}>
+    <div style={{ padding: "35px", maxWidth: "800px", margin: "auto", marginTop: "60px", position: "relative", boxShadow:"var(--color-text-link)", 
+    background: "var(--color-background2)"}}>
   <h1 className="text-center mb-4">{vehicle.make} {vehicle.model}</h1>
   
   <img
     src="https://images.pexels.com/photos/35967/mini-cooper-auto-model-vehicle.jpg?cs=srgb&dl=pexels-pixabay-35967.jpg&fm=jpg"
     alt={`${vehicle.make} ${vehicle.model}`}
-    style={{ width: "100%", height: "auto", borderRadius: "8px", boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)" }}
+    style={{ width: "100%", height: "auto", borderRadius: "8px",boxShadow:"var(--color-text-link)" }}
   />
   
   <div className="mt-4">
