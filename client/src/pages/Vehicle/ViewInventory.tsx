@@ -17,7 +17,9 @@ const ViewInventory: React.FC = () => {
     model: "",
     year: "",
     condition: "",
+    imgUrl: ""
   });
+
 
   // Fetch vehicles from the backend
   useEffect(() => {
@@ -192,11 +194,13 @@ const ViewInventory: React.FC = () => {
                 <div className="col-md-4 mb-4" key={vehicle.vehicleId}>
                   <Link to={`/vehicle/${vehicle.vehicleId}`}>
                 <div className="card">
+
                   <img
-                    src="https://images.pexels.com/photos/35967/mini-cooper-auto-model-vehicle.jpg?cs=srgb&dl=pexels-pixabay-35967.jpg&fm=jpg"
-                    className="card-img-top"
-                    alt={vehicle.model}
-                  />
+      src={vehicle.imgUrl && vehicle.imgUrl.trim() !== "" ? vehicle.imgUrl : "/AutoLinkNoImage.png"}
+      
+      className="card-img-top"
+      alt={vehicle.model || "No Image Available"}
+    />
                   <div className="card-body">
                   
                     <h5 className="card-title">

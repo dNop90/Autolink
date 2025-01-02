@@ -14,6 +14,7 @@ interface Vehicle {
   color: string;
   price: number; // Numeric input
   condition: "Used" | "New"; // Dropdown for "Used" or "New"
+  imgUrl?: string | null;
 }
 
 function DealerVehicleList(props: {dLer: boolean}){
@@ -118,11 +119,11 @@ function DealerVehicleList(props: {dLer: boolean}){
                 <div className="col-md-4 mb-4" key={vehicle.vehicleId}>
                   <div className="card bg-dark text-light">
                     <Link to={`/vehicle/${vehicle.vehicleId}`}>
-                      <img
-                        src="https://images.pexels.com/photos/35967/mini-cooper-auto-model-vehicle.jpg?cs=srgb &dl=pexels-pixabay-35967.jpg&fm=jpg"
-                        className="card-img-top"
-                        alt={vehicle.model}
-                      />
+                    <img
+      src={vehicle.imgUrl && vehicle.imgUrl.trim() !== "" ? vehicle.imgUrl : "/AutoLinkNoImage.png"}
+      className="card-img-top"
+      alt={vehicle.model || "No Image Available"}
+    />
                       <div className="card-body">
                         <h5 className="card-title text-light">
                           {vehicle.make} {vehicle.model}

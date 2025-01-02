@@ -19,6 +19,7 @@ const AddVehicle: React.FC = () => {
     color: "",
     price: 0, // Numeric input
     condition: "Used", // Dropdown for "Used" or "New"
+    imgUrl: "" //for displaying images
   });
 
   type Model = {
@@ -284,6 +285,11 @@ const AddVehicle: React.FC = () => {
               <option value="Used">Used</option>
               <option value="New">New</option>
             </select>
+          </div>
+          <div className="form-group">
+            <label htmlFor="imagUrl">Image Url</label>
+            <input type="text" className="form-control" id="price" placeholder="Enter Price"
+              value={formData.imgUrl} onChange={(e) => setFormData({ ...formData, imgUrl: String(e.target.value) })} />
           </div>
 
 

@@ -38,10 +38,10 @@ const VehicleDetail: React.FC = () => {
   <h1 className="text-center mb-4">{vehicle.make} {vehicle.model}</h1>
   
   <img
-    src="https://images.pexels.com/photos/35967/mini-cooper-auto-model-vehicle.jpg?cs=srgb&dl=pexels-pixabay-35967.jpg&fm=jpg"
-    alt={`${vehicle.make} ${vehicle.model}`}
-    style={{ width: "100%", height: "auto", borderRadius: "8px",boxShadow:"var(--color-text-link)" }}
-  />
+      src={vehicle.imgUrl && vehicle.imgUrl.trim() !== "" ? vehicle.imgUrl : "/AutoLinkNoImage.png"}
+      className="card-img-top"
+      alt={vehicle.model || "No Image Available"}
+    />
   
   <div className="mt-4">
     <h3>Details</h3>

@@ -13,6 +13,7 @@ interface Vehicle {
   color: string;
   price: number;
   condition: "Used" | "New";
+  imgUrl?: string | null;
 }
 
 const UpdateVehicle: React.FC = () => {
@@ -52,17 +53,33 @@ const UpdateVehicle: React.FC = () => {
     }));
   };
 
-  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, checked } = e.target;
-    setVehicle((prev) => ({
-      ...prev!,
-      [name]: checked,
-    }));
-  };
 
+  // const handleSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   try {
+  //     const response = await fetch(`${API_LINK}/${vehicleId}`, {
+  //       method: "PUT",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         "Authorization": cookie.cookieData.token,
+  //       },
+  //       body: JSON.stringify(vehicle),
+  //     });
+
+  //     if (!response.ok) {
+  //       throw new Error("Failed to update vehicle");
+  //     }
+
+  //     alert("Vehicle updated successfully!");
+  //     navigate("/");
+  //   } catch (err: any) {
+  //     setError(err.message);
+  //   }
+  // };
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      console.log("Submitting vehicle data:", vehicle); // Log the vehicle data being submitted
       const response = await fetch(`${API_LINK}/${vehicleId}`, {
         method: "PUT",
         headers: {
@@ -71,11 +88,11 @@ const UpdateVehicle: React.FC = () => {
         },
         body: JSON.stringify(vehicle),
       });
-
+  
       if (!response.ok) {
         throw new Error("Failed to update vehicle");
       }
-
+  
       alert("Vehicle updated successfully!");
       navigate("/");
     } catch (err: any) {
@@ -150,6 +167,18 @@ const UpdateVehicle: React.FC = () => {
             <option value="New">New</option>
             <option value="Used">Used</option>
           </select>
+        </div>
+
+        <div className="mb-3">
+          <label htmlFor="imgUrl" className="form-label">Image Url</label>
+          <input
+            type="text"
+            className="form-control"
+            id="imgUrl"
+            name="imgUrl"
+            value={vehicle?.imgUrl || ""}
+            onChange={handleInputChange}
+          />
         </div>
 
 
