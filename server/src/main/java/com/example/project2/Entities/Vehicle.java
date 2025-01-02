@@ -41,7 +41,7 @@ public class Vehicle {
     @Column(nullable = false)
     private String engineType;
 
-    @Column
+    @Column(nullable = true)
     private String imgUrl;
 
     // Getters and Setters for the Vehicle entities.

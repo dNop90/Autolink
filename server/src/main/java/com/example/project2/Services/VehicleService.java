@@ -65,6 +65,7 @@ public class VehicleService {
             vehicle.setMake(vehicleDetails.getMake());
             vehicle.setColor(vehicleDetails.getColor());
             vehicle.setEngineType(vehicleDetails.getEngineType());
+            vehicle.setImgUrl(vehicleDetails.getImgUrl());
             return ResponseEntity.ok(vehicleRepository.save(vehicle));
         } else {
             return ResponseEntity.notFound().build();
