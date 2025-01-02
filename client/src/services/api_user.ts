@@ -33,8 +33,40 @@ export class api_user {
         return response.data;
     };
 
+    /**
+     * Register user api
+     * @param username 
+     * @param email 
+     * @param password 
+     * @returns promise of axios response
+     */
     async registerUser(username: string, email: string, password: string) {
         const response = await axios.post(`${this.api_link}/register`, { username, email, password});
         return response.data;
+    }
+
+    async searchUser(token: string, username: string) {
+        const response = await axios({
+            method: 'POST',
+            url: `${this.api_link}/search`,
+            data: username,
+            headers: {
+                'Authorization' : token,
+                "Content-Type": "text/plain"
+            }
+        });
+        return response.data;
+    }
+
+    async promoteUser(token: string, username: string) {
+        const response = await axios({
+            method: 'PATCH',
+            url: `${this.api_link}/promote`,
+            data: username,
+            headers: {
+                'Authorization' : token,
+                "Content-Type": "text/plain"
+            }
+        })
     }
 }

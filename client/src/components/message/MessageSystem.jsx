@@ -1,20 +1,53 @@
 import React, { useEffect } from 'react'
+import { useAuth } from '../../contexts/AuthContext';
+import './MessageSystem.css'
 
-const WEBSOCKET_HOST = process.env.REACT_APP_WEBSOCKET_HOST;
 
 function MessageSystem() {
+    const authContext = useAuth();
+    const user = authContext.user;
 
-    useEffect(() => {
-        const socket = window.io;
-        console.log(WEBSOCKET_HOST);
-        socket.connect(WEBSOCKET_HOST);
-    }, []);
+    function ToggleShowChat(event)
+    {
+        let div = document.querySelector("#MessageList > div");
+        div.classList.toggle("active");
+    }
+
+    function userContent()
+    {
+        return (
+            <div className='MessageBox'>
+                <div id='MessageList' onClick={ToggleShowChat}>
+                    <span>Chat</span>
+                    <div>
+                        <ul>
+                            <li><a href="#">test</a></li>
+                            <li><a href="#">test</a></li>
+                            <li><a href="#">test</a></li>
+                            <li><a href="#">test</a></li>
+                            <li><a href="#">test</a></li>
+                            <li><a href="#">test</a></li>
+                            <li><a href="#">test</a></li>
+                            <li><a href="#">test</a></li>
+                            <li><a href="#">test</a></li>
+                            <li><a href="#">test</a></li>
+                            <li><a href="#">test</a></li>
+                            <li><a href="#">test</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <>
-            <div>Message testtt</div>
+            {
+                !user ? <></> :
+                userContent()
+            }
         </>
-    )
+    );
 }
 
 export default MessageSystem

@@ -50,6 +50,7 @@
 .home-section-content{
     margin: 50px auto 30px;
     width: calc(100% / 1.2);
+    font-family: "Open Sans", serif;
 }
 
 .home-section-content table{

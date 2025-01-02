@@ -1,8 +1,44 @@
-.card {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+.VehicleInventory{
+  margin-top: 50px;
+  line-height: 1.5;
 }
 
-.card:hover {
+.VehicleInventory > .row{
+  margin: 35px;
+}
+
+.VehicleInventory .my-4{
+  margin-left: 50px;
+}
+
+.VehicleInventory p{
+  font-family: "Open Sans", serif;
+  font-weight: 300;
+}
+
+.VehicleInventory h1{
+  font-family: "Open Sans", serif;
+  text-transform: uppercase;
+  font-weight: 300;
+}
+
+.VehicleInventory label{
+  color: var(--color-text-link-hover);
+}
+
+.VehicleInventory input:focus,
+.VehicleInventory select:focus{
+  border: 1px solid var(--color-button-background-hover);
+  box-shadow: none;
+}
+
+.VehicleInventory .card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  color: var(--color-text-link-hover);
+  background-color: var(--color-background2);
+}
+
+.VehicleInventory .card:hover {
   transform: translateY(-5px);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
@@ -11,6 +47,12 @@ p{
   color: var(--color-text-link);
 }
 
-body{
-  margin-top: 20px;
+.VehicleInventory .card-title{
+  text-transform: uppercase;
+  font-weight: 400;
+  margin-bottom: 35px;
+}
+
+.VehicleInventory .card-text{
+  line-height: 1;
 }
