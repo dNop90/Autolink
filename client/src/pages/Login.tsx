@@ -70,10 +70,19 @@ function Login() {
         }
         setFormError(inputError);
         api.user.loginUser(username, password).then((response) => {
-                //console.log(response);
-                cookie.setToken(response.token);
+            //console.log(response);
+            if (response.isSuspended) {
+                setFormError({
+                    ...inputError,
+                    errorMessage: "Account suspended please contact administrator"
+                });
+            } else {
                 setAccount(response);
-            })
+                //console.log(account);
+                cookie.setToken(response.token);
+            }
+
+        })
             .catch((error) => {
                 console.log(error);
                 console.log(error.response.data);
@@ -93,7 +102,7 @@ function Login() {
                 });
                 return;
             })
-            
+
     }
 
     return (

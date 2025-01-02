@@ -16,7 +16,7 @@ function DashboardSidebar() {
             </ul>
             
             <ul>
-                <li><Link to="/dashboard/dealer/list">Dealer Vehicle List</Link></li>
+                <li><Link to="/dashboard/dealerVehicleList">Dealer Vehicle List</Link></li>
                 <li><Link to="/dashboard/dealer/add">Add New Vehicle</Link></li>
             </ul>
 

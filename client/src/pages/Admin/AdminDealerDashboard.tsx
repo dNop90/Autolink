@@ -28,7 +28,7 @@ function AdminDealerDashboard() {
     
   }
   function removeApplication(indexToDelete: number) {
-    const updatedApplications = [applications.slice(0, indexToDelete), ...applications.slice(indexToDelete + 1)];
+    const updatedApplications = [...applications.slice(0, indexToDelete), ...applications.slice(indexToDelete + 1)];
     setApplications(updatedApplications);
   }
   return (
@@ -63,7 +63,7 @@ function AdminDealerDashboard() {
                     <td>{application.city}</td>
                     <td>{application.state}</td>
                     <td>{application.zipCode}</td>
-                    <td>{<Button variant='success' type="submit" onClick={() => resolve(i, application.applicantId, "Approved")}> Approve </Button>}{<Button variant='success' type="submit" onClick={() => resolve(i, application.applicantId, "Denied")}> Approve </Button>}</td>
+                    <td>{<Button variant='success' type="submit" onClick={() => resolve(i, application.applicationId, "Approved")}> Approve </Button>}{<Button variant='success' type="submit" onClick={() => resolve(i, application.applicationId, "Denied")}> Deny </Button>}</td>
                   </tr>
                 )
               }

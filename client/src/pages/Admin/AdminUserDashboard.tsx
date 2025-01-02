@@ -9,7 +9,7 @@ function AdminUserDashboard() {
     const cookie = useCookie();
     const [username, setUsername] = useState<string>("");
     const [account, setAccount] = useState<any>(null);
-    
+
     function handleSubmit(event: FormEvent) {
         event.preventDefault();
         updateTable();
@@ -18,13 +18,21 @@ function AdminUserDashboard() {
         api.user.searchUser(cookie.cookieData.token, username).then((response) => {
             console.log(response);
             setAccount(response);
-            console.log(account);
         }).catch((error) => {
             console.log(error);
         })
     }
     function promote(username: string) {
         api.user.promoteUser(cookie.cookieData.token, username).then((response) => {
+            console.log(response);
+            updateTable();
+        }).catch((error) => {
+            console.log(error);
+        })
+    }
+    function suspend(username: string) {
+        api.user.suspendUser(cookie.cookieData.token, username, !account.isSuspended).then((response) => {
+            console.log(response);
             updateTable();
         }).catch((error) => {
             console.log(error);
@@ -56,7 +64,9 @@ function AdminUserDashboard() {
                             <td>{account.username}</td>
                             <td>{account.role === 3 ? "Manager" : "User"}</td>
                             <td>{account.isSuspended ? "Yes" : "No"}</td>
-                            <td>{account.role === 3 ? null : <Button variant='success' type="submit" onClick={() => promote(account.username) }> Promote </Button>}</td>
+                            <td>{account.role === 3 ? null : <Button variant='success' type="submit" onClick={() => promote(account.username)}> Promote </Button>
+                            }{account.role === 3 ? null : <Button variant='success' type="submit" onClick={() => suspend(account.username)}> {
+                                account.isSuspended ? "Activate" : "Suspend"} </Button>}</td>
                         </tr>
                     }
                 </tbody>

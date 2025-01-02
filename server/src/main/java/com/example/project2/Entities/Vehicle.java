@@ -1,11 +1,12 @@
 // Vehicle.java
 package com.example.project2.Entities;
+
 import jakarta.persistence.*;
 
 @Entity
 public class Vehicle {
 
-    // Generate value for ID 
+    // Generate value for ID
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long vehicleId;
@@ -40,6 +41,13 @@ public class Vehicle {
     @Column(nullable = false)
     private String engineType;
 
+    @Column(nullable = true)
+    private String imgUrl;
+
+    @ManyToOne
+    @JoinColumn(name = "buyer_id")
+    private Account buyer;
+
     // Getters and Setters for the Vehicle entities.
 
     public Long getVehicleId() {
@@ -60,10 +68,6 @@ public class Vehicle {
 
     public Boolean getInStock() {
         return inStock;
-    }
-
-    public void setInStock(Boolean inStock) {
-        this.inStock = inStock;
     }
 
     public Long getPrice() {
@@ -112,5 +116,21 @@ public class Vehicle {
 
     public void setEngineType(String engineType) {
         this.engineType = engineType;
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String url) {
+        this.imgUrl = url;
+    }
+
+    public Account getBuyer() {
+        return buyer;
+    }
+
+    public void setBuyer(Account buyer) {
+        this.buyer = buyer;
     }
 }

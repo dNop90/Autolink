@@ -18,8 +18,8 @@ const AddVehicle: React.FC = () => {
     engineType: "",
     color: "",
     price: 0, // Numeric input
-    inStock: false, // Boolean input
     condition: "Used", // Dropdown for "Used" or "New"
+    imgUrl: "" //for displaying images
   });
 
   type Model = {
@@ -274,15 +274,6 @@ const AddVehicle: React.FC = () => {
             <input type="number" className="form-control" id="price" placeholder="Enter Price"
               value={formData.price} onChange={(e) => setFormData({ ...formData, price: Number(e.target.value) })} />
           </div>
-          <div className="form-group" style={{ display: 'flex', alignItems: 'center' }}>
-            <label htmlFor="inStock" style={{ marginRight: '8px' }}>In Stock</label>
-            <input
-              type="checkbox"
-              id="inStock"
-              checked={formData.inStock}
-              onChange={(e) => setFormData({ ...formData, inStock: e.target.checked })}
-            />
-          </div>
           <div className="form-group">
             <label htmlFor="condition">Condition</label>
             <select
@@ -294,6 +285,11 @@ const AddVehicle: React.FC = () => {
               <option value="Used">Used</option>
               <option value="New">New</option>
             </select>
+          </div>
+          <div className="form-group">
+            <label htmlFor="imagUrl">Image Url</label>
+            <input type="text" className="form-control" id="price" placeholder="Enter Price"
+              value={formData.imgUrl} onChange={(e) => setFormData({ ...formData, imgUrl: String(e.target.value) })} />
           </div>
 
 

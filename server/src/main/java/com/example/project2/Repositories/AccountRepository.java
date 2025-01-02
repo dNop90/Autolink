@@ -27,4 +27,8 @@ public interface AccountRepository extends JpaRepository<Account, Long>{
     @Modifying
     @Query("UPDATE Account SET role = ?2 WHERE accountId = ?1")
     int updateRole(Long accountId, Integer role);
+
+    @Modifying
+    @Query("UPDATE Account SET isSuspended = ?2 WHERE accountId =?1")
+    int suspend(Long accountId, Boolean suspend);
 }
