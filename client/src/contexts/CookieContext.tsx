@@ -104,9 +104,9 @@ export const CookieProvider: React.FC<CookieProviderProps> = ({ children }) => {
     <>
       {
         cookie.theme > 0 ?
-        <link rel="stylesheet" href="css/Dark-Theme.css" />
+        <link rel="stylesheet" href="/css/Dark-Theme.css" />
         :
-        <link rel="stylesheet" href="css/Light-Theme.css" />
+        <link rel="stylesheet" href="/css/Light-Theme.css" />
       }
 
       <CookieContext.Provider value={{cookieData: cookie, setTheme, setToken, removeToken}}>

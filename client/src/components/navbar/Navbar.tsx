@@ -5,7 +5,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import * as Icon from 'react-bootstrap-icons';
 import { useCookie } from '../../contexts/CookieContext';
 
-const Navbar: React.FC = () => {
+function Navbar(){
   const themeContext = useCookie();
   const theme = themeContext.cookieData.theme;
 
