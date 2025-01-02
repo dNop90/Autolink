@@ -28,11 +28,8 @@ interface Vehicle {
   buyer?: Buyer;
 }
 
+
 function DealerVehicleList(props: {dLer: boolean}){
-
-
-
-
   const [vehicles, setVehicles] = useState<Vehicle[]>([]); // State to store fetched vehicles
   const [loading, setLoading] = useState(true); // Loading state
   const [error, setError] = useState<string | null>(null); // Error state

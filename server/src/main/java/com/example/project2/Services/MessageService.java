@@ -40,6 +40,10 @@ public class MessageService {
             return false;
         }
 
+        //Add username to the Message
+        message.setFromUsername(fromAccount.getUsername());
+        message.setToUsername(toAccount.getUsername());
+
         //Save the message to the table
         Message newmessage = messageRepository.save(message);
 

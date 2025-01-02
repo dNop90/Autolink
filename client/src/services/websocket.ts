@@ -9,8 +9,7 @@ class websocket{
 
     init()
     {
-        this.socket = (window as any).io;
-        this.socket.connect(WEBSOCKET_HOST, { transports: [ 'websocket' ] });
+        this.socket = (window as any).io.connect(WEBSOCKET_HOST, { transports: [ 'websocket' ] });
     }
 }
 
