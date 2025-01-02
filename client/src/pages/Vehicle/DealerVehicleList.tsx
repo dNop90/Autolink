@@ -1,10 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from 'react-router-dom';
 import { useCookie } from "../../contexts/CookieContext";
+import { useAuth } from '../../contexts/AuthContext';
+
 
 const API_LINK = process.env.REACT_APP_API_VEHICLE;
 
 
+interface Buyer {
+  accountId: string; // Assuming this is the ID of the buyer
+  username: string; // You can include other fields as needed
+  email: string;
+  firstName: string;
+  lastName: string;
+  // Add any other relevant fields
+}
 interface Vehicle {
   vehicleId: string; // Ensure vehicleId is included in the interface
   year: string; // Change to string if you want to allow empty strings
@@ -15,18 +25,27 @@ interface Vehicle {
   price: number; // Numeric input
   condition: "Used" | "New"; // Dropdown for "Used" or "New"
   imgUrl?: string | null;
+  buyer?: Buyer;
 }
 
 function DealerVehicleList(props: {dLer: boolean}){
 
 
 
+
   const [vehicles, setVehicles] = useState<Vehicle[]>([]); // State to store fetched vehicles
   const [loading, setLoading] = useState(true); // Loading state
   const [error, setError] = useState<string | null>(null); // Error state
+  const [accountId, setAccountId] = useState<string>(""); // State for account ID to filter by
+
+  
   const cookie = useCookie();
   const navigate = useNavigate();
 
+  const authContext = useAuth();
+  const user = authContext.user;
+
+  console.log("THis is user: ", user)
 
   const [filters, setFilters] = useState({
     priceRange: [0, 100000],
@@ -42,10 +61,13 @@ function DealerVehicleList(props: {dLer: boolean}){
       try {
         setLoading(true);
         const response = await fetch(`${API_LINK}/inventory`);
+        
+        
         if (!response.ok) {
           throw new Error("Failed to fetch data");
         }
         const data = await response.json();
+        console.log("Fetched file: ", data)
         setVehicles(data); // Update state with fetched vehicles
       } catch (err: any) {
         setError(err.message);
@@ -88,6 +110,22 @@ function DealerVehicleList(props: {dLer: boolean}){
     }
   };
 
+  // const filteredVehicles = vehicles.filter((vehicle: Vehicle) => {
+  //   return (
+  //     vehicle.price >= filters.priceRange[0] &&
+  //     vehicle.price <= filters.priceRange[1] &&
+  //     (filters.make
+  //       ? vehicle.make.toLowerCase().includes(filters.make.toLowerCase())
+  //       : true) &&
+  //     (filters.model
+  //       ? vehicle.model.toLowerCase().includes(filters.model.toLowerCase())
+  //       : true) &&
+  //     (filters.year ? vehicle.year === filters.year : true) &&
+  //     (filters.condition
+  //       ? vehicle.condition.toLowerCase() === filters.condition.toLowerCase()
+  //       : true)
+  //   );
+  // });
   const filteredVehicles = vehicles.filter((vehicle: Vehicle) => {
     return (
       vehicle.price >= filters.priceRange[0] &&
@@ -101,10 +139,10 @@ function DealerVehicleList(props: {dLer: boolean}){
       (filters.year ? vehicle.year === filters.year : true) &&
       (filters.condition
         ? vehicle.condition.toLowerCase() === filters.condition.toLowerCase()
-        : true)
+        : true) &&
+        (props.dLer || vehicle.buyer?.accountId === user?.userid) // Apply buyer filtering only if props.dLer is true
     );
   });
-
   return (
     <div style={{ padding: "35px" }}>
       {loading ? (
