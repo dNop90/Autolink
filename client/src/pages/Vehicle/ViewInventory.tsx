@@ -17,7 +17,6 @@ const ViewInventory: React.FC = () => {
     model: "",
     year: "",
     condition: "",
-    inStock: "", // State for inStock filter
   });
 
   // Fetch vehicles from the backend
@@ -58,12 +57,7 @@ const ViewInventory: React.FC = () => {
     });
   };
 
-  const handleStockChange = (value: string) => {
-    setFilters({
-      ...filters,
-      inStock: value,
-    });
-  };
+
 
   const filteredVehicles = vehicles.filter((vehicle: any) => {
     return (
@@ -78,13 +72,9 @@ const ViewInventory: React.FC = () => {
       (filters.year ? vehicle.year.toString() === filters.year : true) &&
       (filters.condition
         ? vehicle.condition.toLowerCase() === filters.condition.toLowerCase()
-        : true) &&
-      (filters.inStock
-        ? filters.inStock === "true"
-          ? vehicle.inStock === true
-          : vehicle.inStock === false
-        : true)
-    );
+        : true) 
+      
+    )
   });
 
   return (
@@ -193,21 +183,6 @@ const ViewInventory: React.FC = () => {
                 </select>
               </div>
 
-              <div className="mb-2">
-                <label htmlFor="inStock" className="form-label">
-                  In Stock
-                </label>
-                <select
-                  id="inStock"
-                  className="form-select"
-                  onChange={(e) => handleStockChange(e.target.value)}
-                  value={filters.inStock}
-                >
-                  <option value="">Select Stock Status</option>
-                  <option value="true">In Stock</option>
-                  <option value="false">Out of Stock</option>
-                </select>
-              </div>
             </div>
           </div>
 
@@ -231,9 +206,6 @@ const ViewInventory: React.FC = () => {
                     <p className="card-text">Year: {vehicle.year}</p>
                     <p className="card-text">
                       Condition: {vehicle.condition}
-                    </p>
-                    <p className="card-text">
-                      In Stock: {vehicle.inStock ? "Yes" : "No"}
                     </p>
                   
                    

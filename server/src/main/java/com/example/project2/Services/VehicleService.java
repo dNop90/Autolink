@@ -15,44 +15,50 @@ public class VehicleService {
     @Autowired
     private VehicleRepository vehicleRepository;
 
-    /*   
+    /*
      * @return all vehicles in the inventory
-    */
+     */
     public List<Vehicle> getAllVehicles() {
         return vehicleRepository.findAll();
     }
 
-    /*  
-    get the vehicle by passing in the id
-    @param id the id of the vehicle
-    @return vehicle that matches that id
-    */
+    /*
+     * get the vehicle by passing in the id
+     * 
+     * @param id the id of the vehicle
+     * 
+     * @return vehicle that matches that id
+     */
     public ResponseEntity<Vehicle> getVehicleById(Long id) {
         Optional<Vehicle> vehicle = vehicleRepository.findById(id);
         return vehicle.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 
-    /*  
-    Create a vehicle or add new vehicle in the inventory
-    @param Vehicle an object of the vehicle
-    @return save the vehicle to the database.
-    */
+    /*
+     * Create a vehicle or add new vehicle in the inventory
+     * 
+     * @param Vehicle an object of the vehicle
+     * 
+     * @return save the vehicle to the database.
+     */
     public Vehicle createVehicle(Vehicle vehicle) {
         return vehicleRepository.save(vehicle);
     }
 
-    /*  
-    Update a vehicle
-    @param id the id of the object(vehicle) that is going to be updated
-    @param vehicleDetails an object of the Vehicle.
-    @return change the old data and new data (updated version is saved)
-    */
+    /*
+     * Update a vehicle
+     * 
+     * @param id the id of the object(vehicle) that is going to be updated
+     * 
+     * @param vehicleDetails an object of the Vehicle.
+     * 
+     * @return change the old data and new data (updated version is saved)
+     */
     public ResponseEntity<Vehicle> updateVehicle(Long id, Vehicle vehicleDetails) {
         Optional<Vehicle> vehicleOptional = vehicleRepository.findById(id);
         if (vehicleOptional.isPresent()) {
             Vehicle vehicle = vehicleOptional.get();
             vehicle.setModel(vehicleDetails.getModel());
-            vehicle.setInStock(vehicleDetails.getInStock());
             vehicle.setPrice(vehicleDetails.getPrice());
             vehicle.setCondition(vehicleDetails.getCondition());
             vehicle.setYear(vehicleDetails.getYear());
@@ -65,11 +71,13 @@ public class VehicleService {
         }
     }
 
-    /*  
-    Delete a vehicle from the database
-    @param id the id of the vehicle to be removed.
-    @return remove the vehicle and save the data.
-    */
+    /*
+     * Delete a vehicle from the database
+     * 
+     * @param id the id of the vehicle to be removed.
+     * 
+     * @return remove the vehicle and save the data.
+     */
     public ResponseEntity<Void> deleteVehicle(Long id) {
         if (vehicleRepository.existsById(id)) {
             vehicleRepository.deleteById(id);

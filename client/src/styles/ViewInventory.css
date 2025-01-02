@@ -43,8 +43,8 @@
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
 
-.VehicleInventory .card-body{
-  font-family: "Open Sans", serif;
+p{
+  color: var(--color-text-link);
 }
 
 .VehicleInventory .card-title{
