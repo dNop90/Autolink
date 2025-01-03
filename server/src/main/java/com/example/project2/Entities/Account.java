@@ -31,7 +31,6 @@ public class Account {
     private String firstName;
     private String lastName;
     private String phone;
-    private Long imageId;
     private String currentPassword;  // For handling the current password input.
     private String newPassword;      // For handling the new password input.
 }
