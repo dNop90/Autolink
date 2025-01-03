@@ -10,33 +10,39 @@ function MessageSystem() {
     const authContext = useAuth();
     const user = authContext.user;
     const cookie = useCookie().cookieData;
-    let websocket = socket;
     
     useEffect(() => {
-        websocket.init();
-        websocket.socket.on("message", (data: any) =>
+        if(user)
         {
-            data = JSON.parse(JSON.stringify(data));
-
-            let fromAccountID = data.fromAccountID;
-            let fromUsername = data.fromUsername;
-            let toAccountID = data.toAccountID;
-            let toUsername = data.toUsername;
-            let message = data.message;
-
-            let MessageChat = undefined;
-            if(fromAccountID == user?.userid)
+            socket.init();
+            socket.socket.on("message", (data: any) =>
             {
-                MessageChat = createMessageChat(toAccountID, toUsername);
-                addMessageToChat(toAccountID, message, true);
-            }
-            else if(toAccountID == user?.userid)
-            {
-                MessageChat = createMessageChat(fromAccountID, fromUsername);
-                addMessageToChat(fromAccountID, message, false);
-            }
-        });
-        
+                data = JSON.parse(JSON.stringify(data));
+
+                let fromAccountID = data.fromAccountID;
+                let fromUsername = data.fromUsername;
+                let toAccountID = data.toAccountID;
+                let toUsername = data.toUsername;
+                let message = data.message;
+
+                let MessageChat = undefined;
+                if(fromAccountID == user?.userid)
+                {
+                    MessageChat = createMessageChat(toAccountID, toUsername);
+                    addMessageToChat(toAccountID, message, true);
+                }
+                else if(toAccountID == user?.userid)
+                {
+                    MessageChat = createMessageChat(fromAccountID, fromUsername);
+                    addMessageToChat(fromAccountID, message, false);
+                }
+            });
+        }
+        else
+        {
+            socket.socket?.close();
+            socket.socket = null;
+        }
     }, [user]);
 
     /**

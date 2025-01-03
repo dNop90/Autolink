@@ -29,13 +29,13 @@ interface Vehicle {
 }
 
 
-function DealerVehicleList(props: {dLer: boolean}){
+function DealerVehicleList(props: { dLer: boolean }) {
   const [vehicles, setVehicles] = useState<Vehicle[]>([]); // State to store fetched vehicles
   const [loading, setLoading] = useState(true); // Loading state
   const [error, setError] = useState<string | null>(null); // Error state
   const [accountId, setAccountId] = useState<string>(""); // State for account ID to filter by
 
-  
+
   const cookie = useCookie();
   const navigate = useNavigate();
 
@@ -58,8 +58,8 @@ function DealerVehicleList(props: {dLer: boolean}){
       try {
         setLoading(true);
         const response = await fetch(`${API_LINK}/inventory`);
-        
-        
+
+
         if (!response.ok) {
           throw new Error("Failed to fetch data");
         }
@@ -81,7 +81,7 @@ function DealerVehicleList(props: {dLer: boolean}){
     navigate(`/dashboard/vehiclelist/update-vehicle/${vehicleId}`);
   };
 
-  
+
   const handleDelete = async (vehicleId: string) => {
     if (window.confirm("Are you sure you want to delete this vehicle?")) {
       try {
@@ -98,7 +98,7 @@ function DealerVehicleList(props: {dLer: boolean}){
         }
 
         // Remove the deleted vehicle from the state
-        setVehicles((prevVehicles) => 
+        setVehicles((prevVehicles) =>
           prevVehicles.filter(vehicle => vehicle.vehicleId !== vehicleId) // Correctly filter by vehicleId
         );
       } catch (err: any) {
@@ -137,7 +137,7 @@ function DealerVehicleList(props: {dLer: boolean}){
       (filters.condition
         ? vehicle.condition.toLowerCase() === filters.condition.toLowerCase()
         : true) &&
-        (props.dLer || vehicle.buyer?.accountId === user?.userid) // Apply buyer filtering only if props.dLer is true
+      (props.dLer || vehicle.buyer?.accountId === user?.userid) // Apply buyer filtering only if props.dLer is true
     );
   });
   return (
@@ -153,12 +153,13 @@ function DealerVehicleList(props: {dLer: boolean}){
               {filteredVehicles.map((vehicle: Vehicle) => (
                 <div className="col-md-4 mb-4" key={vehicle.vehicleId}>
                   <div className="card bg-dark text-light">
+                  {!props.dLer &&(
                     <Link to={`/vehicle/${vehicle.vehicleId}`}>
-                    <img
-      src={vehicle.imgUrl && vehicle.imgUrl.trim() !== "" ? vehicle.imgUrl : "/AutoLinkNoImage.png"}
-      className="card-img-top"
-      alt={vehicle.model || "No Image Available"}
-    />
+                      <img
+                        src={vehicle.imgUrl && vehicle.imgUrl.trim() !== "" ? vehicle.imgUrl : "/AutoLinkNoImage.png"}
+                        className="card-img-top"
+                        alt={vehicle.model || "No Image Available"}
+                      />
                       <div className="card-body">
                         <h5 className="card-title text-light">
                           {vehicle.make} {vehicle.model}
@@ -170,24 +171,69 @@ function DealerVehicleList(props: {dLer: boolean}){
                         </p>
 
                       </div>
-                    </Link>
+                    </Link>)}
+                    {props.dLer &&(
+                    <Link to={`/dealerVehicle/${vehicle.vehicleId}`}>
+                      <img
+                        src={vehicle.imgUrl && vehicle.imgUrl.trim() !== "" ? vehicle.imgUrl : "/AutoLinkNoImage.png"}
+                        className="card-img-top"
+                        alt={vehicle.model || "No Image Available"}
+                      />
+                      <div className="card-body">
+                        <h5 className="card-title text-light">
+                          {vehicle.make} {vehicle.model}
+                        </h5>
+                        <p className="card-text">Price: ${vehicle.price}</p>
+                        <p className="card-text">Year: {vehicle.year}</p>
+                        <p className="card-text">
+                          Condition: {vehicle.condition}
+                        </p>
+
+                      </div>
+                    </Link>)}
+
                     {/* <button className="btn btn-warning ms-2 me-2" onClick={() => handleUpdate(vehicle.vehicleId)}>Update</button>
                     <button className="btn btn-danger ms-2 m-2" onClick={() => handleDelete(vehicle.vehicleId)}>Delete</button> */}
-                    
-                  {props.dLer && (
-                    <>
-                      <button
-                        className="btn btn-warning ms-2 me-2"
-                        onClick={() => handleUpdate(vehicle.vehicleId)}
-                      >
-                        Update
-                      </button>
-                      <button
-                        className="btn btn-danger ms-2 m-2"
-                        onClick={() => handleDelete(vehicle.vehicleId)}
-                      >
-                        Delete
-                      </button>
+
+                    {props.dLer && (
+                      <>
+                        <button
+                          className="btn btn-warning ms-2 me-2"
+                          onClick={() => handleUpdate(vehicle.vehicleId)}
+                        >
+                          Update
+                        </button>
+                        <button
+                          className="btn btn-danger ms-2 m-2"
+                          onClick={() => handleDelete(vehicle.vehicleId)}
+                        >
+                          Delete
+                        </button>
+                      </>)}
+                      {!props.dLer &&(
+                        <>
+                       <button
+                      style={{
+                        position: "absolute",
+                        bottom: "20px",
+                        right: "20px",
+                        width: "60px",
+                        height: "60px",
+                        backgroundColor: "var(--color-text-link)",
+                        color: "white",
+                        border: "none",
+                        borderRadius: "50%",
+                        boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+                        cursor: "pointer",
+                        fontSize: "18px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center"
+                      }}
+                      onClick={() => alert("Chat feature thing!")} // Replace with actual chat functionality
+                    >
+                      💬
+                    </button>
                     </>)}
                   </div>
                 </div>
