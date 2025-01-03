@@ -24,6 +24,7 @@ import com.example.project2.Exceptions.DuplicateUsernameException;
 import com.example.project2.Exceptions.PasswordIncorrectException;
 import com.example.project2.JWT.JWTUtil;
 import com.example.project2.Response.AccountResponse;
+import com.example.project2.Response.ProfileResponse;
 import com.example.project2.Services.AccountService;
 
 import io.jsonwebtoken.Claims;
@@ -59,7 +60,7 @@ public class UserController {
         } catch (DuplicateEmailException d) {
             return ResponseEntity.status(409).body("Email already registered");
         } catch (NoSuchAlgorithmException d) {
-            return ResponseEntity.status(500).body("Hashing algorithm not fount");
+            return ResponseEntity.status(500).body("Hashing algorithm not found");
         }
     }
 
@@ -82,17 +83,21 @@ public class UserController {
         } catch (PasswordIncorrectException e) {
             return ResponseEntity.status(401).body("Invalid password");
         } catch (NoSuchAlgorithmException e) {
-            return ResponseEntity.status(500).body("Hashing algorithm not fount");
+            return ResponseEntity.status(500).body("Hashing algorithm not found");
         }
     }
 
-    @GetMapping("/info")
-    public ResponseEntity<?> getUserProfile(@RequestParam String usernameOrEmail) {
-        Optional<Account> userOptional = accountService.getUserByUsernameOrEmail(usernameOrEmail);
-        if (userOptional.isEmpty()) {
-            return ResponseEntity.status(404).body("User not found");
-        }
-        return ResponseEntity.ok(userOptional.get());
+    @GetMapping("/info/{username}")
+    public ResponseEntity getUserProfile(@RequestHeader("Authorization") String authHeader, @PathVariable String username) {
+        if (JWTUtil.isValid(authHeader)) {
+            try {
+                ProfileResponse profile = accountService.getUserProfileByUsername(username);
+                return ResponseEntity.ok(profile);
+            } catch (AccountNotFoundException e) {
+                return ResponseEntity.status(404).body("User not found");
+            }
+        } 
+        return ResponseEntity.status(401).build();
     }
 
     /*
@@ -104,55 +109,38 @@ public class UserController {
      * 
      * @return a ResponseEntity with status of the password change operation
      */
-    @PostMapping("/change-password")
-    public ResponseEntity<?> changePassword(@RequestBody Account account) {
-        String usernameOrEmail = account.getUsername(); // Get username from the request body
-        if (usernameOrEmail == null || usernameOrEmail.isEmpty()) {
-            // If username is not provided, check for email
-            usernameOrEmail = account.getEmail();
-        }
-        if (usernameOrEmail == null || usernameOrEmail.isEmpty()) {
-            return ResponseEntity.status(401).body("Username or email is missing.");
-        }
-
-        Optional<Account> userOptional = accountService.getUserByUsernameOrEmail(usernameOrEmail);
-        if (userOptional.isEmpty()) {
-            return ResponseEntity.status(404).body("User not found.");
-        }
-
-        Account user = userOptional.get();
-        try {
-            // Check if current password is correct
-            boolean isPasswordValid = accountService.validatePassword(account.getCurrentPassword(), user.getPassword());
-            if (!isPasswordValid) {
-                return ResponseEntity.status(401).body("Current password is incorrect.");
+    @PatchMapping("/password")
+    public ResponseEntity changePassword(@RequestHeader("Authorization") String authHeader, @RequestBody Account account) {
+        if (JWTUtil.isValid(authHeader)) {
+            try {
+                accountService.updatePassword(account);
+                return ResponseEntity.status(200).body("Password updated");
+            }catch (AccountNotFoundException e) {
+                return ResponseEntity.status(404).body("User not found");
+            }catch (PasswordIncorrectException e) {
+                return ResponseEntity.status(401).body("Invalid password");
+            }catch (NoSuchAlgorithmException e) {
+                return ResponseEntity.status(500).body("Hashing algorithm not found");
             }
-            // Update password if current password is valid
-            accountService.updatePassword(user.getAccountId(), account.getNewPassword());
-            return ResponseEntity.status(200).body("Password updated successfully.");
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body("Failed to update password.");
         }
+        return ResponseEntity.status(401).build();
+        
     }
     /*
      * Update user profile endpoint
      * Accepts updated user details along with accountId in the request body
      */
-    @PutMapping("/edit-profile")
-    public ResponseEntity<?> updateUserProfile(@RequestBody Account updateUserDTO) {
-        Long userId = updateUserDTO.getAccountId();  // Retrieve accountId from request body
-        if (userId == null) {
-            return ResponseEntity.status(401).body("User ID is missing.");
+    @PatchMapping("/profile")
+    public ResponseEntity updateUserProfile(@RequestHeader("Authorization") String authHeader, @RequestBody ProfileResponse profile) {
+        if (JWTUtil.isValid(authHeader)) {
+            try {
+                accountService.updateUserProfile(profile);
+                return ResponseEntity.status(200).body("Account updated");
+            } catch (AccountNotFoundException e) {
+                return ResponseEntity.status(404).body("User not found");
+            }
         }
-
-        try {
-            accountService.updateUserProfile(userId, updateUserDTO);  // Pass Long to service
-            return ResponseEntity.status(200).body("User profile updated successfully.");
-        } catch (AccountNotFoundException e) {
-            return ResponseEntity.status(404).body("User not found.");
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body("Failed to update user profile.");
-        }
+        return ResponseEntity.status(401).build();
     }
     
 
