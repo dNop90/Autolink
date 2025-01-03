@@ -2,7 +2,7 @@
     max-width: 600px; /* Set a maximum width for the form */
     margin: 0 auto; /* Center the form horizontally */
     padding: 20px; /* Add padding around the form */
-    background-color: var(--color-background); /* Light background color */
+    background-color: var(--color-background2); /* Light background color */
     border-radius: 8px; /* Rounded corners */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
 }
