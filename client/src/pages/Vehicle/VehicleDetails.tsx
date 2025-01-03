@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { data, useParams } from "react-router-dom";
 import { api } from "../../services/api";
 import { useAuth } from '../../contexts/AuthContext';
 
@@ -20,8 +20,11 @@ function VehicleDetail(props: { dLer: boolean }) {
         if (!response.ok) {
           throw new Error("Failed to fetch vehicle details");
         }
+        
         const data = await response.json();
+        
         setVehicle(data);
+        
       } catch (err: any) {
         setError(err.message);
       } finally {
@@ -32,8 +35,13 @@ function VehicleDetail(props: { dLer: boolean }) {
     fetchVehicle();
   }, [vehicleId]);
 
+console.log("this is vehicle: ", vehicle)
+
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p className="text-danger">{error}</p>;
+
+
 
   return (
     <div style={{
@@ -54,6 +62,14 @@ function VehicleDetail(props: { dLer: boolean }) {
         <p style={{fontWeight: 300}}><strong>Year:</strong> {vehicle.year}</p>
         <p style={{fontWeight: 300}}><strong>Condition:</strong> {vehicle.condition}</p>
         <p style={{fontWeight: 300}}><strong>Description:</strong> {vehicle.description || "No description available."}</p>
+        
+        {/* Display Dealer Information */}
+        {vehicle.dealer && (
+          <div>
+            <h4 style={{textTransform: "uppercase", marginBottom: "10px"}}>Dealer Information</h4>
+            <p><strong>Username:</strong> {vehicle.dealer.username}</p>
+          </div>
+        )}
       </div>
       {/* Chat Button */}
 
@@ -78,6 +94,7 @@ function VehicleDetail(props: { dLer: boolean }) {
               justifyContent: "center"
             }}
             onClick={() => alert("Chat feature thing!")} // Replace with actual chat functionality
+            vehicle-dealerid={vehicle.dealer ? vehicle.dealer.accountId : -1}
           >
             💬
           </button>
