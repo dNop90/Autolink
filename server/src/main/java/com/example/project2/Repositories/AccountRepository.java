@@ -1,7 +1,5 @@
 package com.example.project2.Repositories;
 
-import java.util.Optional;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -22,7 +20,7 @@ public interface AccountRepository extends JpaRepository<Account, Long>{
     Account findAccountByAccountId(Integer accountId);
 
     @Query("SELECT a FROM Account a WHERE a.username = ?1 OR a.email = ?1")
-    Optional<Account> findByUsernameOrEmail(String usernameOrEmail);
+    Account findByUsernameOrEmail(String usernameOrEmail);
 
     @Modifying
     @Query("UPDATE Account SET role = ?2 WHERE accountId = ?1")
@@ -31,4 +29,12 @@ public interface AccountRepository extends JpaRepository<Account, Long>{
     @Modifying
     @Query("UPDATE Account SET isSuspended = ?2 WHERE accountId =?1")
     int suspend(Long accountId, Boolean suspend);
+
+    @Modifying
+    @Query("UPDATE Account set password = ?2 WHERE accountId = ?1")
+    int updatePassword(Long accountId, String pasword);
+
+    @Modifying
+    @Query("UPDATE Account set email = ?2, firstName = ?3, lastName =?4, phone =?5 WHERE accountId =?1")
+    int updateUserProfile(Long accountId, String email, String firtName, String lastName, String phone);
 }

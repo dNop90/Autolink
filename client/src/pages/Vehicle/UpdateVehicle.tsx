@@ -106,7 +106,7 @@ const UpdateVehicle: React.FC = () => {
   return (
     <div>
       <h1>Update Vehicle</h1>
-      <form onSubmit={handleSubmit}>
+      <form className="loginform" onSubmit={handleSubmit}>
         <div className="mb-3">
           <label htmlFor="make" className="form-label">Make</label>
           <input
