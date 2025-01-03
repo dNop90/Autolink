@@ -26,14 +26,12 @@ public class AccountResponse {
         @JsonProperty("username") String username,
         @JsonProperty("role") Integer role,
         @JsonProperty("isSuspended") Boolean isSuspended,
-        @JsonProperty("imageId") Long imageId,
         @JsonProperty("token") String token
     ) {
         this.accountId = accountId;
         this.username = username;
         this.role = role;
         this.isSuspended = isSuspended;
-        this.imageId = imageId;
         this.token = token;
     }
     
