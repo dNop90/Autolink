@@ -68,6 +68,7 @@ export class api_user {
                 "Content-Type": "text/plain"
             }
         })
+        return response.data;
     }
 
     async suspendUser(token: string, username: string, status: boolean) {
@@ -80,5 +81,51 @@ export class api_user {
                 "Content-Type": "text/plain"
             }
         })
+        return response.data;
+    }
+
+    async fetchProfile(token: string, username: string) {
+        const response = await axios({
+            method: 'GET',
+            url: `${this.api_link}/info/${username}`,
+            headers: {
+                'Authorization' : token
+            }
+        })
+        return response.data;
+    }
+
+    async updateProfile(token: string, username: string, email: string, firstName: string, lastName: string, phone: string) {
+        const response = await axios({
+            method: 'PATCH',
+            url: `${this.api_link}/profile`,
+            data: {
+                username: username,
+                email: email,
+                firstName: firstName,
+                lastName: lastName,
+                phone: phone
+            },
+            headers: {
+                'Authorization': token
+            }
+        })
+        return response.data;
+    }
+
+    async updatePassword(token: string, username: string, currentPassword: string, newPassword: string) {
+        const response = await axios({
+            method: 'PATCH',
+            url: `${this.api_link}/password`,
+            data: {
+                username: username,
+                currentPassword: currentPassword,
+                newPassword: newPassword
+            },
+            headers: {
+                'Authorization' : token
+            }
+        })
+        return response.data;
     }
 }

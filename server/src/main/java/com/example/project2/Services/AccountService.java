@@ -17,6 +17,7 @@ import com.example.project2.Exceptions.PasswordIncorrectException;
 import com.example.project2.JWT.JWTUtil;
 import com.example.project2.Repositories.AccountRepository;
 import com.example.project2.Response.AccountResponse;
+import com.example.project2.Response.ProfileResponse;
 
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -84,7 +85,6 @@ public class AccountService {
                 check.getUsername(),
                 check.getRole(),
                 check.getIsSuspended(),
-                check.getImageId(),
                 token);
         return result;
     }
@@ -96,7 +96,6 @@ public class AccountService {
                 check.getUsername(),
                 check.getRole(),
                 check.getIsSuspended(),
-                check.getImageId(),
                 token);
 
         return result;
@@ -111,66 +110,54 @@ public class AccountService {
                 check.getUsername(),
                 check.getRole(),
                 check.getIsSuspended(),
-                null,
                 null);
         return result;
     }
 
-    public Optional<Account> getUserByUsernameOrEmail(String usernameOrEmail) {
-        return accountRepository.findByUsernameOrEmail(usernameOrEmail);
+    public ProfileResponse getUserProfileByUsername(String username) throws AccountNotFoundException {
+        Account check = accountRepository.findAccountByUsername(username);
+        if (check == null)
+            throw new AccountNotFoundException();
+
+        ProfileResponse res = new ProfileResponse(
+                check.getUsername(),
+                check.getEmail(),
+                check.getFirstName(),
+                check.getLastName(),
+                check.getPhone());
+        return res;
     }
 
     // Update user profile
-    public void updateUserProfile(Long userId, Account updateUserDTO) throws AccountNotFoundException {
-        Optional<Account> optionalAccount = accountRepository.findById(userId.longValue());
-        if (optionalAccount.isEmpty()) {
+    public void updateUserProfile(ProfileResponse profile) throws AccountNotFoundException {
+        Account check = accountRepository.findAccountByUsername(profile.getUsername());
+        if (check == null) {
             throw new AccountNotFoundException();
         }
-
-        Account account = optionalAccount.get();
-        account.setFirstName(updateUserDTO.getFirstName());
-        account.setLastName(updateUserDTO.getLastName());
-        account.setEmail(updateUserDTO.getEmail());
-        account.setPhone(updateUserDTO.getPhone());
-
-        accountRepository.save(account); // Save the updated account
+        accountRepository.updateUserProfile(check.getAccountId(), profile.getEmail(), profile.getFirstName(), profile.getLastName(), profile.getPhone());
     }
 
-    public void updatePassword(Long accountId, String newPassword) throws AccountNotFoundException, NoSuchAlgorithmException {
-        Optional<Account> optionalAccount = accountRepository.findById(accountId);
-        
-        // If account is not found, throw an exception
-        if (optionalAccount.isEmpty()) {
-            throw new AccountNotFoundException();
-        }
-        
-        // Get the account from the database
-        Account account = optionalAccount.get();
-        
-        // Hash the new password before saving it
-        account.setPassword(toHexString(getSHA(newPassword))); // Assuming your password is hashed
-        accountRepository.save(account); // Save the updated account
-    }
-
-    public boolean validatePassword(String username, String currentPassword) throws NoSuchAlgorithmException {
-        Account account = accountRepository.findAccountByUsername(username);
-        
-        if (account == null) {
-            return false;  // Account not found
-        }
-        
-        // Check if the current password matches the stored password (hashed)
-        return account.getPassword().equals(toHexString(getSHA(currentPassword)));
+    public void updatePassword(Account account)
+            throws AccountNotFoundException, NoSuchAlgorithmException, PasswordIncorrectException {
+        Account check = accountRepository.findAccountByUsername(account.getUsername());
+        if (check == null) throw new AccountNotFoundException();
+        String currpwd = toHexString(getSHA(account.getCurrentPassword()));
+        if (check.getPassword().equals(currpwd)) {
+            String newpwd = toHexString(getSHA(account.getNewPassword()));
+            accountRepository.updatePassword(check.getAccountId(), newpwd);
+        } else throw new PasswordIncorrectException();
     }
 
     /*
      * Promotion service to change regular account to admin account
      * 
      * @param username, username of the account to be promoted
+     * 
      * @return Promoted message
+     * 
      * @throws AccountNotFoundException if username not in database
      */
-    public String promote(String username) throws AccountNotFoundException{
+    public String promote(String username) throws AccountNotFoundException {
         Account a = accountRepository.findAccountByUsername(username);
         if (a != null) {
             accountRepository.updateRole(a.getAccountId(), 3);
@@ -184,14 +171,16 @@ public class AccountService {
      * Suspension service to prevent account login
      * 
      * @param username, username of the account to be suspended
+     * 
      * @return Suspended message
+     * 
      * @throws AccountNotFoundException if username not in database
      */
-    public String suspend(String username, Boolean status) throws AccountNotFoundException{
+    public String suspend(String username, Boolean status) throws AccountNotFoundException {
         Account a = accountRepository.findAccountByUsername(username);
         if (a != null) {
             accountRepository.suspend(a.getAccountId(), status);
-            if(status) {
+            if (status) {
                 return "Suspended";
             } else {
                 return "Activated";
