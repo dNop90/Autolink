@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { api } from "../../services/api";
 
-const VehicleDetail: React.FC = () => {
+function VehicleDetail(props: { dLer: boolean }) {
   const { vehicleId } = useParams<{ vehicleId: string }>();
   const [vehicle, setVehicle] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -51,6 +51,9 @@ const VehicleDetail: React.FC = () => {
     <p><strong>Description:</strong> {vehicle.description || "No description available."}</p>
   </div>
  {/* Chat Button */}
+ 
+ {props.dLer && (
+                      <>
  <button
     style={{
       position: "absolute",
@@ -73,6 +76,7 @@ const VehicleDetail: React.FC = () => {
   >
     💬
   </button>
+  </>)}
   
 </div>
   );
