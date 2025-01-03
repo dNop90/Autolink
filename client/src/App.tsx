@@ -38,7 +38,8 @@ const App: React.FC = () => {
           {/* testing for Car api request */}
           <Route path="/addvehicle" element={<AddVehicle />} />
 
-          <Route path="/vehicle/:vehicleId" element={<VehicleDetails />} />
+          <Route path="/vehicle/:vehicleId" element={<VehicleDetails dLer={true}/>} />
+          <Route path="/dealerVehicle/:vehicleId" element={<VehicleDetails dLer={false}/>} />
           
           <Route element={<UserRouteGuard />}>
             <Route path="/dealer-dashboard" element={<DealerDashboard />} />
