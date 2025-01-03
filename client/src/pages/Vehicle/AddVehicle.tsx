@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { authenticate, fetchData } from "../../services/apiService";
 import "../../styles/AddVehicle.css";
 import { useCookie } from "../../contexts/CookieContext";
+import { useAuth } from '../../contexts/AuthContext';
 
 
 const API_LINK = process.env.REACT_APP_API_VEHICLE;
@@ -11,16 +12,25 @@ const AddVehicle: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const cookie = useCookie();
 
+  
+    const authContext = useAuth();
+    const user = authContext.user;
+
+
+    const currentUser = user
+    console.log("This is current user" , currentUser)
   const [formData, setFormData] = useState({
     year: "",
     make: "",
     model: "",
     engineType: "",
     color: "",
-    price: 0, // Numeric input
-    condition: "Used", // Dropdown for "Used" or "New"
-    imgUrl: "" //for displaying images
+    price: 0,
+    condition: "Used",
+    imgUrl: "",
+    dealer: currentUser // New field for the dealer ID
   });
+  
 
   type Model = {
     id: number;
@@ -146,36 +156,33 @@ const AddVehicle: React.FC = () => {
     }
   };
 
-  // const handleSubmit = (e: React.FormEvent) => {
-  //   e.preventDefault();
-  //   console.log("Form submitted:", formData);
-  // };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form to be submitted: ", formData)
-    try {
-      const response = await fetch(`${API_LINK}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": cookie.cookieData.token
-        },
-        body: JSON.stringify(formData), // Send the formData object
-      });
-
-      if (response.ok) {
-        const savedVehicle = await response.json();
-        console.log("Vehicle saved successfully:", savedVehicle);
-        alert("Vehicle added successfully!");
-      } else {
-        console.error("Failed to save vehicle:", response.statusText);
-        alert("Failed to add vehicle. Please try again.");
-      }
-    } catch (error) {
-      console.error("Error saving vehicle:", error);
-      alert("An error occurred. Please try again.");
+  const payload = { ...formData, dealerId: currentUser?.userid }; // Include dealerId
+  console.log("This is form to be submitted: ", formData)
+  try {
+    const response = await fetch(`${API_LINK}?dealerId=6`, { // Pass dealerId as query param
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": cookie.cookieData.token,
+      },
+      body: JSON.stringify(payload),
+    });
+    if (response.ok) {
+      console.log("Submitted form: ", payload)
+      alert("Vehicle added successfully!");
+    } else {
+      console.error("Failed to save vehicle:", response.statusText);
+      alert("Failed to add vehicle. Please try again.");
     }
-  };
+  } catch (error) {
+    console.error("Error saving vehicle:", error);
+    alert("An error occurred. Please try again.");
+  }
+};
+  
 
 
   return (

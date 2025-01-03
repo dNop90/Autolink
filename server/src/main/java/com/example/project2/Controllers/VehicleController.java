@@ -69,14 +69,15 @@ public class VehicleController {
 
     // }
     @PostMapping
-    public Vehicle createVehicle(@RequestHeader("Authorization") String authHeader, @RequestBody Vehicle vehicle) {
+    public Vehicle createVehicle(@RequestHeader("Authorization") String authHeader, @RequestBody Vehicle vehicle,
+            @RequestParam Long dealerId) {
         System.out.println("Received Vehicle: " + vehicle);
 
         JWTUtil.parseToken(authHeader).getId();
         // Check if the authorization header is valid
         if (JWTUtil.isValid(authHeader)) {
             try {
-                return vehicleService.createVehicle(vehicle);
+                return vehicleService.createVehicle(vehicle, dealerId);
             } catch (Exception e) {
                 e.printStackTrace();
                 throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error saving vehicle", e);

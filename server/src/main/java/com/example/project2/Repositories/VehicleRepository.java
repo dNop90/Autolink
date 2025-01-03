@@ -13,4 +13,5 @@ import org.springframework.stereotype.Repository;
 public interface VehicleRepository extends JpaRepository<Vehicle, Long> {
     @Query("SELECT v.buyer.accountId FROM Vehicle v WHERE v.buyer.accountId = :accountId")
     List<Long> findBuyerIdsByAccountId(@Param("accountId") Long accountId);
+
 }
