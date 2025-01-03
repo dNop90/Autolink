@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { data, useParams } from "react-router-dom";
 import { api } from "../../services/api";
 import { useAuth } from '../../contexts/AuthContext';
+import { messageManager } from "../../services/MessageManager";
 
 function VehicleDetail(props: { dLer: boolean }) {
   const { vehicleId } = useParams<{ vehicleId: string }>();
@@ -93,8 +94,15 @@ console.log("this is vehicle: ", vehicle)
               alignItems: "center",
               justifyContent: "center"
             }}
-            onClick={() => alert("Chat feature thing!")} // Replace with actual chat functionality
+            onClick={(e) => {
+              let dealerid = e.currentTarget.getAttribute("vehicle-dealerid");
+              let dealerusername = e.currentTarget.getAttribute("vehicle-dealerusername");
+
+              if(dealerid && dealerusername)
+              messageManager.createMessageChat(parseInt(dealerid), dealerusername);
+            }} // Replace with actual chat functionality
             vehicle-dealerid={vehicle.dealer ? vehicle.dealer.accountId : -1}
+            vehicle-dealerusername={vehicle.dealer ? vehicle.dealer.username : null}
           >
             💬
           </button>
