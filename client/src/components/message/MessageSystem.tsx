@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useAuth } from '../../contexts/AuthContext';
 import './MessageSystem.css'
-import { socket } from '../../services/websocket';
+import { messageManager } from '../../services/MessageManager';
 import { api } from '../../services/api';
 import { useCookie } from '../../contexts/CookieContext';
 
@@ -14,8 +14,8 @@ function MessageSystem() {
     useEffect(() => {
         if(user)
         {
-            socket.init();
-            socket.socket.on("message", (data: any) =>
+            messageManager.init(user, cookie);
+            messageManager.socket.on("message", (data: any) =>
             {
                 data = JSON.parse(JSON.stringify(data));
 
@@ -28,140 +28,57 @@ function MessageSystem() {
                 let MessageChat = undefined;
                 if(fromAccountID == user?.userid)
                 {
-                    MessageChat = createMessageChat(toAccountID, toUsername);
-                    addMessageToChat(toAccountID, message, true);
+                    MessageChat = messageManager.createMessageChat(toAccountID, toUsername);
+                    messageManager.addMessageToChat(toAccountID, message, true);
                 }
                 else if(toAccountID == user?.userid)
                 {
-                    MessageChat = createMessageChat(fromAccountID, fromUsername);
-                    addMessageToChat(fromAccountID, message, false);
+                    MessageChat = messageManager.createMessageChat(fromAccountID, fromUsername);
+                    messageManager.addMessageToChat(fromAccountID, message, false);
                 }
             });
+
+            WatchForChatListChange();
         }
         else
         {
-            socket.socket?.close();
-            socket.socket = null;
+            messageManager.disconnect();
         }
     }, [user]);
 
+    
     /**
-     * Toggle the chat to open or close
-     * @param event The event from the element
-     */
-    function ToggleShowChat(event: any)
-    {
-        const current = event.currentTarget;
-        let div = current.parentNode.querySelector("div");
-        div.classList.toggle("active");
-    }
-
-    /**
-     * Create new chat if user doesn't exist
-     * @param fromAccountID The account ID of that user you are going to send the chat message to
-     * @param fromUsername The account username of that user you are going to send the chat message to
-     * @returns The chat message that found or created
-     */
-    function createMessageChat(fromAccountID: number, fromUsername: string)
-    {
-        let MessageChatList = document.querySelector("#MessageChatList");
-        let findExist = MessageChatList?.querySelector(`div[data-message-id="${fromAccountID}"]`);
-        if(findExist != null)
-        {
-            return findExist;
-        }
-
-
-        //Create new chatbox
-        let NewMessageChat = document.createElement('div');
-        NewMessageChat.classList.add("Message-Chat");
-        NewMessageChat.setAttribute("data-message-id", String(fromAccountID));
-
-        let span = document.createElement('span');
-        span.onclick = ToggleShowChat;
-        span.innerText = fromUsername;
-
-        NewMessageChat.innerHTML = `<div><ul></ul><input type="text"></input></div>`;
-        NewMessageChat.insertBefore(span, NewMessageChat.querySelector("div"));
-
-        MessageChatList?.insertBefore(NewMessageChat, MessageChatList.firstChild);
-
-
-        //Add event for the input to send message
-        NewMessageChat.querySelector("input")?.addEventListener("keyup", InputSendChat);
-
-
-        //Find and create if not exist in the message list
-        let findExistInMessageList = MessageChatList?.querySelector(`#MessageList a[message-user-id="${fromAccountID}"]`);
-        if(findExistInMessageList == null)
-        {
-            let li_a = document.createElement('li');
-            let a = document.createElement('a');
-            a.setAttribute("message-user-id", String(fromAccountID));
-            a.innerText = fromUsername;
-            a.onclick = OnUserSelectedFromMessageList;
-            a.href = "#";
-            li_a.appendChild(a);
-            document.querySelector("#MessageList ul")?.appendChild(li_a);
-        }
-
-        return NewMessageChat;
-    }
-
-    /**
-     * Add a message to a chat
-     * @param fromAccountID The account ID to search for
-     * @param message The message
-     * @param self Check if the message is user himself/herself
+     * Watch for the chat list change
      * @returns 
      */
-    function addMessageToChat(fromAccountID: number, message: string, self: boolean)
-    {
-        let MessageChatList = document.querySelector("#MessageChatList");
-        let findExist = MessageChatList?.querySelector(`div[data-message-id="${fromAccountID}"]`);
-        if(findExist == null)
-        {
-            return;
-        }
+    function WatchForChatListChange(){
+        let MessageChatList = document.getElementById("MessageChatList");
+        if(!MessageChatList) return;
 
-        //Add message to the chatbox
-        let ul = MessageChatList?.querySelector("ul");
-        let li = document.createElement('li');
-        if(self)
-        {
-            li.classList.add("message-self");
-        }
-        li.innerText = message;
+        let observer = new window.MutationObserver((e) => {
+            let div = (e[0].addedNodes[0]) as HTMLElement;
+            let input = div.querySelector("input");
+            if(input)
+            {
+                input.addEventListener("keyup", InputSendChat);
+            }
+        });
 
-        ul?.appendChild(li);
-    }
-
-    /**
-     * Open specific user chat
-     * When user selected a user to chat with in the message list
-     * @param event The event
-     */
-    function OnUserSelectedFromMessageList(event: any)
-    {
-        event.preventDefault();
-        let current = event.currentTarget;
-
-        let user_id = current.getAttribute("message-user-id");
-        createMessageChat(user_id, "Test2");
+        observer.observe(MessageChatList, {
+            childList: true,
+        });
     }
 
     /**
      * Use for send chat message for the input tag
      * @param event The event of keyup
      */
-    async function InputSendChat(event: any)
+    function InputSendChat(event: any)
     {
         if(event.keyCode === 13)
         {
             let current = event.currentTarget;
             let value = current.value;
-
-            console.log(value);
     
             let target_accountID = current.parentNode.parentNode.getAttribute("data-message-id");
             api.message.send(cookie.token, user?.userid ? user.userid : -1, target_accountID, value);
@@ -178,7 +95,7 @@ function MessageSystem() {
                     
                 </div>
                 <div id='MessageList'>
-                    <span onClick={ToggleShowChat}>Chat</span>
+                    <span onClick={messageManager.ToggleShowChat}>Chat</span>
                     <div>
                         <ul>
                             
