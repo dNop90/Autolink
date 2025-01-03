@@ -48,6 +48,7 @@ p{
 }
 
 .VehicleInventory .card-title{
+  color: var(--color-text-link-hover);
   text-transform: uppercase;
   font-weight: 400;
   margin-bottom: 35px;
@@ -55,4 +56,13 @@ p{
 
 .VehicleInventory .card-text{
   line-height: 1;
+}
+
+.VehicleInventory .btn-warning{
+  background-color: var(--color-button-background);
+  border: 0;
+}
+
+.VehicleInventory .btn-warning:hover{
+  background-color: var(--color-button-background-hover);
 }

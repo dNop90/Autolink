@@ -125,7 +125,7 @@ function DealerVehicleList(props: { dLer: boolean }) {
     );
   });
   return (
-    <div style={{ padding: "35px" }}>
+    <div className="VehicleInventory">
       {loading ? (
         <p>Loading vehicles...</p>
       ) : error ? (
@@ -136,7 +136,7 @@ function DealerVehicleList(props: { dLer: boolean }) {
             <div className="row">
               {filteredVehicles.map((vehicle: Vehicle) => (
                 <div className="col-md-4 mb-4" key={vehicle.vehicleId}>
-                  <div className="card bg-dark text-light">
+                  <div className="card text-light">
                   {!props.dLer &&(
                     <Link to={`/vehicle/${vehicle.vehicleId}`}>
                       <img
@@ -145,7 +145,7 @@ function DealerVehicleList(props: { dLer: boolean }) {
                         alt={vehicle.model || "No Image Available"}
                       />
                       <div className="card-body">
-                        <h5 className="card-title text-light">
+                        <h5 className="card-title">
                           {vehicle.make} {vehicle.model}
                         </h5>
                         <p className="card-text">Price: ${vehicle.price}</p>
@@ -164,7 +164,7 @@ function DealerVehicleList(props: { dLer: boolean }) {
                         alt={vehicle.model || "No Image Available"}
                       />
                       <div className="card-body">
-                        <h5 className="card-title text-light">
+                        <h5 className="card-title">
                           {vehicle.make} {vehicle.model}
                         </h5>
                         <p className="card-text">Price: ${vehicle.price}</p>
