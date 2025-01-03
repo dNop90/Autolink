@@ -3,7 +3,10 @@ package com.example.project2.Services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
+import com.example.project2.Entities.Account;
 import com.example.project2.Entities.Vehicle;
+import com.example.project2.Repositories.AccountRepository;
 import com.example.project2.Repositories.VehicleRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -14,6 +17,8 @@ public class VehicleService {
 
     @Autowired
     private VehicleRepository vehicleRepository;
+    @Autowired
+    private AccountRepository accountRepository;
 
     /*
      * @return all vehicles in the inventory
@@ -45,7 +50,10 @@ public class VehicleService {
      * 
      * @return save the vehicle to the database.
      */
-    public Vehicle createVehicle(Vehicle vehicle) {
+    public Vehicle createVehicle(Vehicle vehicle, Long dealerId) {
+        Account dealer = accountRepository.findById(dealerId)
+                .orElseThrow(() -> new RuntimeException("Dealer not found with ID: " + dealerId));
+        vehicle.setDealer(dealer);
         return vehicleRepository.save(vehicle);
     }
 
@@ -71,6 +79,7 @@ public class VehicleService {
             vehicle.setEngineType(vehicleDetails.getEngineType());
             vehicle.setImgUrl(vehicleDetails.getImgUrl());
             vehicle.setBuyer(vehicle.getBuyer());
+            vehicle.setDealer(vehicle.getDealer());
             return ResponseEntity.ok(vehicleRepository.save(vehicle));
         } else {
             return ResponseEntity.notFound().build();
