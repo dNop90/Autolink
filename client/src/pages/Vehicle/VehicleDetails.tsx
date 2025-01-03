@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { api } from "../../services/api";
+import { useAuth } from '../../contexts/AuthContext';
 
 function VehicleDetail(props: { dLer: boolean }) {
   const { vehicleId } = useParams<{ vehicleId: string }>();
   const [vehicle, setVehicle] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+
 
   const API_LINK = process.env.REACT_APP_API_VEHICLE
   useEffect(() => {
