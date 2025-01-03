@@ -7,7 +7,7 @@ import { useAuth } from '../../contexts/AuthContext';
 const API_LINK = process.env.REACT_APP_API_VEHICLE;
 
 
-interface Buyer {
+interface Account {
   accountId: string; // Assuming this is the ID of the buyer
   username: string; // You can include other fields as needed
   email: string;
@@ -25,7 +25,8 @@ interface Vehicle {
   price: number; // Numeric input
   condition: "Used" | "New"; // Dropdown for "Used" or "New"
   imgUrl?: string | null;
-  buyer?: Buyer;
+  buyer?: Account;
+  dealer?: Account;
 }
 
 
@@ -41,8 +42,6 @@ function DealerVehicleList(props: { dLer: boolean }) {
 
   const authContext = useAuth();
   const user = authContext.user;
-
-  console.log("THis is user: ", user)
 
   const [filters, setFilters] = useState({
     priceRange: [0, 100000],
@@ -65,6 +64,7 @@ function DealerVehicleList(props: { dLer: boolean }) {
         }
         const data = await response.json();
         console.log("Fetched file: ", data)
+        
         setVehicles(data); // Update state with fetched vehicles
       } catch (err: any) {
         setError(err.message);
@@ -107,22 +107,6 @@ function DealerVehicleList(props: { dLer: boolean }) {
     }
   };
 
-  // const filteredVehicles = vehicles.filter((vehicle: Vehicle) => {
-  //   return (
-  //     vehicle.price >= filters.priceRange[0] &&
-  //     vehicle.price <= filters.priceRange[1] &&
-  //     (filters.make
-  //       ? vehicle.make.toLowerCase().includes(filters.make.toLowerCase())
-  //       : true) &&
-  //     (filters.model
-  //       ? vehicle.model.toLowerCase().includes(filters.model.toLowerCase())
-  //       : true) &&
-  //     (filters.year ? vehicle.year === filters.year : true) &&
-  //     (filters.condition
-  //       ? vehicle.condition.toLowerCase() === filters.condition.toLowerCase()
-  //       : true)
-  //   );
-  // });
   const filteredVehicles = vehicles.filter((vehicle: Vehicle) => {
     return (
       vehicle.price >= filters.priceRange[0] &&

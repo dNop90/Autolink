@@ -48,6 +48,10 @@ public class Vehicle {
     @JoinColumn(name = "buyer_id")
     private Account buyer;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "dealer_id")
+    private Account dealer;
+
     // Getters and Setters for the Vehicle entities.
 
     public Long getVehicleId() {
@@ -132,5 +136,13 @@ public class Vehicle {
 
     public void setBuyer(Account buyer) {
         this.buyer = buyer;
+    }
+
+    public Account getDealer() {
+        return dealer;
+    }
+
+    public void setDealer(Account dealer) {
+        this.dealer = dealer;
     }
 }
