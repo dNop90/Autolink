@@ -15,8 +15,8 @@ public interface ApplicationRepository extends JpaRepository<Application, Long>{
     @Query("SELECT a FROM Application a WHERE status = ?1 ORDER BY applicationId DESC")
     List<Application> getPendingApplication(String status);
 
-    @Query("SELECT a FROM Application a WHERE applicationId = ?1 ")
-    List<Application> getApplicationByAccountId(Integer applicationId);
+    @Query("SELECT a FROM Application a WHERE applicantId = ?1 ORDER BY applicationId DESC")
+    List<Application> getApplicationByAccountId(Integer applicantId);
 
     @Query("SELECT applicantId FROM Application a WHERE applicationId = ?1")
     Long findAccountId(Long applicationId);

@@ -21,8 +21,12 @@ public class Message {
     @Column(nullable = false)
     private Long fromAccountID;
 
+    private String fromUsername;
+
     @Column(nullable = false)
     private Long toAccountID;
+
+    private String toUsername;
 
     private String message;
 
@@ -37,6 +41,14 @@ public class Message {
     public Message(Long fromAccountID, Long toAccountID, String message) {
         this.fromAccountID = fromAccountID;
         this.toAccountID = toAccountID;
+        this.message = message;
+    }
+
+    public Message(Long fromAccountID, String fromUsername, Long toAccountID, String toUsername, String message) {
+        this.fromAccountID = fromAccountID;
+        this.fromUsername = fromUsername;
+        this.toAccountID = toAccountID;
+        this.toUsername = toUsername;
         this.message = message;
     }
 
@@ -56,12 +68,28 @@ public class Message {
         this.fromAccountID = fromAccountID;
     }
 
+    public String getFromUsername() {
+        return fromUsername;
+    }
+
+    public void setFromUsername(String fromUsername) {
+        this.fromUsername = fromUsername;
+    }
+
     public Long getToAccountID() {
         return toAccountID;
     }
 
     public void setToAccountID(Long toAccountID) {
         this.toAccountID = toAccountID;
+    }
+
+    public String getToUsername() {
+        return toUsername;
+    }
+
+    public void setToUsername(String toUsername) {
+        this.toUsername = toUsername;
     }
 
     public String getMessage() {
