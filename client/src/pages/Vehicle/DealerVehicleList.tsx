@@ -60,9 +60,7 @@ function DealerVehicleList(props: { dLer: boolean }) {
         if (!response.ok) {
           throw new Error("Failed to fetch data");
         }
-        const data = await response.json();
-        console.log("Fetched file: ", data)
-        
+        const data = await response.json();        
         setVehicles(data); // Update state with fetched vehicles
       } catch (err: any) {
         setError(err.message);
@@ -128,10 +126,12 @@ function DealerVehicleList(props: { dLer: boolean }) {
   });
   return (
     <div className="VehicleInventory">
-      {loading ? (
-        <p>Loading vehicles...</p>
+     {loading ? (
+        <h3>Loading vehicles...</h3>
       ) : error ? (
         <p className="text-danger">{error}</p>
+      ) : filteredVehicles.length === 0 ? ( // Check if filteredVehicles is empty
+        <p>There are no vehicles added.</p>
       ) : (
         <div className="row">
           <div className="col-md-12">
