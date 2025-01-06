@@ -1,5 +1,6 @@
 package com.example.project2.Controllers;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
@@ -30,7 +31,6 @@ import com.example.project2.Services.AccountService;
 import io.jsonwebtoken.Claims;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.PathVariable;
-
 
 @AllArgsConstructor
 @RestController
@@ -87,8 +87,14 @@ public class UserController {
         }
     }
 
+    @GetMapping("/all")
+    public List<Account> getAllUsers() {
+        return accountService.getAllAccounts();
+    }
+
     @GetMapping("/info/{username}")
-    public ResponseEntity getUserProfile(@RequestHeader("Authorization") String authHeader, @PathVariable String username) {
+    public ResponseEntity getUserProfile(@RequestHeader("Authorization") String authHeader,
+            @PathVariable String username) {
         if (JWTUtil.isValid(authHeader)) {
             try {
                 ProfileResponse profile = accountService.getUserProfileByUsername(username);
@@ -96,7 +102,7 @@ public class UserController {
             } catch (AccountNotFoundException e) {
                 return ResponseEntity.status(404).body("User not found");
             }
-        } 
+        }
         return ResponseEntity.status(401).build();
     }
 
@@ -110,28 +116,31 @@ public class UserController {
      * @return a ResponseEntity with status of the password change operation
      */
     @PatchMapping("/password")
-    public ResponseEntity changePassword(@RequestHeader("Authorization") String authHeader, @RequestBody Account account) {
+    public ResponseEntity changePassword(@RequestHeader("Authorization") String authHeader,
+            @RequestBody Account account) {
         if (JWTUtil.isValid(authHeader)) {
             try {
                 accountService.updatePassword(account);
                 return ResponseEntity.status(200).body("Password updated");
-            }catch (AccountNotFoundException e) {
+            } catch (AccountNotFoundException e) {
                 return ResponseEntity.status(404).body("User not found");
-            }catch (PasswordIncorrectException e) {
+            } catch (PasswordIncorrectException e) {
                 return ResponseEntity.status(401).body("Invalid password");
-            }catch (NoSuchAlgorithmException e) {
+            } catch (NoSuchAlgorithmException e) {
                 return ResponseEntity.status(500).body("Hashing algorithm not found");
             }
         }
         return ResponseEntity.status(401).build();
-        
+
     }
+
     /*
      * Update user profile endpoint
      * Accepts updated user details along with accountId in the request body
      */
     @PatchMapping("/profile")
-    public ResponseEntity updateUserProfile(@RequestHeader("Authorization") String authHeader, @RequestBody ProfileResponse profile) {
+    public ResponseEntity updateUserProfile(@RequestHeader("Authorization") String authHeader,
+            @RequestBody ProfileResponse profile) {
         if (JWTUtil.isValid(authHeader)) {
             try {
                 accountService.updateUserProfile(profile);
@@ -142,7 +151,6 @@ public class UserController {
         }
         return ResponseEntity.status(401).build();
     }
-    
 
     /*
      * Search endpoint for admins looking for a specific account via username
@@ -167,7 +175,9 @@ public class UserController {
 
     /*
      * Promote endpoint for admins to set a user account as admin
+     * 
      * @param JWT token for authorization, and username to search for account
+     * 
      * @return a ResponseEntity with the corresponding message
      */
     @PatchMapping("/promote")
@@ -178,13 +188,17 @@ public class UserController {
             return ResponseEntity.status(404).body("User not found.");
         }
     }
+
     /*
      * Promote endpoint for admins to set a user account as admin
+     * 
      * @param JWT token for authorization, and username to search for account
+     * 
      * @return a ResponseEntity with the corresponding message
      */
     @PatchMapping("/suspend/{status}")
-    public ResponseEntity suspend(@RequestHeader("Authorization") String authHeader, @PathVariable Boolean status, @RequestBody String username) {
+    public ResponseEntity suspend(@RequestHeader("Authorization") String authHeader, @PathVariable Boolean status,
+            @RequestBody String username) {
         try {
             return ResponseEntity.status(200).body(accountService.suspend(username, status));
         } catch (AccountNotFoundException e) {
