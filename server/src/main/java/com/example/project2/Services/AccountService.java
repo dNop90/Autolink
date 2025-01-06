@@ -151,7 +151,8 @@ public class AccountService {
         if (check == null) {
             throw new AccountNotFoundException();
         }
-        accountRepository.updateUserProfile(check.getAccountId(), profile.getEmail(), profile.getFirstName(), profile.getLastName(), profile.getPhone());
+        accountRepository.updateUserProfile(check.getAccountId(), profile.getEmail(), profile.getFirstName(),
+                profile.getLastName(), profile.getPhone());
     }
 
     /*
@@ -161,12 +162,14 @@ public class AccountService {
     public void updatePassword(Account account)
             throws AccountNotFoundException, NoSuchAlgorithmException, PasswordIncorrectException {
         Account check = accountRepository.findAccountByUsername(account.getUsername());
-        if (check == null) throw new AccountNotFoundException();
+        if (check == null)
+            throw new AccountNotFoundException();
         String currpwd = toHexString(getSHA(account.getCurrentPassword()));
         if (check.getPassword().equals(currpwd)) {
             String newpwd = toHexString(getSHA(account.getNewPassword()));
             accountRepository.updatePassword(check.getAccountId(), newpwd);
-        } else throw new PasswordIncorrectException();
+        } else
+            throw new PasswordIncorrectException();
     }
 
     /*
@@ -239,5 +242,15 @@ public class AccountService {
             hexString.insert(0, '0');
         }
         return hexString.toString();
+    }
+
+
+    public List<Account> getAll() {
+        // TODO Auto-generated method stub
+        return accountRepository.findAll();
+    }
+
+    public List<Account> getAllAccounts() {
+        return accountRepository.findAll();
     }
 }

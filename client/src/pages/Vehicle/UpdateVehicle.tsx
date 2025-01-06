@@ -1,8 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useCookie } from "../../contexts/CookieContext";
+import { useAuth } from "../../contexts/AuthContext";
 
 const API_LINK = process.env.REACT_APP_API_VEHICLE;
+
+interface User {
+  accountId: number;
+  username: string;
+}
 
 interface Vehicle {
   vehicleId: string;
@@ -14,14 +20,19 @@ interface Vehicle {
   price: number;
   condition: "Used" | "New";
   imgUrl?: string | null;
+  buyer?: User | null;
+  dealer: User;
 }
 
 const UpdateVehicle: React.FC = () => {
   const { vehicleId } = useParams<{ vehicleId: string }>();
   const navigate = useNavigate();
   const cookie = useCookie();
+  const authContext = useAuth();
+  const currentUser = authContext.user;
 
   const [vehicle, setVehicle] = useState<Vehicle | null>(null);
+  const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -29,12 +40,19 @@ const UpdateVehicle: React.FC = () => {
     const fetchVehicle = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`${API_LINK}/${vehicleId}`);
-        if (!response.ok) {
-          throw new Error("Failed to fetch vehicle details");
+
+        const vehicleResponse = await fetch(`${API_LINK}/${vehicleId}`);
+        const userResponse = await fetch(`${process.env.REACT_APP_API_USER}/all`);
+
+        if (!vehicleResponse.ok || !userResponse.ok) {
+          throw new Error("Failed to fetch data");
         }
-        const data = await response.json();
-        setVehicle(data);
+
+        const vehicleData = await vehicleResponse.json();
+        const userData = await userResponse.json();
+
+        setUsers(userData);
+        setVehicle({ ...vehicleData, dealer: currentUser }); // Add current user as dealer
       } catch (err: any) {
         setError(err.message);
       } finally {
@@ -43,56 +61,52 @@ const UpdateVehicle: React.FC = () => {
     };
 
     fetchVehicle();
-  }, [vehicleId]);
+  }, [vehicleId, currentUser]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setVehicle((prev) => ({
-      ...prev!,
-      [name]: name === "price" ? Number(value) : value,
-    }));
+
+    if (name === "buyerId") {
+      // Find the selected user by accountId
+      const selectedUser = users.find(user => user.accountId === Number(value));
+
+      // Update the vehicle state with the selected buyer
+      setVehicle((prev) => ({
+        ...prev!,
+        buyer: selectedUser || null, // Set buyer to selected account or null
+      }));
+    } else {
+      setVehicle((prev) => ({
+        ...prev!,
+        [name]: name === "price" ? Number(value) : value,
+      }));
+    }
   };
 
-
-  // const handleSubmit = async (e: React.FormEvent) => {
-  //   e.preventDefault();
-  //   try {
-  //     const response = await fetch(`${API_LINK}/${vehicleId}`, {
-  //       method: "PUT",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         "Authorization": cookie.cookieData.token,
-  //       },
-  //       body: JSON.stringify(vehicle),
-  //     });
-
-  //     if (!response.ok) {
-  //       throw new Error("Failed to update vehicle");
-  //     }
-
-  //     alert("Vehicle updated successfully!");
-  //     navigate("/");
-  //   } catch (err: any) {
-  //     setError(err.message);
-  //   }
-  // };
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      console.log("Submitting vehicle data:", vehicle); // Log the vehicle data being submitted
+      if (!vehicle) {
+        setError("Vehicle data is missing");
+        return;
+      }
+
+      console.log("Submitting vehicle data:", vehicle); // Log the vehicle object being sent
+
       const response = await fetch(`${API_LINK}/${vehicleId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
           "Authorization": cookie.cookieData.token,
         },
-        body: JSON.stringify(vehicle),
+        body: JSON.stringify(vehicle), // Submit the vehicle object
       });
-  
+
       if (!response.ok) {
-        throw new Error("Failed to update vehicle");
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to update vehicle");
       }
-  
+
       alert("Vehicle updated successfully!");
       navigate("/");
     } catch (err: any) {
@@ -170,7 +184,7 @@ const UpdateVehicle: React.FC = () => {
         </div>
 
         <div className="mb-3">
-          <label htmlFor="imgUrl" className="form-label">Image Url</label>
+          <label htmlFor="imgUrl" className="form-label">Image URL</label>
           <input
             type="text"
             className="form-control"
@@ -181,6 +195,23 @@ const UpdateVehicle: React.FC = () => {
           />
         </div>
 
+        <div className="mb-3">
+          <label htmlFor="buyerId" className="form-label">Buyer</label>
+          <select
+            className="form-select"
+            id="buyerId"
+            name="buyerId"
+            value={vehicle?.buyer?.accountId || ""}
+            onChange={handleInputChange}
+          >
+            <option value="">Select a buyer</option>
+            {users.map((user) => (
+              <option key={user.accountId} value={user.accountId}>
+                {user.username}
+              </option>
+            ))}
+          </select>
+        </div>
 
         <button type="submit" className="btn btn-primary">Update Vehicle</button>
       </form>

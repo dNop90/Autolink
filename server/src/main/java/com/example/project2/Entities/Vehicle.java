@@ -45,7 +45,7 @@ public class Vehicle {
     private String imgUrl;
 
     @ManyToOne
-    @JoinColumn(name = "buyer_id")
+    @JoinColumn(name = "buyer_id", referencedColumnName = "accountId")
     private Account buyer;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -132,6 +132,10 @@ public class Vehicle {
 
     public Account getBuyer() {
         return buyer;
+    }
+
+    public Long getBuyerId() {
+        return (buyer != null) ? buyer.getAccountId() : null; // Get buyerId from the buyer object
     }
 
     public void setBuyer(Account buyer) {
