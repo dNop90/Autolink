@@ -9,11 +9,10 @@ const API_LINK = process.env.REACT_APP_API_VEHICLE;
 
 interface Account {
   accountId: string; // Assuming this is the ID of the buyer
-  username: string; // You can include other fields as needed
+  username: string; 
   email: string;
   firstName: string;
   lastName: string;
-  // Add any other relevant fields
 }
 interface Vehicle {
   vehicleId: string; // Ensure vehicleId is included in the interface
