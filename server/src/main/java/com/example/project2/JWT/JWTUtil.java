@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.example.project2.Entities.Account;
@@ -18,8 +19,7 @@ import jakarta.annotation.PostConstruct;
  */
 @Component
 public class JWTUtil {
-    private static final String SECRET_KEY = "013f6975c4498c9e2266130e4325126d24f85404c4f3b8f499d394fea8b74d61";
-    
+    private static String SECRET_KEY;
     private static AccountRepository accountRepository;
     
     @Autowired
@@ -28,6 +28,16 @@ public class JWTUtil {
     @PostConstruct
     public void init() {
         accountRepository = pre_accountRepository;
+    }
+
+    @Value("${jwt.secret-key}")
+    public void setSecretKey(String SecretKey)
+    {
+        SECRET_KEY = SecretKey;
+    }
+
+    public static String getSecretKey(){
+        return SECRET_KEY;
     }
 
     /**
@@ -43,7 +53,7 @@ public class JWTUtil {
                 .setId(id)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)) // 1 hour
-                .signWith(Keys.hmacShaKeyFor(SECRET_KEY.getBytes()))
+                .signWith(Keys.hmacShaKeyFor(getSecretKey().getBytes()))
                 .compact();
     }
 
@@ -61,7 +71,7 @@ public class JWTUtil {
                 .setClaims(claims)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)) // 1 hour
-                .signWith(Keys.hmacShaKeyFor(SECRET_KEY.getBytes()))
+                .signWith(Keys.hmacShaKeyFor(getSecretKey().getBytes()))
                 .compact();
     }
 
@@ -73,7 +83,7 @@ public class JWTUtil {
      */
     public static Claims parseToken(String token) {
         return Jwts.parserBuilder()
-                .setSigningKey(Keys.hmacShaKeyFor(SECRET_KEY.getBytes()))
+                .setSigningKey(Keys.hmacShaKeyFor(getSecretKey().getBytes()))
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
