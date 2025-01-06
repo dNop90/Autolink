@@ -33,7 +33,6 @@ function DealerVehicleList(props: { dLer: boolean }) {
   const [vehicles, setVehicles] = useState<Vehicle[]>([]); // State to store fetched vehicles
   const [loading, setLoading] = useState(true); // Loading state
   const [error, setError] = useState<string | null>(null); // Error state
-  const [accountId, setAccountId] = useState<string>(""); // State for account ID to filter by
 
 
   const cookie = useCookie();
@@ -61,9 +60,7 @@ function DealerVehicleList(props: { dLer: boolean }) {
         if (!response.ok) {
           throw new Error("Failed to fetch data");
         }
-        const data = await response.json();
-        console.log("Fetched file: ", data)
-        
+        const data = await response.json();        
         setVehicles(data); // Update state with fetched vehicles
       } catch (err: any) {
         setError(err.message);
@@ -107,7 +104,11 @@ function DealerVehicleList(props: { dLer: boolean }) {
   };
 
   const filteredVehicles = vehicles.filter((vehicle: Vehicle) => {
+    
+    
     return (
+      
+      vehicle.dealer?.accountId == user?.userid &&
       vehicle.price >= filters.priceRange[0] &&
       vehicle.price <= filters.priceRange[1] &&
       (filters.make
@@ -125,10 +126,12 @@ function DealerVehicleList(props: { dLer: boolean }) {
   });
   return (
     <div className="VehicleInventory">
-      {loading ? (
-        <p>Loading vehicles...</p>
+     {loading ? (
+        <h3>Loading vehicles...</h3>
       ) : error ? (
         <p className="text-danger">{error}</p>
+      ) : filteredVehicles.length === 0 ? ( // Check if filteredVehicles is empty
+        <p>There are no vehicles added.</p>
       ) : (
         <div className="row">
           <div className="col-md-12">
@@ -152,6 +155,12 @@ function DealerVehicleList(props: { dLer: boolean }) {
                         <p className="card-text">
                           Condition: {vehicle.condition}
                         </p>
+                        <p className="card-text">
+                          Dealer: {vehicle.dealer?.firstName}
+                        </p>
+                        <p className="card-text">
+                          buyer: {vehicle.buyer?.firstName}
+                        </p>
 
                       </div>
                     </Link>)}
@@ -170,6 +179,12 @@ function DealerVehicleList(props: { dLer: boolean }) {
                         <p className="card-text">Year: {vehicle.year}</p>
                         <p className="card-text">
                           Condition: {vehicle.condition}
+                        </p>
+                        <p className="card-text">
+                          Dealer: {vehicle.dealer?.firstName}
+                        </p>
+                        <p className="card-text">
+                          buyer: {vehicle.buyer?.firstName}
                         </p>
 
                       </div>

@@ -17,7 +17,8 @@ const ViewInventory: React.FC = () => {
     model: "",
     year: "",
     condition: "",
-    imgUrl: ""
+    imgUrl: "",
+    dealer: ""
   });
 
 
@@ -59,10 +60,9 @@ const ViewInventory: React.FC = () => {
     });
   };
 
-
-
   const filteredVehicles = vehicles.filter((vehicle: any) => {
     return (
+      vehicle.inStock == true &&
       vehicle.price >= filters.priceRange[0] &&
       vehicle.price <= filters.priceRange[1] &&
       (filters.make
@@ -211,7 +211,11 @@ const ViewInventory: React.FC = () => {
                     <p className="card-text">
                       Condition: {vehicle.condition}
                     </p>
-                  
+                    <p className="card-text">
+                      Dealer: {vehicle.dealer.firstName}
+                    </p>
+                    
+                    
                    
                   </div>
                 </div>
