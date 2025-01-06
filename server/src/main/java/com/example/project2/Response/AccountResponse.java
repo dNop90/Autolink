@@ -13,7 +13,6 @@ public class AccountResponse {
     private String username;
     private Integer role;
     private Boolean isSuspended;
-    private Long imageId;
     private String token;
 
     

@@ -78,11 +78,25 @@ public class VehicleService {
             vehicle.setColor(vehicleDetails.getColor());
             vehicle.setEngineType(vehicleDetails.getEngineType());
             vehicle.setImgUrl(vehicleDetails.getImgUrl());
-            vehicle.setBuyer(vehicle.getBuyer());
-            vehicle.setDealer(vehicle.getDealer());
+            // vehicle.setBuyer(vehicle.getBuyer());
+            // vehicle.setDealer(vehicle.getDealer());
+            // vehicle.setBuyerId(vehicle.getBuyerId());
+            // Handle buyerId
+            if (vehicleDetails.getBuyer() != null && vehicleDetails.getBuyer().getAccountId() != null) {
+                Long buyerId = vehicleDetails.getBuyer().getAccountId();
+                Account buyer = accountRepository.findById(buyerId)
+                        .orElseThrow(() -> new RuntimeException("Buyer not found with ID: " + buyerId));
+                vehicle.setBuyer(buyer);
+            } else {
+                vehicle.setBuyer(null); // Set buyer to null if no buyerId is provided
+            }
+
             return ResponseEntity.ok(vehicleRepository.save(vehicle));
-        } else {
+        } else
+
+        {
             return ResponseEntity.notFound().build();
+
         }
     }
 

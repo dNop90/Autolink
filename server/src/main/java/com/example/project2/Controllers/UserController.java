@@ -1,5 +1,10 @@
 package com.example.project2.Controllers;
 
+
+import java.util.List;
+import java.util.Optional;
+
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -81,6 +86,12 @@ public class UserController {
         }
     }
 
+
+    @GetMapping("/all")
+    public List<Account> getAllUsers() {
+        return accountService.getAllAccounts();
+    }
+
     /*
      * Retrieve user profile information endpoind
      * 
@@ -89,6 +100,7 @@ public class UserController {
      * @return a response entity with the profile object in body or corresponding
      * error message
      */
+
     @GetMapping("/info/{username}")
     public ResponseEntity getUserProfile(@RequestHeader("Authorization") String authHeader,
             @PathVariable String username) {
@@ -198,6 +210,7 @@ public class UserController {
     @PatchMapping("/suspend/{status}")
     public ResponseEntity suspend(@RequestHeader("Authorization") String authHeader, @PathVariable Boolean status,
             @RequestBody String username) {
+
         if (JWTUtil.isValid(authHeader)) {
             try {
                 return ResponseEntity.status(200).body(accountService.suspend(username, status));
