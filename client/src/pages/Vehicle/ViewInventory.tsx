@@ -60,6 +60,7 @@ const ViewInventory: React.FC = () => {
     });
   };
 
+
   const filteredVehicles = vehicles.filter((vehicle: any) => {
     return (
       vehicle.inStock == true &&
