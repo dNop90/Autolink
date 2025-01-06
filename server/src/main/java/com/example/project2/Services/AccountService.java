@@ -4,6 +4,8 @@ import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -90,7 +92,9 @@ public class AccountService {
     /*
      * Service to retrive current logged in user and push token into cookie
      * 
-     * @param username username of the logged in account, token token to pass back into cookie
+     * @param username username of the logged in account, token token to pass back
+     * into cookie
+     * 
      * @returns an accountResponse with the necessary fields
      */
     public AccountResponse getCurrentUser(String username, String token) {
@@ -107,7 +111,9 @@ public class AccountService {
 
     /*
      * Service to retrive a user's account information by a username
+     * 
      * @param username of the user to look up
+     * 
      * @returns a accountResponse with the necessary fields
      */
     public AccountResponse getUserByUsername(String username) throws AccountNotFoundException {
@@ -125,7 +131,9 @@ public class AccountService {
 
     /*
      * Service to retrive a user's profile by a username
+     * 
      * @param username of the user to look up
+     * 
      * @returns a profileResponse with the necessary fields
      */
     public ProfileResponse getUserProfileByUsername(String username) throws AccountNotFoundException {
@@ -143,9 +151,10 @@ public class AccountService {
     }
 
     /*
-    * Service to update a user's profile
-    * @param profile with the updated information
-    */ 
+     * Service to update a user's profile
+     * 
+     * @param profile with the updated information
+     */
     public void updateUserProfile(ProfileResponse profile) throws AccountNotFoundException {
         Account check = accountRepository.findAccountByUsername(profile.getUsername());
         if (check == null) {
@@ -156,9 +165,11 @@ public class AccountService {
     }
 
     /*
-    * Service the change a user's password
-    * @param account with username, current password to check for validity, and new pasword to update to
-    */
+     * Service the change a user's password
+     * 
+     * @param account with username, current password to check for validity, and new
+     * pasword to update to
+     */
     public void updatePassword(Account account)
             throws AccountNotFoundException, NoSuchAlgorithmException, PasswordIncorrectException {
         Account check = accountRepository.findAccountByUsername(account.getUsername());
@@ -244,7 +255,6 @@ public class AccountService {
         return hexString.toString();
     }
 
-
     public List<Account> getAll() {
         // TODO Auto-generated method stub
         return accountRepository.findAll();
@@ -252,5 +262,10 @@ public class AccountService {
 
     public List<Account> getAllAccounts() {
         return accountRepository.findAll();
+    }
+
+    public Account findById(Long id) {
+        Optional<Account> account = accountRepository.findById(id);
+        return account.orElse(null); // Return null if not found
     }
 }

@@ -78,6 +78,7 @@ public class VehicleService {
             vehicle.setColor(vehicleDetails.getColor());
             vehicle.setEngineType(vehicleDetails.getEngineType());
             vehicle.setImgUrl(vehicleDetails.getImgUrl());
+            vehicle.setInStock(vehicleDetails.getInStock());
             // vehicle.setBuyer(vehicle.getBuyer());
             // vehicle.setDealer(vehicle.getDealer());
             // vehicle.setBuyerId(vehicle.getBuyerId());
