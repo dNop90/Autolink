@@ -33,8 +33,8 @@ public class MessageService {
         Long toID = message.getToAccountID();
 
         //Check if account ID exist
-        Account fromAccount = accountRepository.findById(fromID).orElse(null);
-        Account toAccount = accountRepository.findById(toID).orElse(null);
+        Account fromAccount = accountRepository.findAccountByAccountId(fromID);
+        Account toAccount = accountRepository.findAccountByAccountId(toID);
         if(fromAccount == null || toAccount == null)
         {
             return false;
