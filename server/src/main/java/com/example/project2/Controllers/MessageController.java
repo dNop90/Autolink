@@ -48,7 +48,8 @@ public class MessageController {
         Message message = new Message(fromAccountID, toAccountID, strMessage);
 
         //If message successfully create then we will send 200 status
-        if(messageService.createMessage(message))
+        boolean service_result = messageService.createMessage(message);
+        if(service_result)
         {
             return ResponseEntity.ok().build();
         }
