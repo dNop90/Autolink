@@ -1,7 +1,5 @@
 package com.example.project2.Services;
 
-import java.util.List;
-import java.util.Optional;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -89,6 +87,12 @@ public class AccountService {
         return result;
     }
 
+    /*
+     * Service to retrive current logged in user and push token into cookie
+     * 
+     * @param username username of the logged in account, token token to pass back into cookie
+     * @returns an accountResponse with the necessary fields
+     */
     public AccountResponse getCurrentUser(String username, String token) {
         Account check = accountRepository.findAccountByUsername(username);
         AccountResponse result = new AccountResponse(
@@ -101,6 +105,11 @@ public class AccountService {
         return result;
     }
 
+    /*
+     * Service to retrive a user's account information by a username
+     * @param username of the user to look up
+     * @returns a accountResponse with the necessary fields
+     */
     public AccountResponse getUserByUsername(String username) throws AccountNotFoundException {
         Account check = accountRepository.findAccountByUsername(username);
         if (check == null)
@@ -114,6 +123,11 @@ public class AccountService {
         return result;
     }
 
+    /*
+     * Service to retrive a user's profile by a username
+     * @param username of the user to look up
+     * @returns a profileResponse with the necessary fields
+     */
     public ProfileResponse getUserProfileByUsername(String username) throws AccountNotFoundException {
         Account check = accountRepository.findAccountByUsername(username);
         if (check == null)
@@ -128,7 +142,10 @@ public class AccountService {
         return res;
     }
 
-    // Update user profile
+    /*
+    * Service to update a user's profile
+    * @param profile with the updated information
+    */ 
     public void updateUserProfile(ProfileResponse profile) throws AccountNotFoundException {
         Account check = accountRepository.findAccountByUsername(profile.getUsername());
         if (check == null) {
@@ -137,6 +154,10 @@ public class AccountService {
         accountRepository.updateUserProfile(check.getAccountId(), profile.getEmail(), profile.getFirstName(), profile.getLastName(), profile.getPhone());
     }
 
+    /*
+    * Service the change a user's password
+    * @param account with username, current password to check for validity, and new pasword to update to
+    */
     public void updatePassword(Account account)
             throws AccountNotFoundException, NoSuchAlgorithmException, PasswordIncorrectException {
         Account check = accountRepository.findAccountByUsername(account.getUsername());
@@ -193,7 +214,7 @@ public class AccountService {
     /*
      * Helper class for password hasing
      */
-    private static byte[] getSHA(String input) throws NoSuchAlgorithmException {
+    public static byte[] getSHA(String input) throws NoSuchAlgorithmException {
         // Static getInstance method is called with hashing SHA
         MessageDigest md = MessageDigest.getInstance("SHA-256");
 
@@ -206,7 +227,7 @@ public class AccountService {
     /*
      * Helper class for password hasing
      */
-    private static String toHexString(byte[] hash) {
+    public static String toHexString(byte[] hash) {
         // Convert byte array into signum representation
         BigInteger number = new BigInteger(1, hash);
 
@@ -218,10 +239,5 @@ public class AccountService {
             hexString.insert(0, '0');
         }
         return hexString.toString();
-    }
-
-    public List<Account> getAll() {
-        // TODO Auto-generated method stub
-        return accountRepository.findAll();
     }
 }

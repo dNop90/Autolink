@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from 'react-router-dom';
 import { useCookie } from "../../contexts/CookieContext";
 import { useAuth } from '../../contexts/AuthContext';
-
+import { messageManager } from "../../services/MessageManager";
 
 const API_LINK = process.env.REACT_APP_API_VEHICLE;
 
@@ -214,10 +214,18 @@ function DealerVehicleList(props: { dLer: boolean }) {
                         alignItems: "center",
                         justifyContent: "center"
                       }}
-                      onClick={() => alert("Chat feature thing!")} // Replace with actual chat functionality
-                    >
-                      💬
-                    </button>
+                       onClick={(e) => {
+                                    let dealerid = e.currentTarget.getAttribute("vehicle-dealerid");
+                                    let dealerusername = e.currentTarget.getAttribute("vehicle-dealerusername");
+                      
+                                    if(dealerid && dealerusername)
+                                    messageManager.createMessageChat(parseInt(dealerid), dealerusername);
+                                  }} // Replace with actual chat functionality
+                                  vehicle-dealerid={vehicle.dealer ? vehicle.dealer.accountId : -1}
+                                  vehicle-dealerusername={vehicle.dealer ? vehicle.dealer.username : null}
+                                >
+                                  💬
+                                </button>
                     </>)}
                   </div>
                 </div>
