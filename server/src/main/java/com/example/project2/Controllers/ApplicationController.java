@@ -16,7 +16,6 @@ import com.example.project2.Exceptions.AccountNotFoundException;
 import com.example.project2.JWT.JWTUtil;
 import com.example.project2.Services.ApplicationService;
 
-import jakarta.websocket.server.PathParam;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
