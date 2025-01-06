@@ -1,7 +1,9 @@
 package com.example.project2.Controllers;
 
+
 import java.util.List;
 import java.util.Optional;
+
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,13 +11,11 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import java.security.NoSuchAlgorithmException;
 
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.project2.Entities.Account;
@@ -28,7 +28,6 @@ import com.example.project2.Response.AccountResponse;
 import com.example.project2.Response.ProfileResponse;
 import com.example.project2.Services.AccountService;
 
-import io.jsonwebtoken.Claims;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -87,10 +86,20 @@ public class UserController {
         }
     }
 
+
     @GetMapping("/all")
     public List<Account> getAllUsers() {
         return accountService.getAllAccounts();
     }
+
+    /*
+     * Retrieve user profile information endpoind
+     * 
+     * @param JWT token for authorization and username of the account
+     * 
+     * @return a response entity with the profile object in body or corresponding
+     * error message
+     */
 
     @GetMapping("/info/{username}")
     public ResponseEntity getUserProfile(@RequestHeader("Authorization") String authHeader,
@@ -110,8 +119,7 @@ public class UserController {
      * Change Password
      * Validates current password and updates the new password
      * 
-     * @param account, contains current password, new password, and email or
-     * username
+     * @param account, contains current password, new password, and username
      * 
      * @return a ResponseEntity with status of the password change operation
      */
@@ -136,7 +144,10 @@ public class UserController {
 
     /*
      * Update user profile endpoint
-     * Accepts updated user details along with accountId in the request body
+     * 
+     * @param JWT token for authroization and username to search
+     * 
+     * @return a ResponseEntity with the corresponding message
      */
     @PatchMapping("/profile")
     public ResponseEntity updateUserProfile(@RequestHeader("Authorization") String authHeader,
@@ -167,7 +178,7 @@ public class UserController {
                 AccountResponse user = accountService.getUserByUsername(username);
                 return ResponseEntity.ok(user);
             } catch (AccountNotFoundException e) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
             }
         }
         return ResponseEntity.status(401).build();
@@ -185,7 +196,7 @@ public class UserController {
         try {
             return ResponseEntity.status(200).body(accountService.promote(username));
         } catch (AccountNotFoundException e) {
-            return ResponseEntity.status(404).body("User not found.");
+            return ResponseEntity.status(404).body("User not found");
         }
     }
 
@@ -199,11 +210,15 @@ public class UserController {
     @PatchMapping("/suspend/{status}")
     public ResponseEntity suspend(@RequestHeader("Authorization") String authHeader, @PathVariable Boolean status,
             @RequestBody String username) {
-        try {
-            return ResponseEntity.status(200).body(accountService.suspend(username, status));
-        } catch (AccountNotFoundException e) {
-            return ResponseEntity.status(404).body("User not found.");
+
+        if (JWTUtil.isValid(authHeader)) {
+            try {
+                return ResponseEntity.status(200).body(accountService.suspend(username, status));
+            } catch (AccountNotFoundException e) {
+                return ResponseEntity.status(404).body("User not found");
+            }
         }
+        return ResponseEntity.status(401).build();
     }
 
     /**
@@ -216,6 +231,7 @@ public class UserController {
     public ResponseEntity<?> verifyUserToken(@RequestHeader("Authorization") String authHeader) {
         // Check if token is valid
         if (JWTUtil.isValid(authHeader)) {
+            
             AccountResponse res = accountService.getCurrentUser(JWTUtil.parseToken(authHeader).getSubject(),
                     authHeader);
 
@@ -226,22 +242,4 @@ public class UserController {
         return ResponseEntity.status(401).build();
     }
 
-    /*
-     * This is for testing the JWT
-     */
-    @GetMapping("/test")
-    public String getTest(String test) {
-        return JWTUtil.generateToken(test, "123");
-    }
-
-    @PostMapping("/test2")
-    public String getTest3(@RequestHeader("Authorization") String authHeader, String test) {
-        // Not valid
-        if (!JWTUtil.isValid(authHeader)) {
-            return "ERROR token";
-        }
-
-        Claims claims = JWTUtil.parseToken(test);
-        return claims.getSubject();
-    }
 }
