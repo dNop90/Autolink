@@ -52,6 +52,8 @@ public class Vehicle {
     @JoinColumn(name = "dealer_id")
     private Account dealer;
 
+    // for review:
+
     // Getters and Setters for the Vehicle entities.
 
     public Long getVehicleId() {
@@ -72,6 +74,10 @@ public class Vehicle {
 
     public Boolean getInStock() {
         return inStock;
+    }
+
+    public void setInStock(Boolean instock) {
+        this.inStock = instock;
     }
 
     public Long getPrice() {
@@ -149,4 +155,5 @@ public class Vehicle {
     public void setDealer(Account dealer) {
         this.dealer = dealer;
     }
+
 }

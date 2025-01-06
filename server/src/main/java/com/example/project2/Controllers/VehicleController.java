@@ -7,8 +7,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+
+import com.example.project2.Entities.Review;
 import com.example.project2.Entities.Vehicle;
 import com.example.project2.JWT.JWTUtil;
+import com.example.project2.Services.ReviewService;
 import com.example.project2.Services.VehicleService;
 
 @RestController
@@ -18,6 +21,9 @@ public class VehicleController {
 
     @Autowired
     private VehicleService vehicleService;
+
+    @Autowired
+    private ReviewService reviewService;
 
     /*
      * List all vehicle inventory
@@ -167,4 +173,32 @@ public class VehicleController {
         }
 
     }
+
+    /*
+     * Get reviews for a specific vehicle
+     */
+    @GetMapping("/{id}/reviews")
+    public ResponseEntity<List<Review>> getReviewsByVehicleId(@PathVariable Long id) {
+        List<Review> reviews = reviewService.getReviewsByVehicleId(id);
+        return ResponseEntity.ok(reviews);
+    }
+
+    /*
+     * Add a review for a specific vehicle
+     */
+    @PostMapping("/{id}/reviews")
+    public ResponseEntity<Review> addReview(@PathVariable Long id, @RequestBody Review review) {
+        // Set the vehicle for the review
+        Vehicle vehicle = vehicleService.getVehicleById(id).getBody(); // Assuming this returns a
+                                                                       // ResponseEntity<Vehicle>
+
+        if (vehicle == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); // Return 404 if vehicle not found
+        }
+
+        review.setVehicle(vehicle); // Set the vehicle for the review
+        Review savedReview = reviewService.addReview(review);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedReview);
+    }
+
 }
