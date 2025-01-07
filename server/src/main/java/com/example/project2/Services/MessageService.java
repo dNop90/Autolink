@@ -1,5 +1,7 @@
 package com.example.project2.Services;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.example.project2.Entities.Account;
@@ -51,5 +53,27 @@ public class MessageService {
         kafkaService.send(newmessage);
 
         return true;
+    }
+
+    /**
+     * Get all old message related to the fromAccountID and toAccountID using specific offset for the limit
+     * @param fromAccountID The message from Account ID
+     * @param toAccountID The message to Account ID
+     * @param offset The offset for the limit
+     * @return A list of old messages
+     */
+    public List<Message> getOldMessages(Long fromAccountID, Long toAccountID, int offset)
+    {
+        return messageRepository.findAllByFromAccountIDAndToAccountID(fromAccountID, toAccountID, offset);
+    }
+
+    /**
+     * Get unique account that the user has interact with
+     * @param fromAccountID Account ID from the user
+     * @return A list of messages with unique of account
+     */
+    public List<?> getUniqueAccountInteractWith(Long fromAccountID)
+    {
+        return messageRepository.findAllUniqueAccountUserInteractWith(fromAccountID);
     }
 }
