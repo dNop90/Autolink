@@ -26,6 +26,22 @@
     border-top-right-radius: 10px;
     margin-right: 20px;
     vertical-align: bottom;
+    position: relative;
+}
+
+.Message-Chat .bi-x-lg{
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    cursor: pointer;
+    padding: 7px;
+    font-size: 20px;
+    color: var(--color-button-background);
+}
+
+.Message-Chat .bi-x-lg:hover{
+    color: var(--color-button-background-hover);
 }
 
 .Message-Chat > div{
