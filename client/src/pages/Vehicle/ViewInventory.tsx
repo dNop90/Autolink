@@ -100,7 +100,7 @@ const ViewInventory: React.FC = () => {
         </div>
       </div>
 
-      <h1 className="my-4">Vehicle Listings</h1>
+      <h1 className="my-4">In Stock Vehicles</h1>
 
       {loading ? (
         <p>Loading vehicles...</p>

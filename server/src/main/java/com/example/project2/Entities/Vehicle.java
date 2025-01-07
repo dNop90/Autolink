@@ -15,6 +15,8 @@ public class Vehicle {
     @Column(nullable = false)
     private String model;
 
+    @Column
+    private String description;
     // Show if it is in Stock or not (True by default)
     @Column(nullable = false)
     private Boolean inStock = true;
@@ -38,7 +40,7 @@ public class Vehicle {
     @Column(nullable = false)
     private String color;
 
-    @Column(nullable = false)
+    @Column
     private String engineType;
 
     @Column(nullable = true)

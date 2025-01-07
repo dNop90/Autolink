@@ -249,7 +249,6 @@ const AddVehicle: React.FC = () => {
               id="engine"
               value={formData.engineType}
               onChange={(e) => setFormData({ ...formData, engineType: e.target.value })}
-              required
             >
               <option value="">Select Engine Type</option>
               {Array.from(new Set(engine.map((e) => e.engine_type))).map((type, index) => (
