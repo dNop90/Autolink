@@ -1,24 +1,39 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useAuth } from '../../contexts/AuthContext';
 import { messageManager } from "../../services/MessageManager";
+import '../../styles/VehicleDetails.css'; // Import the CSS file
+import { Account, Vehicle } from "../../services/EntitiesEnterface";
+import { useAuth } from '../../contexts/AuthContext';
+import { useCookie } from "../../contexts/CookieContext";
+
 
 function VehicleDetail(props: { dLer: boolean }) {
   const { vehicleId } = useParams<{ vehicleId: string }>();
-  const [vehicle, setVehicle] = useState<any>(null);
+  const [vehicle, setVehicle] = useState<Vehicle | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [reviews, setReviews] = useState<any[]>([]); // Initialize as an empty array
   const [newReview, setNewReview] = useState<string>("");
+  const cookie = useCookie();
 
   const API_LINK = process.env.REACT_APP_API_VEHICLE;
+
+      const authContext = useAuth();
+      const user = authContext.user;
+
+  
+  interface Review {
+    reviewId: number;
+    comment: string;
+    vehicle: Vehicle;
+    reviewer: Account;
+  }
 
   useEffect(() => {
     const fetchVehicle = async () => {
       try {
         setLoading(true);
         const response = await fetch(`${API_LINK}/${vehicleId}`);
-        console.log("response is this: ", response)
         if (!response.ok) {
           throw new Error("Failed to fetch vehicle details");
         }
@@ -31,7 +46,7 @@ function VehicleDetail(props: { dLer: boolean }) {
         if (!reviewsResponse.ok) {
           throw new Error("Failed to fetch reviews");
         }
-        const reviewsData = await reviewsResponse.json();
+        const reviewsData: Review[] = await reviewsResponse.json();
         setReviews(reviewsData);
         
       } catch (err: any) {
@@ -46,6 +61,7 @@ function VehicleDetail(props: { dLer: boolean }) {
 
   const handleAddReview = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log("This is review: ", )
     if (!newReview.trim()) return; // Prevent empty reviews
 
     try {
@@ -53,54 +69,79 @@ function VehicleDetail(props: { dLer: boolean }) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": cookie.cookieData.token,
         },
-        body: JSON.stringify({ comment: newReview }),
+        body: JSON.stringify({
+          comment: newReview,
+          vehicle: { vehicleId }, // Include the vehicle ID
+          reviewer: { user } // Replace with actual current user ID
+        }),
       });
 
       if (!response.ok) {
         throw new Error("Failed to add review");
       }
 
-      const addedReview = await response.json();
+      const addedReview: Review = await response.json();
       setReviews((prevReviews) => [...prevReviews, addedReview]); // Update reviews state
       setNewReview(""); // Clear the input
     } catch (err: any) {
       setError(err.message);
     }
   };
-  console.log("THis is review: ", reviews)
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p className="text-danger">{error}</p>;
 
   return (
-    <div style={{
-      padding: "35px", maxWidth: "800px", margin: "auto", marginTop: "60px", marginBottom: "60px", position: "relative", boxShadow: "var(--color-text-link)",
-      background: "var(--color-background)", lineHeight: "1", fontFamily: "Open Sans"
-    }}>
-      <h1 className="text-center mb-4" style={{textTransform: "uppercase"}}>{vehicle.make} {vehicle.model}</h1>
+    <div className="vehicle-detail-container">
+      <h1 className="vehicle-title">{vehicle?.make} {vehicle?.model}</h1>
 
       <img
-        src={vehicle.imgUrl && vehicle.imgUrl.trim() !== "" ? vehicle.imgUrl : "/AutoLinkNoImage.png"}
-        className="card-img-top"
-        alt={vehicle.model || "No Image Available"}
+        src={vehicle?.imgUrl && vehicle.imgUrl.trim() !== "" ? vehicle.imgUrl : "/AutoLinkNoImage.png"}
+        className="vehicle-image"
+        alt={vehicle?.model || "No Image Available"}
       />
 
-      <div className="mt-4">
-        <h3 style={{textTransform: "uppercase", marginBottom: "20px", fontWeight: 300}}>Details</h3>
-        <p style={{fontWeight: 300}}><strong>Price:</strong> ${vehicle.price.toLocaleString()}</p>
-        <p style={{fontWeight: 300}}><strong>Year:</strong> {vehicle.year}</p>
-        <p style={{fontWeight: 300}}><strong>Condition:</strong> {vehicle.condition}</p>
-        <p style={{fontWeight: 300}}><strong>Description :</strong> {vehicle.description}</p>
+      <div className="details-section">
+        <h3>Details</h3>
+        <p><strong>Price:</strong> ${vehicle?.price.toLocaleString()}</p>
+        <p><strong>Year:</strong> {vehicle?.year}</p>
+        <p><strong>Condition:</strong> {vehicle?.condition}</p>
+        <p><strong>Description:</strong> {vehicle?.description}</p>
+        
+        {vehicle?.dealer && (
+          <div className="dealer-info-container">
+            <div className="dealer-info">
+              <h4>Dealer Information</h4>
+              <p><strong> Username:</strong> {vehicle.dealer.username}</p>
+            </div>
+            {props.dLer && (
+              <button
+                className="chat-button"
+                onClick={(e) => {
+                  let dealerid = e.currentTarget.getAttribute("vehicle-dealerid");
+                  let dealerusername = e.currentTarget.getAttribute("vehicle-dealerusername");
+
+                  if (dealerid && dealerusername)
+                    messageManager.createMessageChat(parseInt(dealerid), dealerusername);
+                }}
+                vehicle-dealerid={vehicle.dealer ? vehicle.dealer.accountId : -1}
+                vehicle-dealerusername={vehicle.dealer ? vehicle.dealer.username : null}
+              >
+                💬
+              </button>
+            )}
+          </div>
+        )}
       </div>
 
-      <div className="mt-4">
-        <h3 style={{textTransform: "uppercase", marginBottom: "20px", fontWeight: 300}}>Reviews</h3>
+      <div className="reviews-section">
+        <h3>Reviews</h3>
         {reviews.length > 0 ? (
           reviews.map((review) => (
-            <div key={review.id} className="review">
-              
-              <p>{review.comment}</p>
+            <div key={review.reviewId} className="review">
+              <p><strong>{review.reviewer.username}</strong> : {review.comment}</p>
             </div>
           ))
         ) : (

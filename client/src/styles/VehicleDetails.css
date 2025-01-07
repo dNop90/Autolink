@@ -1,0 +1,76 @@
+.vehicle-detail-container {
+    padding: 35px;
+    max-width: 800px;
+    margin: auto;
+    margin-top: 60px;
+    margin-bottom: 60px;
+    position: relative;
+    box-shadow: var(--color-text-link);
+    background: var(--color-background);
+    line-height: 1;
+    font-family: "Open Sans";
+}
+
+.vehicle-title {
+    text-align: center;
+    margin-bottom: 4rem;
+    text-transform: uppercase;
+}
+
+.vehicle-image {
+    width: 100%; /* Adjust as needed */
+}
+
+.details-section {
+    margin-top: 1rem;
+}
+
+.details-section h3 {
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    font-weight: 300;
+}
+
+.details-section p {
+    font-weight: 300;
+}
+
+.dealer-info {
+    flex: 1; /* Allow dealer info to take available space */
+}
+
+.dealer-info-container {
+    display: flex;
+    align-items: center; /* Align items vertically */
+    justify-content: space-between; /* Space between dealer info and chat button */
+    margin-top: 1rem; /* Add some space above */
+}
+.chat-button {
+    margin-left: 20px;
+    width: 60px;
+    height: 60px;
+    background-color: var(--color-button-background);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.reviews-section {
+    margin-top: 1rem;
+}
+
+.reviews-section h3 {
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    font-weight: 300;
+}
+
+.review {
+    margin-bottom: 1rem;
+}
