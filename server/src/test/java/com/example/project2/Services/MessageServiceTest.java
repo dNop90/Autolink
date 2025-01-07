@@ -1,8 +1,14 @@
 package com.example.project2.Services;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -59,5 +65,24 @@ public class MessageServiceTest {
         Boolean result = messageService.createMessage(message);
 
         assertEquals(result, false);
+    }
+
+    @Test
+    public void testgetOldMessages_Success() throws Exception {
+        List<Message> mockMessage = new ArrayList<>();
+        when(messageRepository.findAllByFromAccountIDAndToAccountID(anyLong(), anyLong(), anyInt())).thenReturn(mockMessage);
+
+        List<Message> message = messageService.getOldMessages(Long.valueOf(2), Long.valueOf(2), 0);
+        
+        assertNotNull(message);
+    }
+
+    @Test
+    public void testgetUniqueAccountInteractWith_Success() throws Exception {
+        when(messageRepository.findAllUniqueAccountUserInteractWith(anyLong())).thenReturn(new ArrayList<>());
+
+        List<?> message = messageService.getUniqueAccountInteractWith(Long.valueOf(2));
+        
+        assertNotNull(message);
     }
 }
