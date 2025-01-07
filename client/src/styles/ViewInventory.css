@@ -58,11 +58,11 @@ p{
   line-height: 1;
 }
 
-.VehicleInventory .btn-warning{
+.VehicleInventory .btn-warning, .VehicleInventory .chat-button{
   background-color: var(--color-button-background);
   border: 0;
 }
 
-.VehicleInventory .btn-warning:hover{
+.VehicleInventory .btn-warning:hover, .VehicleInventory .chat-button:hover{
   background-color: var(--color-button-background-hover);
 }

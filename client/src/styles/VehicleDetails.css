@@ -31,6 +31,12 @@
     font-weight: 300;
 }
 
+.details-section h4 {
+    text-transform: uppercase;
+    font-weight: 300;
+    margin-top: 25px;
+}
+
 .details-section p {
     font-weight: 300;
 }
@@ -61,8 +67,12 @@
     justify-content: center;
 }
 
+.chat-button:hover{
+    background-color: var(--color-button-background-hover);
+}
+
 .reviews-section {
-    margin-top: 1rem;
+    margin-top: 35px;
 }
 
 .reviews-section h3 {
@@ -71,6 +81,26 @@
     font-weight: 300;
 }
 
-.review {
+.vehicle-detail-container .review{
     margin-bottom: 1rem;
+}
+
+.vehicle-detail-container .review p{
+    font-weight: 300;
+}
+
+.vehicle-detail-container .btn-primary{
+    padding: 6px 30px;
+    background-color: var(--color-button-background);
+    border: 0;
+    font-size: 16px;
+}
+
+.vehicle-detail-container .btn-primary:hover{
+    background-color: var(--color-button-background-hover);
+}
+
+.vehicle-detail-container textarea:focus{
+    border: 1px solid var(--color-button-background-hover);
+    box-shadow: none;
 }
