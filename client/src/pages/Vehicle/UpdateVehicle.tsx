@@ -2,28 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useCookie } from "../../contexts/CookieContext";
 import { useAuth } from "../../contexts/AuthContext";
+import { Account, Vehicle } from "../../services/EntitiesEnterface";
 
 const API_LINK = process.env.REACT_APP_API_VEHICLE;
 
-interface User {
-  accountId: number;
-  username: string;
-}
 
-interface Vehicle {
-  vehicleId: string;
-  year: string;
-  make: string;
-  model: string;
-  engineType: string;
-  color: string;
-  price: number;
-  condition: "Used" | "New";
-  imgUrl?: string | null;
-  buyer?: User | null;
-  dealer: User;
-  inStock: boolean;
-}
 
 const UpdateVehicle: React.FC = () => {
   const { vehicleId } = useParams<{ vehicleId: string }>();
@@ -33,7 +16,7 @@ const UpdateVehicle: React.FC = () => {
   const currentUser = authContext.user;
 
   const [vehicle, setVehicle] = useState<Vehicle | null>(null);
-  const [users, setUsers] = useState<User[]>([]);
+  const [users, setUsers] = useState<Account[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 

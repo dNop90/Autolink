@@ -1,0 +1,34 @@
+/* .card.has-buyer {
+    background-color: var(--color-background); /* White for vehicles with buyers */
+  /* } */
+  
+  /* .card.no-buyer {
+    background-color: var(--color-border); /* Gray for vehicles without buyers */
+  /* } */ 
+  
+  .card.text-light {
+    color: var(--color-button-text) /* Ensure text is readable on colored backgrounds */
+  }
+  .chat-button {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    background-color: var(--color-text-link);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+
+  
+  .chat-button.default {
+    background-color: var(--color-default); /* Default color for when props.dLer is false */
+  }
