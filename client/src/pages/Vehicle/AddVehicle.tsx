@@ -18,7 +18,6 @@ const AddVehicle: React.FC = () => {
 
 
     const currentUser = user
-    console.log("This is current user" , currentUser)
   const [formData, setFormData] = useState({
     year: "",
     make: "",
@@ -159,10 +158,10 @@ const AddVehicle: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-  const payload = { ...formData, dealerId: currentUser?.userid }; // Include dealerId
-  console.log("This is form to be submitted: ", formData)
+  const payload = { ...formData, dealer: currentUser}; // Include dealerId
+
   try {
-    const response = await fetch(`${API_LINK}?dealerId=6`, { // Pass dealerId as query param
+    const response = await fetch(`${API_LINK}?dealerId=${formData.dealer?.userid}`, { // Pass dealerId as query param
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -295,7 +294,7 @@ const AddVehicle: React.FC = () => {
           </div>
           <div className="form-group">
             <label htmlFor="imagUrl">Image Url</label>
-            <input type="text" className="form-control" id="price" placeholder="Enter Price"
+            <input type="text" className="form-control" id="price" placeholder="Enter Image Url"
               value={formData.imgUrl} onChange={(e) => setFormData({ ...formData, imgUrl: String(e.target.value) })} />
           </div>
 

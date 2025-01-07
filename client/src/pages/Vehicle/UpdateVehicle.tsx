@@ -22,6 +22,7 @@ interface Vehicle {
   imgUrl?: string | null;
   buyer?: User | null;
   dealer: User;
+  inStock: boolean;
 }
 
 const UpdateVehicle: React.FC = () => {
@@ -74,6 +75,7 @@ const UpdateVehicle: React.FC = () => {
       setVehicle((prev) => ({
         ...prev!,
         buyer: selectedUser || null, // Set buyer to selected account or null
+        inStock: selectedUser ? false : true,
       }));
     } else {
       setVehicle((prev) => ({
