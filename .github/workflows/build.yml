@@ -23,6 +23,9 @@ jobs:
   build_server:
     permissions: write-all
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: server
     
     steps:
     - name: Checkout
@@ -36,11 +39,9 @@ jobs:
         cache: maven
         
     - name: Compile and Build
-      working-directory: server
       run: mvn clean compile
       
     - name: Deploy
-      working-directory: server
       run: mvn package
     
     - name: Archive artifact
@@ -54,13 +55,15 @@ jobs:
   build_client:
     permissions: write-all
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: client
     
     steps:
     - name: Checkout
       uses: actions/checkout@v4
       
     - name: Use Node.js
-      working-directory: client
       uses: actions/setup-node@v4
       with:
         node-version: '20'
@@ -68,19 +71,15 @@ jobs:
         cache: 'npm'
         
     - name: Install Yarn
-      working-directory: client
       run: npm install yarn
       
     - name: Install modules
-      working-directory: client
       run: npx yarn install
       
     - name: Build
-      working-directory: client
       run: npx yarn build
       
     - name: Zip build
-      working-directory: client
       run: zip -r client.zip build
       
     - name: Archive artifact
