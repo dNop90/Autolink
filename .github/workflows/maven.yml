@@ -6,7 +6,7 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
-name: Build Server (Maven)
+name: Build
 
 on:
   workflow_dispatch:
@@ -23,7 +23,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build:
+  build_server:
     permissions: write-all
     runs-on: ubuntu-latest
     
@@ -53,3 +53,5 @@ jobs:
         prerelease: false
         name: "Autolink ${{ github.event.inputs.version }}"
         tag_name: ${{ github.event.inputs.version }}
+        files: |
+          server/target/project2*.jar
