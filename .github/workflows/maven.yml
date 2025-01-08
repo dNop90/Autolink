@@ -41,6 +41,5 @@ jobs:
         prerelease: false
         release_name: "Server_${{ github.event.inputs.version }}"
         tag_name: ${{ github.ref }}
-        body_path: CHANGELOG.md
       env:
         GITHUB_TOKEN: ${{ github.token }}
