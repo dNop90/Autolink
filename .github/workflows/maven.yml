@@ -11,17 +11,12 @@ name: Build Server (Maven)
 on:
   workflow_dispatch:
     inputs:
-      logLevel:
-        description: 'Log level'
+      version:
+        description: 'Version'
         required: true
-        default: 'warning'
-      environment:
-        description: 'Environment to deploy'
-        required: false
-        default: 'staging'
 
 jobs:
-  build:
+  build-server:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
@@ -38,3 +33,14 @@ jobs:
     - name: Deploy
       working-directory: server
       run: mvn package
+    - name: Release
+      uses: actions/create-release@v1
+      id: create_release
+      with:
+        draft: false
+        prerelease: false
+        release_name: "Server_${{ github.event.inputs.version }}"
+        tag_name: ${{ github.ref }}
+        body_path: CHANGELOG.md
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
