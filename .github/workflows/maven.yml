@@ -40,6 +40,6 @@ jobs:
         draft: false
         prerelease: false
         release_name: "Server_${{ github.event.inputs.version }}"
-        tag_name: ${{ github.ref }}
+        tag_name: ${{ github.event.inputs.version }}
       env:
         GITHUB_TOKEN: ${{ github.token }}
