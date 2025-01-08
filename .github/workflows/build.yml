@@ -43,12 +43,15 @@ jobs:
       
     - name: Deploy
       run: mvn package
+
+    - name: Zip build
+      run: zip -r server.zip target
     
     - name: Archive artifact
       uses: actions/upload-artifact@v3
       with:
         name: Server
-        path: server/target/*
+        path: server/server.zip
         retention-days: 1
       
   
@@ -70,13 +73,13 @@ jobs:
         check-latest: true
         
     - name: Install Yarn
-      run: npm install yarn
+      run: npm install -g yarn
       
     - name: Install modules
-      run: npx yarn install
+      run: yarn install
       
     - name: Build
-      run: npx yarn build
+      run: yarn build
       
     - name: Zip build
       run: zip -r client.zip build
