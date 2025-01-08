@@ -63,4 +63,5 @@ An application that enables users to search an inventory of vehicles provided by
 - Download the latest client files from our [release](https://github.com/dNop90/Autolink/releases).
 - Unpack the zip and extract the `build` folder.
 - Install `serve` using `npm install -g serve`.
-- Go in the folder where your `build` folder is located, and then run it using `serve -s build`. Your console will show you the port and the IP.
+- Create a file named `.env` in the same folder as the `build` folder. The `.env` will contain the configuration, such as the web socket server. You can take a look at our [example](https://github.com/dNop90/Autolink/blob/main/client/.env).
+- Go to the folder where your `build` folder is located, and then run it using `serve -s build`. Your console will show you the port and the IP.
