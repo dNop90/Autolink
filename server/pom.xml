@@ -11,8 +11,8 @@
 	<groupId>com.example</groupId>
 	<artifactId>project2</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>project2</name>
-	<description>Project 2</description>
+	<name>Autolink_Server</name>
+	<description>Autolink Server</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -109,6 +109,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -124,6 +125,8 @@
 				</configuration>
 			</plugin>
 		</plugins>
+
+		<finalName>${name}</finalName>
 	</build>
 
 </project>
