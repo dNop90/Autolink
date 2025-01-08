@@ -14,6 +14,8 @@ import com.example.project2.JWT.JWTUtil;
 import com.example.project2.Services.ReviewService;
 import com.example.project2.Services.VehicleService;
 
+import io.jsonwebtoken.Claims;
+
 @RestController
 @CrossOrigin
 @RequestMapping("/api/vehicles")
@@ -74,23 +76,52 @@ public class VehicleController {
     // return ResponseEntity.status(401).build();
 
     // }
+    // @PostMapping
+    // public Vehicle createVehicle(@RequestHeader("Authorization") String
+    // authHeader, @RequestBody Vehicle vehicle,
+    // @RequestParam Long dealerId) {
+    // System.out.println("Received Vehicle: " + vehicle);
+
+    // JWTUtil.parseToken(authHeader).getId();
+    // // Check if the authorization header is valid
+    // if (JWTUtil.isValid(authHeader)) {
+    // try {
+    // return vehicleService.createVehicle(vehicle, dealerId);
+    // } catch (Exception e) {
+    // e.printStackTrace();
+    // throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error
+    // saving vehicle", e);
+    // }
+    // } else {
+    // // If the authHeader is not valid, throw a 401 Unauthorized exception
+    // throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid
+    // authorization header");
+    // }
+    // }
     @PostMapping
     public Vehicle createVehicle(@RequestHeader("Authorization") String authHeader, @RequestBody Vehicle vehicle,
             @RequestParam Long dealerId) {
         System.out.println("Received Vehicle: " + vehicle);
 
-        JWTUtil.parseToken(authHeader).getId();
         // Check if the authorization header is valid
-        if (JWTUtil.isValid(authHeader)) {
-            try {
-                return vehicleService.createVehicle(vehicle, dealerId);
-            } catch (Exception e) {
-                e.printStackTrace();
-                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error saving vehicle", e);
-            }
-        } else {
+        if (!JWTUtil.isValid(authHeader)) {
             // If the authHeader is not valid, throw a 401 Unauthorized exception
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid authorization header");
+        }
+
+        // Now that we know the JWT is valid, we can safely parse it
+        Claims claims = JWTUtil.parseToken(authHeader);
+        if (claims == null) {
+            // Handle the case where parsing the token returns null
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid authorization header");
+        }
+
+        // Proceed to create the vehicle
+        try {
+            return vehicleService.createVehicle(vehicle, dealerId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error saving vehicle", e);
         }
     }
 
@@ -173,7 +204,5 @@ public class VehicleController {
         }
 
     }
-
-
 
 }
