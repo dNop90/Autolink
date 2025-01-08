@@ -11,8 +11,12 @@ name: Build Server (Maven)
 on:
   push:
     branches: [ "main" ]
+    paths:
+      - server/**
   pull_request:
     branches: [ "main" ]
+    paths:
+      - server/**
 
 jobs:
   build:
@@ -29,5 +33,7 @@ jobs:
         cache: maven
     - name: Build with Maven
       working-directory: server
-      run: mvn -B package --file pom.xml
+      run: |
+        mvn clean compile
+        mvn package
       
