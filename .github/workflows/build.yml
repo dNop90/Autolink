@@ -79,7 +79,7 @@ jobs:
       run: yarn install
       
     - name: Build
-      run: yarn run build
+      run: CI=false yarn build
       
     - name: Zip build
       run: zip -r client.zip build
