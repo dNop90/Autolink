@@ -39,6 +39,12 @@ class MessageManager{
         const current = event.currentTarget;
         let div = current.parentNode.querySelector("div");
         div.classList.toggle("active");
+
+        if(div.classList.contains("active"))
+        {
+            let ul = div.getElementsByTagName("ul")[0];
+            ul.scrollTop = ul.scrollHeight;
+        }
     }
 
     /**
@@ -66,21 +72,21 @@ class MessageManager{
         span.onclick = this.ToggleShowChat;
         span.innerText = fromUsername;
 
-        NewMessageChat.innerHTML = `<div><ul></ul><input type="text"></input></div>`;
+        NewMessageChat.innerHTML = `<i class="bi bi-x-lg"></i><div><ul></ul><input type="text"></input></div>`;
         NewMessageChat.insertBefore(span, NewMessageChat.querySelector("div"));
 
         MessageChatList?.insertBefore(NewMessageChat, MessageChatList.firstChild);
 
 
         //Find and create if not exist in the message list
-        let findExistInMessageList = MessageChatList?.querySelector(`#MessageList a[message-user-id="${fromAccountID}"]`);
+        let findExistInMessageList = document.querySelector(`#MessageList a[message-user-id="${fromAccountID}"]`);
         if(findExistInMessageList == null)
         {
             let li_a = document.createElement('li');
             let a = document.createElement('a');
             a.setAttribute("message-user-id", String(fromAccountID));
             a.innerText = fromUsername;
-            //a.onclick = this.OnUserSelectedFromMessageList;
+            a.onclick = this.OnUserSelectedFromMessageList;
             a.href = "#";
             li_a.appendChild(a);
             document.querySelector("#MessageList ul")?.appendChild(li_a);
@@ -128,7 +134,7 @@ class MessageManager{
         let current = event.currentTarget;
 
         let user_id = current.getAttribute("message-user-id");
-        this.createMessageChat(user_id, current.innerText);
+        messageManager.createMessageChat(user_id, current.innerText);
     }
 }
 
