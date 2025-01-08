@@ -10,16 +10,13 @@ import java.util.Map;
 @Service
 public class CarApiService {
 
-    @Value("${carapi.api-token}")
-    private String apiToken;
+    @Value("${carapi.api-token}") String apiToken;
 
-    @Value("${carapi.api-secret}")
-    private String apiSecret;
+    @Value("${carapi.api-secret}") String apiSecret;
 
-    @Value("${carapi.base-url}")
-    private String carApiBaseUrl;
+    @Value("${carapi.base-url}") String carApiBaseUrl;
 
-    private String jwtToken; // Cached JWT
+    String jwtToken; // Cached JWT
 
     private final RestTemplate restTemplate;
 
