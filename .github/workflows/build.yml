@@ -55,10 +55,6 @@ jobs:
     permissions: write-all
     runs-on: ubuntu-latest
     
-    strategy:
-      matrix:
-        node-version: 24.x
-    
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -66,7 +62,8 @@ jobs:
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
       with:
-        node-version: ${{ matrix.node-version }}
+        node-version: '24'
+        check-latest: true
         cache: 'npm'
         
     - name: Install Yarn
