@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { useCookie } from "../../contexts/CookieContext";
 import { useAuth } from '../../contexts/AuthContext';
 import { messageManager } from "../../services/MessageManager";
@@ -17,7 +17,7 @@ function DealerVehicleList(props: { dLer: boolean }) {
   const navigate = useNavigate();
   const authContext = useAuth();
   const user = authContext.user;
-
+  const location = useLocation();
 
   useEffect(() => {
     const fetchVehicles = async () => {
@@ -77,6 +77,12 @@ function DealerVehicleList(props: { dLer: boolean }) {
       return vehicle.dealer?.accountId === user?.userid;
     }
   });
+
+  // Check for roles
+  if(user?.role === 2 && !location.pathname.includes("/dashboard/dealerVehicleList")){
+    return (<Navigate to="/dashboard/dealerVehicleList" replace/>)
+  }
+
 
   return (
     <div className="VehicleInventory">
