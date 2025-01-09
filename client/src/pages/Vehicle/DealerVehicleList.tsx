@@ -18,13 +18,6 @@ function DealerVehicleList(props: { dLer: boolean }) {
   const authContext = useAuth();
   const user = authContext.user;
 
-  const [filters, setFilters] = useState({
-    priceRange: [0, 100000],
-    make: "",
-    model: "",
-    year: "",
-    condition: ""
-  });
 
   useEffect(() => {
     const fetchVehicles = async () => {
@@ -74,17 +67,15 @@ function DealerVehicleList(props: { dLer: boolean }) {
     }
   };
 
+
   const filteredVehicles = vehicles.filter((vehicle: Vehicle) => {
-    return (
-      vehicle.dealer?.accountId === user?.userid &&
-      vehicle.price >= filters.priceRange[0] &&
-      vehicle.price <= filters.priceRange[1] &&
-      (filters.make ? vehicle.make.toLowerCase().includes(filters.make.toLowerCase()) : true) &&
-      (filters.model ? vehicle.model.toLowerCase().includes(filters.model.toLowerCase()) : true) &&
-      (filters.year ? vehicle.year === filters.year : true) &&
-      (filters.condition ? vehicle.condition.toLowerCase() === filters.condition.toLowerCase() : true) &&
-      (props.dLer || vehicle.buyer?.accountId === user?.userid)
-    );
+    if (!props.dLer) {
+      // Show vehicles where the buyer's accountId matches the user's id
+      return vehicle.buyer?.accountId === user?.userid;
+    } else {
+      // Show vehicles where the dealer's accountId matches the user's id
+      return vehicle.dealer?.accountId === user?.userid;
+    }
   });
 
   return (
