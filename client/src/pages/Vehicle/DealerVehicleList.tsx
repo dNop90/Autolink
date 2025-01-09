@@ -117,10 +117,10 @@ function DealerVehicleList(props: { dLer: boolean }) {
                           Condition: {vehicle.condition}
                         </p>
                         <p className="card-text">
-                          Dealer: {vehicle.dealer?.firstName}
+                          Dealer: {vehicle.dealer?.username}
                         </p>
                         <p className="card-text">
-                          Buyer: {vehicle.buyer ? vehicle.buyer.firstName : "Not Sold"}
+                          Buyer: {vehicle.buyer ? vehicle.buyer.username : "Not Sold"}
                         </p>
                       </div>
                     </Link>
