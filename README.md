@@ -1,4 +1,5 @@
 # Autolink
+[![Build Release](https://github.com/dNop90/Autolink/actions/workflows/build.yml/badge.svg)](https://github.com/dNop90/Autolink/actions/workflows/build.yml)
 
 ## Description
 An application that enables users to search an inventory of vehicles provided by dealers. Users can filter their search based on essential criteria, including make, model, year, and specific features. Once a preferred vehicle has been identified, users can directly communicate with the dealer to negotiate terms and finalize the transaction. Furthermore, the application offers an option for users to apply for dealer status, pending approval by an administrator. Upon authorization, dealers can efficiently upload and manage their vehicle inventory, ensuring users can access the most current listings.
