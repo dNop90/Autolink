@@ -14,23 +14,22 @@ An application that enables users to search an inventory of vehicles provided by
     - Mockito
     - Javascript Web Token (JWT)
     - Web Socket Server
+    - Docker
 
 - Client
     - React
     - HTML, CSS, and Javascript
     - TypeScript
-    - Jest
     - Bootstrap
     - Web Socket Client
 
 ## Features
 - User
     - Users and dealers should be able to create and log in to accounts.
-    - User accounts should have an associated profile where the user can set things like: display name, profile picture, about me.
+    - User accounts should have an associated profile where the user can set things like: name, email, and phone number.
     - A logged-in user should be able to look up dealers and see their inventory and also be able to search and filter for specific vehicles they are looking for.
     - Users can message dealers in real-time.
     - Users can Leave reviews for dealers or vehicles.
-    - Users can make an appointment with dealers.
 
 - Dealer
     - Dealers will require some approval for their account
