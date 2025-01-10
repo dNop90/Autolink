@@ -41,10 +41,12 @@ function AdminDealerDashboard() {
             <th>Email</th>
             <th>First Name</th>
             <th>Last Name</th>
+            <th>Business License</th>
             <th>Street Address</th>
             <th>City</th>
             <th>State</th>
             <th>Zip Code</th>
+            
           </tr>
         </thead>
         <tbody>

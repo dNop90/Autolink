@@ -213,7 +213,7 @@ const ViewInventory: React.FC = () => {
                       Condition: {vehicle.condition}
                     </p>
                     <p className="card-text">
-                      Dealer: {vehicle.dealer.firstName}
+                      Dealer: {vehicle.dealer.username}
                     </p>
                     
                     

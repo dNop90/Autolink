@@ -170,7 +170,6 @@ const AddVehicle: React.FC = () => {
       body: JSON.stringify(payload),
     });
     if (response.ok) {
-      console.log("Submitted form: ", payload)
       alert("Vehicle added successfully!");
     } else {
       console.error("Failed to save vehicle:", response.statusText);

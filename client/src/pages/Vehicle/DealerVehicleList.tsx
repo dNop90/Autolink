@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { useCookie } from "../../contexts/CookieContext";
 import { useAuth } from '../../contexts/AuthContext';
 import { messageManager } from "../../services/MessageManager";
@@ -17,14 +17,7 @@ function DealerVehicleList(props: { dLer: boolean }) {
   const navigate = useNavigate();
   const authContext = useAuth();
   const user = authContext.user;
-
-  const [filters, setFilters] = useState({
-    priceRange: [0, 100000],
-    make: "",
-    model: "",
-    year: "",
-    condition: ""
-  });
+  const location = useLocation();
 
   useEffect(() => {
     const fetchVehicles = async () => {
@@ -74,18 +67,22 @@ function DealerVehicleList(props: { dLer: boolean }) {
     }
   };
 
+
   const filteredVehicles = vehicles.filter((vehicle: Vehicle) => {
-    return (
-      vehicle.dealer?.accountId === user?.userid &&
-      vehicle.price >= filters.priceRange[0] &&
-      vehicle.price <= filters.priceRange[1] &&
-      (filters.make ? vehicle.make.toLowerCase().includes(filters.make.toLowerCase()) : true) &&
-      (filters.model ? vehicle.model.toLowerCase().includes(filters.model.toLowerCase()) : true) &&
-      (filters.year ? vehicle.year === filters.year : true) &&
-      (filters.condition ? vehicle.condition.toLowerCase() === filters.condition.toLowerCase() : true) &&
-      (props.dLer || vehicle.buyer?.accountId === user?.userid)
-    );
+    if (!props.dLer) {
+      // Show vehicles where the buyer's accountId matches the user's id
+      return vehicle.buyer?.accountId === user?.userid;
+    } else {
+      // Show vehicles where the dealer's accountId matches the user's id
+      return vehicle.dealer?.accountId === user?.userid;
+    }
   });
+
+  // Check for roles
+  if(user?.role === 2 && !location.pathname.includes("/dashboard/dealerVehicleList")){
+    return (<Navigate to="/dashboard/dealerVehicleList" replace/>)
+  }
+
 
   return (
     <div className="VehicleInventory">
@@ -120,10 +117,10 @@ function DealerVehicleList(props: { dLer: boolean }) {
                           Condition: {vehicle.condition}
                         </p>
                         <p className="card-text">
-                          Dealer: {vehicle.dealer?.firstName}
+                          Dealer: {vehicle.dealer?.username}
                         </p>
                         <p className="card-text">
-                          Buyer: {vehicle.buyer ? vehicle.buyer.firstName : "Not Sold"}
+                          Buyer: {vehicle.buyer ? vehicle.buyer.username : "Not Sold"}
                         </p>
                       </div>
                     </Link>
