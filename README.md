@@ -30,6 +30,7 @@ An application that enables users to search an inventory of vehicles provided by
     - A logged-in user should be able to look up dealers and see their inventory and also be able to search and filter for specific vehicles they are looking for.
     - Users can message dealers in real-time.
     - Users can Leave reviews for vehicles.
+    - Users can apply to be a dealer
 
 - Dealer
     - Dealers will require some approval for their account
