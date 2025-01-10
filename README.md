@@ -29,7 +29,7 @@ An application that enables users to search an inventory of vehicles provided by
     - User accounts should have an associated profile where the user can set things like: name, email, and phone number.
     - A logged-in user should be able to look up dealers and see their inventory and also be able to search and filter for specific vehicles they are looking for.
     - Users can message dealers in real-time.
-    - Users can Leave reviews for dealers or vehicles.
+    - Users can Leave reviews for vehicles.
 
 - Dealer
     - Dealers will require some approval for their account
