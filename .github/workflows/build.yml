@@ -3,7 +3,7 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
-name: Build Release
+name: Build
 
 on:
   workflow_dispatch:
