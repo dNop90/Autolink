@@ -85,7 +85,7 @@ function DealerApp() {
                 <Form.Group>
                     <Form.Label>
                         Employer Identification Number:
-                        <Form.Control type="text" value={formInput.businessLicense} onChange={(e: any) => setFormInput({ ...formInput, businessLicense: e.target.value })} placeholder='Business License'></Form.Control>
+                        <Form.Control type="text" value={formInput.businessLicense} onChange={(e: any) => setFormInput({ ...formInput, businessLicense: e.target.value })} placeholder='Employer Identification Number'></Form.Control>
                     </Form.Label>
                 </Form.Group>
                 <Form.Group>
