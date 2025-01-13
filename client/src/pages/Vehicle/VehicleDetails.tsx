@@ -116,7 +116,7 @@ function VehicleDetail(props: { dLer: boolean }) {
               <h4>Dealer Information</h4>
               <p><strong> Username:</strong> {vehicle.dealer.username}</p>
             </div>
-            {props.dLer && (
+            {user && props.dLer && (
               <button
                 className="chat-button"
                 onClick={(e) => {
@@ -149,6 +149,7 @@ function VehicleDetail(props: { dLer: boolean }) {
         )}
       </div>
 
+      {user &&(
       <form onSubmit={handleAddReview} className="mt-4">
         <textarea
           value={newReview}
@@ -158,7 +159,9 @@ function VehicleDetail(props: { dLer: boolean }) {
           className="form-control"
         />
         <button type="submit" className="btn btn-primary mt-2">Add Review</button>
-      </form>
+      </form>)}
+
+      
     </div>
   );
 }
