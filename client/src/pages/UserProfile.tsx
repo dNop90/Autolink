@@ -108,7 +108,7 @@ const UserProfile: React.FC = () => {
       });
       return;
     }
-    if (!formInput.password !== !formInput.confirmPassword) {
+    if (formInput.password !== formInput.confirmPassword) {
       setFormError({
         ...inputError,
         confirmPassword: "Passwords do not match"
