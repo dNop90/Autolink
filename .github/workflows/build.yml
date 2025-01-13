@@ -3,7 +3,7 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
-name: Build Release
+name: Build
 
 on:
   workflow_dispatch:
@@ -45,7 +45,7 @@ jobs:
       run: mvn package
 
     - name: Zip build
-      run: zip -r server.zip target
+      run: zip -r server.zip target/Autolink*.jar
     
     - name: Archive artifact
       uses: actions/upload-artifact@v3
@@ -79,7 +79,7 @@ jobs:
       run: yarn install
       
     - name: Build
-      run: yarn build
+      run: CI=false yarn build
       
     - name: Zip build
       run: zip -r client.zip build
